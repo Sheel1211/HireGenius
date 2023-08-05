@@ -1,30 +1,40 @@
 import React, { useState } from "react";
 import {
   Box,
-  FormControl,
+  Divider,
   FormControlLabel,
-  MenuItem,
   Radio,
   RadioGroup,
+  FormControl,
+  MenuItem,
   TextField,
   Select,
   Button,
   FormLabel,
   Alert,
   Checkbox,
+  Tooltip,
+  IconButton,
+  Typography,
+  Avatar,
 } from "@mui/material";
-import { PlusIcon } from "../Style";
+import { PlusIcon } from "./Style";
 import { useDispatch } from "react-redux";
-import { addQuestion } from "../../../store/slices/AptitudeSlice";
+import { addQuestion } from "../../store/slices/AptitudeSlice";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
-const Text = () => {
+const AddQuestion = () => {
+  const [questionCategory, setQuestionCategory] = useState("Text");
   const [question, setQuestion] = useState("");
-  const [options, setOptions] = useState({ 0: "", 1: "", 2: "", 3: "" });
+  const [questionImage, setQuestionImage] = useState("");
+  const [questionImageURL, setQuestionImageURL] = useState("");
+  const [options, setOptions] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [questionType, setQuestionType] = useState("");
   const [answerType, setAnswerType] = useState("None");
   const [showOption, setShowOption] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
+
   const dispatch = useDispatch();
 
   const handleAddOption = () => {
@@ -39,6 +49,7 @@ const Text = () => {
       />
     );
     setShowOption([...showOption, newOption]);
+    // setOptions([...options, ""]);
   };
 
   const handleAnswers = (ans) => {
@@ -46,25 +57,25 @@ const Text = () => {
   };
 
   const handleOptions = (value, optionNumber) => {
-    console.log(value);
-    // var abcd = { ...options, [optionNumber - 1]: value };
-    // setOptions(abcd);
-    // console.log(options);
-    // const copy = { ...options, [optionNumber - 1]: option };
-    // setOptions(copy);
-    console.log(options);
+    // const copy = [...options];
+    options[optionNumber - 1] = value;
+    setOptions(options);
   };
 
   const handleSubmit = () => {
-    const data = { question, options, answers, questionType, answerType };
+    const data = {
+      question,
+      questionImageURL,
+      options,
+      answers,
+      questionType,
+      answerType,
+    };
     dispatch(addQuestion(data));
   };
 
-  console.log(options);
-
   const Option = ({ optionNumber }) => {
     const [singleOption, setSingleOption] = useState("");
-    console.log("Single option: ", singleOption);
     return (
       <Box
         sx={{
@@ -104,8 +115,28 @@ const Text = () => {
       </Box>
     );
   };
+
   return (
     <>
+      <Box
+        sx={{
+          width: "100%",
+          position: "sticky",
+          top: 0,
+          zIndex: 1,
+          background: "white",
+          padding: 3,
+        }}
+      >
+        <Typography
+          sx={{ fontFamily: "serif", textAlign: "center" }}
+          variant="h5"
+          component="div"
+        >
+          Enter the question
+        </Typography>
+        <Divider sx={{ marginTop: 2 }} />
+      </Box>
       <FormControl
         sx={{
           padding: 4,
@@ -143,17 +174,95 @@ const Text = () => {
             label="Domain"
           />
         </RadioGroup>
-        <FormLabel sx={{ marginTop: 2 }} focused={false}>
-          Enter the question
-        </FormLabel>
-        <TextField
-          id="outlined-basic"
-          variant="outlined"
-          required
-          size="small"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-        />
+        <>
+          <FormLabel focused={false} sx={{ marginTop: 2 }}>
+            Enter the question type
+          </FormLabel>
+          <RadioGroup
+            row
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            name="row-radio-buttons-group"
+            sx={{
+              display: "flex",
+              justifyContent: "start",
+              alignItems: "center",
+            }}
+            onChange={(e) => setQuestionCategory(e.target.value)}
+          >
+            <FormControlLabel
+              value="Text"
+              control={
+                <Radio size="small" checked={questionCategory === "Text"} />
+              }
+              label="Text"
+            />
+            <FormControlLabel
+              value="Image"
+              control={
+                <Radio size="small" checked={questionCategory === "Image"} />
+              }
+              label="Image"
+            />
+          </RadioGroup>
+        </>
+        {questionCategory === "Text" && (
+          <>
+            <FormLabel sx={{ marginTop: 2 }} focused={false}>
+              Enter the question
+            </FormLabel>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              required
+              size="small"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+            />
+          </>
+        )}
+        {questionCategory === "Image" && (
+          <>
+            <FormControl fullWidth>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "start",
+                }}
+              >
+                <TextField
+                  type="file"
+                  id="photo"
+                  sx={{ display: "none" }}
+                  onChange={(e) => {
+                    setQuestionImage(e.target.files[0]),
+                      setQuestionImageURL(
+                        URL.createObjectURL(e.target.files[0])
+                      );
+                  }}
+                />
+                <FormLabel htmlFor="photo">
+                  <Tooltip
+                    title="Choose the question"
+                    placement="top-start"
+                    arrow
+                  >
+                    <IconButton component="span" size="large">
+                      <PhotoCameraIcon sx={{ width: 55, height: 55 }} />
+                    </IconButton>
+                  </Tooltip>
+                </FormLabel>
+                {questionImageURL && (
+                  <Avatar
+                    sx={{ marginLeft: 2 }}
+                    alt="Image"
+                    src={questionImageURL}
+                  />
+                )}
+              </Box>
+            </FormControl>
+          </>
+        )}
         <FormLabel focused={false} sx={{ marginTop: 2 }}>
           Enter the answer type
         </FormLabel>
@@ -204,4 +313,4 @@ const Text = () => {
   );
 };
 
-export default Text;
+export default AddQuestion;
