@@ -19,7 +19,7 @@ import { addQuestion } from "../../../store/slices/AptitudeSlice";
 
 const Text = () => {
   const [question, setQuestion] = useState("");
-  const [options, setOptions] = useState({ 0: "", 1: "", 2: "", 3: "" });
+  const [options, setOptions] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [questionType, setQuestionType] = useState("");
   const [answerType, setAnswerType] = useState("None");
@@ -46,12 +46,8 @@ const Text = () => {
   };
 
   const handleOptions = (value, optionNumber) => {
-    console.log(value);
-    // var abcd = { ...options, [optionNumber - 1]: value };
-    // setOptions(abcd);
-    // console.log(options);
-    // const copy = { ...options, [optionNumber - 1]: option };
-    // setOptions(copy);
+    options[optionNumber-1] = value;
+    setOptions(options)
     console.log(options);
   };
 
