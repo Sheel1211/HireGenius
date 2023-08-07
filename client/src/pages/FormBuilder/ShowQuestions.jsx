@@ -27,11 +27,13 @@ const ShowQuestions = () => {
   const lastQuestionRef = useRef(null);
 
   // Scroll to the last question when new questions are added
-  // useEffect(() => {
-  //   if (lastQuestionRef.current) {
-  //     lastQuestionRef.current.scrollIntoView({ behavior: "smooth" });
-  //   }
-  // }, [questions]);
+  useEffect(() => {
+    if (lastQuestionRef.current) {
+      lastQuestionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [questions]);
+
+  console.log(questions);
 
   // useEffect(() => {
   //   const handleVisibilityChange = () => {
@@ -86,17 +88,35 @@ const ShowQuestions = () => {
                   justifyContent: "space-between",
                 }}
               >
-                <Typography
-                  onCopy={(e) => e.preventDefault()}
-                  sx={{
-                    textAlign: "start",
-                    fontSize: "20px",
-                    paddingBottom: 1,
-                    userSelect: "none",
-                  }}
-                >
-                  {index + 1}. {question.question}
-                </Typography>
+                {question.questionImageURL ? (
+                  <>
+                    <Box>
+                      <img
+                        src={question.questionImageURL}
+                        alt="Big Image"
+                        style={{
+                          width: "100%",
+                          height: "100px",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </Box>
+                  </>
+                ) : (
+                  <>
+                    <Typography
+                      onCopy={(e) => e.preventDefault()}
+                      sx={{
+                        textAlign: "start",
+                        fontSize: "20px",
+                        paddingBottom: 1,
+                        userSelect: "none",
+                      }}
+                    >
+                      {index + 1}. {question.question}
+                    </Typography>
+                  </>
+                )}
 
                 <IconButton>
                   <MoreVertIcon />

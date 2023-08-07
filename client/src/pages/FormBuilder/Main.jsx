@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Card, Grid } from "@mui/material";
 import { Item, PlusIcon } from "./Style";
-import AddQuestion from "./AddQuestion/AddQuestion";
+import AddQuestion from "./AddQuestion";
 import ShowQuestions from "./ShowQuestions";
 
 const Main = () => {
