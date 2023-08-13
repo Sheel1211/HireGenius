@@ -1,73 +1,30 @@
 import {
-  Alert,
-  AlertTitle,
   Box,
-  Button,
   Checkbox,
-  Dialog,
-  DialogActions,
   Divider,
   FormControlLabel,
-  FormGroup,
   IconButton,
   Radio,
   RadioGroup,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const ShowQuestions = () => {
-  // const [isNewTabOpened, setIsNewTabOpened] = useState(false);
   const questions = useSelector((state) => state.Aptitude);
-
   const lastQuestionRef = useRef(null);
 
-  // Scroll to the last question when new questions are added
   useEffect(() => {
     if (lastQuestionRef.current) {
       lastQuestionRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [questions]);
 
-  console.log(questions);
-
-  // useEffect(() => {
-  //   const handleVisibilityChange = () => {
-  //     if (document.visibilityState === "hidden") {
-  //       setIsNewTabOpened(true);
-  //     }
-  //   };
-
-  //   document.addEventListener("visibilitychange", handleVisibilityChange);
-
-  //   return () => {
-  //     document.removeEventListener("visibilitychange", handleVisibilityChange);
-  //   };
-  // }, []);
-
   return (
     <>
-      {/* <Dialog
-        open={isNewTabOpened}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <Alert severity="warning" sx={{ fontSize: "16px" }}>
-          <AlertTitle sx={{ fontSize: "24px" }}>Warning</AlertTitle>
-          Do not try to leave the page otherwise you will be remove from the
-          test
-        </Alert>
-        <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
-          <Button variant="contained" onClick={() => setIsNewTabOpened(false)}>
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog> */}
-
       {questions &&
         questions.map((question, index) => {
           return (
@@ -91,12 +48,22 @@ const ShowQuestions = () => {
                 {question.questionImageURL ? (
                   <>
                     <Box>
+                      <Typography
+                        onCopy={(e) => e.preventDefault()}
+                        sx={{
+                          textAlign: "start",
+                          fontSize: "20px",
+                          paddingBottom: 1,
+                          userSelect: "none",
+                        }}
+                      >
+                        {index + 1}.
+                      </Typography>
                       <img
                         src={question.questionImageURL}
                         alt="Big Image"
                         style={{
                           width: "100%",
-                          height: "100px",
                           objectFit: "contain",
                         }}
                       />
@@ -126,17 +93,39 @@ const ShowQuestions = () => {
               {question.answerType === "Radio" && (
                 <>
                   <Divider />
-                  <RadioGroup>
+                  <RadioGroup sx={{ my: 2 }}>
                     {question.options.map((option, index) => {
                       return (
-                        <FormControlLabel
-                          sx={{ userSelect: "none" }}
-                          onCopy={(e) => e.preventDefault()}
+                        <Box
                           key={index}
-                          value={option}
-                          control={<Radio size="small" />}
-                          label={option}
-                        />
+                          sx={{
+                            display: "flex",
+                            justifyContent: "start",
+                            alignItems: "start",
+                          }}
+                        >
+                          <FormControlLabel
+                            sx={{ userSelect: "none" }}
+                            onCopy={(e) => e.preventDefault()}
+                            value={option.optionURL ? "" : option.option}
+                            control={<Radio size="small" />}
+                            label={option.optionURL ? "" : option.option}
+                            name="radio"
+                          />
+                          <Box>
+                            {option.optionURL && (
+                              <img
+                                src={option.optionURL}
+                                alt="Big Image"
+                                style={{
+                                  height: "200px",
+                                  width: "100%",
+                                  objectFit: "contain",
+                                }}
+                              />
+                            )}
+                          </Box>
+                        </Box>
                       );
                     })}
                   </RadioGroup>
@@ -146,21 +135,45 @@ const ShowQuestions = () => {
               {question.answerType === "Checkbox" && (
                 <>
                   <Divider />
-                  <FormGroup>
+                  <RadioGroup sx={{ my: 2 }}>
                     {question.options.map((option, index) => {
                       return (
-                        <FormControlLabel
-                          sx={{ userSelect: "none" }}
+                        <Box
                           key={index}
-                          value={option}
-                          control={<Checkbox size="small" />}
-                          label={option}
-                        />
+                          sx={{
+                            display: "flex",
+                            justifyContent: "start",
+                            alignItems: "start",
+                          }}
+                        >
+                          <FormControlLabel
+                            sx={{ userSelect: "none" }}
+                            onCopy={(e) => e.preventDefault()}
+                            value={option.optionURL ? "" : option.option}
+                            control={<Checkbox size="small" />}
+                            label={option.optionURL ? "" : option.option}
+                            name="radio"
+                          />
+                          <Box>
+                            {option.optionURL && (
+                              <img
+                                src={option.optionURL}
+                                alt="Big Image"
+                                style={{
+                                  height: "200px",
+                                  width: "100%",
+                                  objectFit: "contain",
+                                }}
+                              />
+                            )}
+                          </Box>
+                        </Box>
                       );
                     })}
-                  </FormGroup>
+                  </RadioGroup>
                 </>
               )}
+
               {question.answerType === "Text" && (
                 <>
                   <TextField

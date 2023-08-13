@@ -55,7 +55,7 @@ const Main = () => {
             columns={16}
             sx={{ background: "#eeeeee" }}
           >
-            <Grid item xs={6}>
+            <Grid item xs={8}>
               <Box
                 sx={{
                   display: "flex",
@@ -68,7 +68,7 @@ const Main = () => {
                     margin: 2,
                     background: "#ffffff",
                     boxShadow: 2,
-                    maxHeight: "80vh",
+                    maxHeight: "85vh",
                     overflowY: "auto",
                   }}
                 >
@@ -76,7 +76,7 @@ const Main = () => {
                 </Card>
               </Box>
             </Grid>
-            <Grid item xs={10}>
+            <Grid item xs={8}>
               <Box
                 sx={{
                   maxHeight: "100vh",
