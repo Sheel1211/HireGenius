@@ -10,6 +10,8 @@ import CompilerHome from "./pages/compiler/Home";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Header from "./pages/landing_page/header/Header";
 import Main from "./pages/FormBuilder/Main";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
@@ -21,6 +23,7 @@ const App = () => {
     // </>
 
     <Router>
+      <ToastContainer />
       <Header />
       <Routes>
         <Route path="/" exact element={<Landing />} />
