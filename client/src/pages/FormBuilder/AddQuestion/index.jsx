@@ -9,10 +9,11 @@ const index = () => {
   const dispatch = useDispatch();
   const singleQuestion = useSelector((state) => state.SingleQuestion);
   const handleSubmit = () => {
+    // console.log(singleQuestion);
     dispatch(addQuestion(singleQuestion));
   };
 
-  console.log(singleQuestion);
+  // console.log(singleQuestion);
 
   return (
     <>

@@ -18,6 +18,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 const ShowQuestion = ({ selectedQuestionIdx }) => {
   const questions = useSelector((state) => state.Aptitude);
 
+  console.log(questions[selectedQuestionIdx]);
+
   const handleFullScreen = () => {
     if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen();
@@ -98,9 +100,9 @@ const ShowQuestion = ({ selectedQuestionIdx }) => {
                       sx={{ userSelect: "none" }}
                       onCopy={(e) => e.preventDefault()}
                       key={index}
-                      value={option}
+                      value={option.option}
                       control={<Radio size="small" />}
-                      label={option}
+                      label={option.option}
                     />
                   );
                 })}
@@ -117,9 +119,9 @@ const ShowQuestion = ({ selectedQuestionIdx }) => {
                     <FormControlLabel
                       sx={{ userSelect: "none" }}
                       key={index}
-                      value={option}
+                      value={option.option}
                       control={<Checkbox size="small" />}
-                      label={option}
+                      label={option.option}
                     />
                   );
                 })}
