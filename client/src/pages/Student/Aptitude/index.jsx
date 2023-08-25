@@ -25,7 +25,10 @@ const index = () => {
                 mb: 4,
               }}
             >
-              <AllQuestions setSelectedQuestionIdx={setSelectedQuestionIdx} />
+              <AllQuestions
+                selectedQuestionIdx={selectedQuestionIdx}
+                setSelectedQuestionIdx={setSelectedQuestionIdx}
+              />
             </Card>
           </Grid>
           <Grid item xs={13}>

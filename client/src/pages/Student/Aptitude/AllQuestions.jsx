@@ -2,9 +2,10 @@ import React from "react";
 import { Box, Button, Divider, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 
-const AllQuestions = ({ setSelectedQuestionIdx }) => {
+const AllQuestions = ({ selectedQuestionIdx, setSelectedQuestionIdx }) => {
   const questions = useSelector((state) => state.Aptitude);
 
+  console.log(selectedQuestionIdx);
   console.log(questions);
   return (
     <>
@@ -27,7 +28,10 @@ const AllQuestions = ({ setSelectedQuestionIdx }) => {
                     color: "white",
                   },
                 }}
-                onClick={() => setSelectedQuestionIdx(index)}
+                onClick={() => {
+                  console.log(question);
+                  setSelectedQuestionIdx(index);
+                }}
               >
                 <Typography variant="subtitle1" textTransform="none">
                   {index + 1}. {question.question || question.questionImageDesc}
