@@ -5,19 +5,19 @@ const Navigation = () => {
   const navigations = [
     {
       label: "Home",
-      path: "#", // '/',
+      path: "/", // '/',
     },
     {
-      label: "Courses",
-      path: "popular-course", // '/popular-course',
+      label: "Aptitude",
+      path: "/form", // '/popular-course',
     },
     {
-      label: "Testimonial",
-      path: "testimonial", // '/testimonial',
+      label: "Compiler",
+      path: "/compiler", // '/testimonial',
     },
     {
-      label: "Mentor",
-      path: "mentors", // '/mentors',
+      label: "Group Discussion",
+      path: "/gd", // '/mentors',
     },
   ];
 

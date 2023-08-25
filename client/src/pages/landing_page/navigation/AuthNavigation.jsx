@@ -8,7 +8,6 @@ const AuthNavigation = () => {
         Sign In
       </Button>
       <Button variant="contained" sx={{borderRadius:"1vmax"}}>Sign Up</Button> */}
-      <Avatar sx={{ bgcolor: blue[800] ,marginTop:"-1vmax" ,cursor:"pointer"}}>N</Avatar>
     </Box>
   );
 };

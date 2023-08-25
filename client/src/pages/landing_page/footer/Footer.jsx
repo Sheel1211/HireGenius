@@ -34,12 +34,12 @@ const pageMenu = [
     path: "/compiler", // '/popular-course',
   },
   {
-    label: "Testimonial",
-    path: "testimonial", // '/testimonial',
+    label: "OA",
+    path: "/oa", // '/testimonial',
   },
   {
-    label: "Mentor",
-    path: "mentors", // '/mentors',
+    label: "Group Discussion",
+    path: "/gd", // '/mentors',
   },
 ];
 
@@ -93,13 +93,14 @@ const FooterNavigation = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={4}>
-        <FooterSectionTitle title="Course" />
+        {/* <FooterSectionTitle title="Course" /> */}
         {courseMenu.map(({ label, path }, index) => (
-          <NavigationItem
-            key={index + path}
-            label={label}
-            path={/* path */ "#"}
-          />
+          // <NavigationItem
+          //   key={index + path}
+          //   label={label}
+          //   path={/* path */ "#"}
+          // />
+          <></>
         ))}
       </Grid>
       <Grid item xs={12} md={4}>

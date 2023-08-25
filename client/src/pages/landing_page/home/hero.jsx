@@ -9,16 +9,16 @@ import { Button } from '@mui/material'
 
 const exps = [
   {
-    label: 'Students',
+    label: 'Students Hired',
     value: '10K+',
   },
   {
-    label: 'Quality Course',
-    value: '20+',
+    label: 'Companies Registered',
+    value: '700+',
   },
   {
-    label: 'Experience Mentors',
-    value: '10+',
+    label: 'Domains',
+    value: '5+',
   },
 ]
 
@@ -74,7 +74,7 @@ const HomeHero = () => {
                       backgroundColor: 'unset',
                     }}
                   >
-                    Improve{' '}
+                    Recruit{' '}
                     <Box
                       sx={{
                         position: 'absolute',
@@ -88,7 +88,7 @@ const HomeHero = () => {
                       <img src="/images/headline-curve.svg" alt="Headline curve" />
                     </Box>
                   </Typography>
-                  your{' '}
+                  Smarter{' '}
                   <Typography
                     component="span"
                     sx={{
@@ -104,7 +104,7 @@ const HomeHero = () => {
                       },
                     }}
                   >
-                    Skill
+                    
                     <svg version="1.1" viewBox="0 0 3183 3072">
                       <g id="Layer_x0020_1">
                         <path
@@ -129,7 +129,7 @@ const HomeHero = () => {
               <Box sx={{ mb: 4, width: { xs: '100%', md: '70%' } }}>
                 <Typography sx={{ color: 'text.secondary', lineHeight: 1.6 }}>
                   {
-                    "Let's take an online course to improve your skills in a different way, you can set your own study time according to your learning speed. So you san study comfortable and absorb tge material easily."
+                    "Revolutionizing hiring through innovation and simplicity, making your recruitment experience seamless and efficient. Welcome to HireGenius!"
                   }
                 </Typography>
               </Box>
@@ -185,10 +185,10 @@ const HomeHero = () => {
                   component="h6"
                   sx={{ color: 'secondary.main', fontSize: '1.1rem', fontWeight: 700, mb: 0.5 }}
                 >
-                  Certificate
+                  Interview
                 </Typography>
                 <Typography variant="subtitle1" sx={{ color: 'text.secondary', lineHeight: 1.3 }}>
-                  There are certificates for all courses.
+                  You can conduct Interviews for all domains.
                 </Typography>
               </Box>
             </Box>
