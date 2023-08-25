@@ -10,6 +10,7 @@ import { useTheme } from "@mui/material/styles";
 import { Menu, Close } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
+import UserOptions from "./userOptions";
 
 const Logo = () => {
   const navigate = useNavigate();
@@ -72,6 +73,7 @@ const Header = () => {
             <Box /> {/* Magic space */}
             <Navigation />
             <AuthNavigation />
+            <UserOptions />
             {visibleMenu && matchMobileView && (
               <IconButton
                 sx={{

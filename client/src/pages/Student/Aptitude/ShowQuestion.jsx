@@ -93,6 +93,7 @@ const ShowQuestion = ({ selectedQuestionIdx }) => {
               <Divider />
               <RadioGroup>
                 {questions[selectedQuestionIdx].options.map((option, index) => {
+                  // console.log(option)
                   return (
                     <FormControlLabel
                       sx={{ userSelect: "none" }}
@@ -100,7 +101,7 @@ const ShowQuestion = ({ selectedQuestionIdx }) => {
                       key={index}
                       value={option}
                       control={<Radio size="small" />}
-                      label={option}
+                      label={option.option}
                     />
                   );
                 })}
