@@ -2,7 +2,7 @@ import React from "react";
 import Signin from "./pages/auth/Signin";
 import "./index.css";
 import FormBuilder from "./pages/FormBuilder/Main";
-import CsvParser from "./pages/CsvParser/Main";
+import Csvparser from "./pages/CsvParser/Main";
 import StudentAptitude from "./pages/Student/Aptitude";
 import Playground from "./pages/compiler/Playground";
 import Landing from "./pages/landing_page/Landing";
@@ -30,7 +30,7 @@ const App = () => {
         <Route path="/compiler" element={<CompilerHome />} />
         <Route path="/compiler/playground" element={<Playground />} />
         <Route path="/form" element={<FormBuilder />} />
-        <Route path="/parser" element={<CsvParser />} />
+        <Route path="/parser" element={<Csvparser />} />
         <Route path="/apt" element={<StudentAptitude />} />
         <Route path="/formBuilder" element={<Main />} />
       </Routes>
