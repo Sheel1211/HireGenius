@@ -1,14 +1,27 @@
-import express from "express";
-import {app} from "./app.js"
-import {connectDB} from "./config/db.js";
-import dotenv from "dotenv";
+const express = require('express');
+const app = express();
+const cors = require('cors');
+const Routes = require('./routes')
+require('dotenv').config();
+require('./config/db');
 
-dotenv.config({path:"backend/config/config.env"})
+const hostname = process.env.HOST_NAME || "127.0.0.1";
+const port = process.env.PORT || 4000;
+
+app.use(
+    cors({
+        origin:'*'
+    })
+)
+
+app.use(express.json());
 
 app.get("/",(req,res)=>{
-    res.send("Server is running");
+    res.send(`<h1>Hii I'm Running</h1>`);
 })
 
+app.use('/api',Routes)
+
 app.listen(process.env.PORT || 4000,()=>{
-    console.log(`server started on port ${port}`);
+    console.log(`Server running at http://${hostname}:${port}/`);
 })
