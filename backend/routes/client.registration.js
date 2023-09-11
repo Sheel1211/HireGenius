@@ -1,21 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const {uploadFile}  = require('../services/uploadFileS3.service')
+const fileUpload = require('express-fileupload');
+router.use(fileUpload());
 
 //1. Registration 
 // API -> /api/client/registration
 router.post("/registration",async(req,res)=>{
-
-    const clientType = req.body.clienttype;
-    const company = req.body.company;
-    const domain = req.body.domain;
-    const website = req.body.website;
     
-    console.log("data",clientType,company,domain,website)
 
+    const clientType = req.body.client;
+        
     const imgUrl = await uploadFile(req.files)
 
-    console.log("Data : ",clientType,company,domain,website,imgUrl.Location)
+    console.log("Data : ",clientType,imgUrl)
 
     res.status(200).send({message:"Success"})
 
