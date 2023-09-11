@@ -52,6 +52,10 @@ const clientSchema = new mongoose.Schema({
       type: String,
     },
   },
+  approved: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const client = mongoose.model("client", clientSchema);
