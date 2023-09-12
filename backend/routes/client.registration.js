@@ -7,13 +7,10 @@ router.use(fileUpload());
 //1. Registration 
 // API -> /api/client/registration
 router.post("/registration",async(req,res)=>{
-    
 
-    const clientType = req.body.client;
-        
+    const clientType = req.body.client;    
     const imgUrl = await uploadFile(req.files)
-
-    console.log("Data : ",clientType,imgUrl)
+    console.log("Data : ",clientType,imgUrl.Location)
 
     res.status(200).send({message:"Success"})
 
