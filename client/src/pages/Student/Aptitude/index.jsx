@@ -12,8 +12,8 @@ const index = () => {
     <Box sx={{ height: "100vh", background: "#eeeeee" }}>
       <Header />
       <Box sx={{ mt: 2 }}>
-        {/* <NewTab /> */}
-        {/* <PreventReload /> */}
+        <NewTab />
+        <PreventReload />
         <Grid container spacing={2} columns={20}>
           <Grid item xs={7}>
             <Card
