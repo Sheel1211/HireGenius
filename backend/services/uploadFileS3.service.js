@@ -5,7 +5,7 @@ import AWS from 'aws-sdk'
 router.use(fileUpload());
 
 //Upload File on Amazon S3 Bucket
-export const uploadFile = async(files)=>{
+export const uploadFile = async(file,fileName)=>{
     AWS.config.update({
         accessKeyId:process.env.ACCESS_KEY_ID,
         secretAccessKey:process.env.SECRET_ACCESS_KEY,
@@ -13,10 +13,10 @@ export const uploadFile = async(files)=>{
     })
 
     const s3 = new AWS.S3();
-    const fileContent = Buffer.from(file.img.data,'binary');
+    const fileContent = Buffer.from(file.data,'binary');
     const params = {
         Bucket: 'hireginus-images',
-        Key:`${new Date().getTime().toString()}`,
+        Key:`${new Date().getTime().toString()}`+`_${fileName}`,
         Body: fileContent
     }
     return new Promise((resolve,reject)=>{

@@ -8,6 +8,6 @@ export const connectDB = () => {
       console.log("MongoDB connection established.");
     })
     .catch((e) => {
-      console.log("MongoDB connection established.", e.message);
+      console.log("MongoDB connection not established.", e.message);
     });
 };

@@ -6,7 +6,7 @@ import Routes from "./routes/index.js";
 import "./config/db.js";
 
 import { connectDB } from "./config/db.js";
-dotenv.config({ path: "config/config.env" });
+dotenv.config();
 
 console.log(process.env.PORT)
 

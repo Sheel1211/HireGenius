@@ -1,5 +1,5 @@
 import express from "express";
-import clientRoute from "./client.registration.js";
+import clientRoute from "./clientRoute.js"
 import codingRoute from "./codingRoute.js";
 
 const router = express.Router();
