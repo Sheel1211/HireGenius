@@ -12,6 +12,7 @@ import Header from "./pages/landing_page/header/Header";
 import Main from "./pages/FormBuilder/Main";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Registration from "./pages/ClientRegistration/Registration";
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
         <Route path="/parser" element={<CsvParser />} />
         <Route path="/apt" element={<StudentAptitude />} />
         <Route path="/formBuilder" element={<Main />} />
+        <Route path="/client/registration" element={<Registration/>} />
       </Routes>
     </Router>
   );

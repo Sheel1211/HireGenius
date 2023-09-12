@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "It is our college project where we are creating an interview system which will help companies to take their interviews with ease so that placements can be done with ease",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": " nodemon backend/server.js"
