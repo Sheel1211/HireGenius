@@ -1,11 +1,11 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
-import fileUpload from 'express-fileupload';
-import AWS from 'aws-sdk'
+const fileUpload = require('express-fileupload');
+const AWS = require('aws-sdk')
 router.use(fileUpload());
 
 //Upload File on Amazon S3 Bucket
-export const uploadFile = async(files)=>{
+const uploadFile = async(files)=>{
     AWS.config.update({
         accessKeyId:process.env.ACCESS_KEY_ID,
         secretAccessKey:process.env.SECRET_ACCESS_KEY,
@@ -31,3 +31,6 @@ export const uploadFile = async(files)=>{
         })
     })
 }
+
+
+module.exports={uploadFile}

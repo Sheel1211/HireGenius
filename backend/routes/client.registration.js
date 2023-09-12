@@ -1,36 +1,41 @@
-import express from "express";
+const express = require('express');
 const router = express.Router();
-import { uploadFile } from "../services/uploadFileS3.service.js";
+const {uploadFile}  = require('../services/uploadFileS3.service')
 
-//1. Registration
+//1. Registration 
 // API -> /api/client/registration
-router.post("/registration", async (req, res) => {
-  const clientType = req.body.clienttype;
-  const company = req.body.company;
-  const domain = req.body.domain;
-  const website = req.body.website;
+router.post("/registration",async(req,res)=>{
 
-  console.log("data", clientType, company, domain, website);
+    const clientType = req.body.clienttype;
+    const company = req.body.company;
+    const domain = req.body.domain;
+    const website = req.body.website;
+    
+    console.log("data",clientType,company,domain,website)
 
-  const imgUrl = await uploadFile(req.files);
+    const imgUrl = await uploadFile(req.files)
 
-  console.log("Data : ", clientType, company, domain, website, imgUrl.Location);
+    console.log("Data : ",clientType,company,domain,website,imgUrl.Location)
 
-  res.status(200).send({ message: "Success" });
-});
+    res.status(200).send({message:"Success"})
+
+})
+
 
 //2. Post plan
 // API -> /api/client/post-plan
-router.post("/post-plan", (req, res) => {
-  const data = req.body;
-  console.log("DATA : ", data);
-  res.status(200).send({ message: "Successfully" });
-});
+router.post("/post-plan",(req,res)=>{
+    const data = req.body
+    console.log("DATA : ",data)
+    res.status(200).send({message:"Successfully"})
+}) 
 
-//3. Pree plan
+
+//3. Pree plan 
 // API -> /api/client/pree-plan
-router.post("/pree-plan", (req, res) => {
-  res.send("pree registration of client");
-});
+router.post("/pree-plan",(req,res)=>{
+    res.send("pree registration of client");
+})
 
-export default router;
+
+module.exports = router;

@@ -1,13 +1,11 @@
-import mongoose from "mongoose";
-// console.log(process.env.PORT);
+const mongoose = require('mongoose');
+require('dotenv').config();
 
-export const connectDB = () => {
-  mongoose
-    .connect(`${process.env.DB_URI}`)
-    .then(() => {
-      console.log("MongoDB connection established.");
-    })
-    .catch((e) => {
-      console.log("MongoDB connection established.", e.message);
-    });
-};
+
+const DATABASE_URI = process.env.DB_URI
+
+mongoose.connect(`${DATABASE_URI}`).then(()=>{
+    console.log("MongoDB connection established.");
+}).catch((e)=>{
+    console.log("MongoDB connection established.",e.message);
+})

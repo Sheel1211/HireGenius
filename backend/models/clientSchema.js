@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import validator from "validator"
+
 const clientSchema = new mongoose.Schema({
   name: {
     type: String,

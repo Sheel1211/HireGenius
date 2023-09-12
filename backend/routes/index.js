@@ -1,9 +1,7 @@
-import express from "express";
-import clientRoute from "./client.registration.js";
-import codingRoute from "./codingRoute.js";
-
+const express = require('express');
 const router = express.Router();
-router.use("/client", clientRoute);
-router.use("/coding", codingRoute);
+const clientRoute = require('./client.registration');
 
-export default router;
+router.use("/client",clientRoute)
+
+module.exports = router
