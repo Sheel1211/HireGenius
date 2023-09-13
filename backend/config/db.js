@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-// console.log(process.env.PORT);
 
 export const connectDB = () => {
   mongoose
