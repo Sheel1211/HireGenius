@@ -6,25 +6,13 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 
 const RegistartionSub1 = ({clientData, setClientData}) => {
-// const [clientData, setClientData] = useState({
-//             name: "",
-//             email: "",
-//             password: "",
-//             cpassword:"",
-//             url: "",
-//             description: "",
-//             contactno: "",
-//             sector: "",
-//           }); 
-const [sector,setSector] = useState()
+
 
     const handleInputChange = (e) => {
             setClientData({ ...clientData, [e.target.name]: e.target.value });
           };
 
-    const seedata=()=>{
-console.log(clientData);
-    }
+ 
 
   return (
     <>
@@ -64,6 +52,7 @@ console.log(clientData);
           required
           id="password"
           name="password"
+          type='password'
           label="Create password"
           fullWidth
           variant="standard"
@@ -77,6 +66,7 @@ console.log(clientData);
           required
           id="cpassword"
           name="cpassword"
+          type='password'
           value={clientData.cpassword}
 
           label="Confirm password"
@@ -140,7 +130,7 @@ console.log(clientData);
         </Select>
       </Grid>
     </Grid>
-    <button onClick={seedata}>see</button>
+
   </>
   )
 }

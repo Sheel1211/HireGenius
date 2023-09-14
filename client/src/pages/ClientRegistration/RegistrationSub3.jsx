@@ -17,11 +17,7 @@ import { red } from '@mui/material/colors';
   ];
 
 const RegistrationSub3 = ({clientData,validCertificateFile,logoFile}) => {
-  const seeALLData=()=>{
-    console.log(clientData);
-    console.log(validCertificateFile);
-    console.log(logoFile);
-  }
+
 
   const products = [
     {
@@ -79,7 +75,6 @@ const RegistrationSub3 = ({clientData,validCertificateFile,logoFile}) => {
           
         </Grid>
       </Grid>
-      <button onClick={seeALLData}>SeeAllData</button>
     </React.Fragment>
   )
 }

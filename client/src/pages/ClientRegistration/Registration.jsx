@@ -30,21 +30,10 @@ function Copyright(props) {
 }
 
 const steps = ['Fill Form', 'Upload Files', 'Review'];
-// function getStepContent(step) {
-//   switch (step) {
-//     case 0:
-//       return <RegistartionSub1/>;
-//     case 1:
-//       return <RegistrationSub2/>;
-//     case 2:
-//       return <RegistrationSub3/>;
-//     default:
-//       throw new Error('Unknown step');
-//   }
-// }
+
 
 // const Registration = () => {
-//   const [formData, setFormData] = useState({
+//   const [clientData, setclientData] = useState({
 //     name: "",
 //     email: "",
 //     password: "",
@@ -57,7 +46,7 @@ const steps = ['Fill Form', 'Upload Files', 'Review'];
 //   const [logoFile, setLogoFile] = useState(null);
 
 //   const handleInputChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
+//     setclientData({ ...clientData, [e.target.name]: e.target.value });
 //   };
 
 //   const handleFileChange = (e) => {
@@ -71,7 +60,7 @@ const steps = ['Fill Form', 'Upload Files', 'Review'];
 
 //   const handleSubmit = (e) => {
 //     e.preventDefault();
-//     console.log("formData", formData);
+//     console.log("clientData", clientData);
    
 //     const certi = validCertificateFile;
 //     const logo = logoFile;
@@ -83,13 +72,13 @@ const steps = ['Fill Form', 'Upload Files', 'Review'];
 //       .post(
 //         "http://127.0.0.1:4000/api/client/registration",
 //         {
-//           name: formData.name,
-//           email: formData.email,
-//           password: formData.password,
-//           url: formData.url,
-//           description: formData.description,
-//           contactno: formData.contactno,
-//           sector: formData.sector,
+//           name: clientData.name,
+//           email: clientData.email,
+//           password: clientData.password,
+//           url: clientData.url,
+//           description: clientData.description,
+//           contactno: clientData.contactno,
+//           sector: clientData.sector,
 //           validcertificate: certi,
 //           logo:logo
 //         },
@@ -205,6 +194,52 @@ const Registration = ()=>{
     setActiveStep(activeStep - 1);
   };
 
+  const handleSubmit = () => {
+        // e.preventDefault();
+        console.log("clientData", clientData);
+       
+        const certi = validCertificateFile;
+        const logo = logoFile;
+    
+        console.log("certi", certi);
+        console.log("logo", logo);
+        if( !clientData.name ||!clientData.email||!clientData.password||!clientData.url||!clientData.description||!clientData.contactno||!clientData.sector){
+          alert("All fields are required!")
+        }else if(clientData.password !== clientData.cpassword){
+          alert("Passwords are not match")
+        }else if(!certi || !logo){
+          alert("files are not Uploaded")
+        }else{
+          axios
+          .post(
+            "http://127.0.0.1:4000/api/client/registration",
+            {
+              name: clientData.name,
+              email: clientData.email,
+              password: clientData.password,
+              url: clientData.url,
+              description: clientData.description,
+              contactno: clientData.contactno,
+              sector: clientData.sector,
+              validcertificate: certi,
+              logo:logo
+            },
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          )
+          .then((res) => {
+            console.log("response", res.data);
+          })
+          .catch((error) => {
+            console.log("error", error);
+          });
+          handleNext();
+        }
+      };
+
   return (
     <>
     
@@ -249,13 +284,22 @@ const Registration = ()=>{
                   </Button>
                 )}
 
+                
+                  {
+                  activeStep === steps.length - 1 ? 
+                  <Button
+                  variant="contained"
+                  onClick={()=>{handleSubmit();}
+                }
+                  sx={{ mt: 3, ml: 1 }}> Register</Button>
+                : 
                 <Button
                   variant="contained"
                   onClick={handleNext}
-                  sx={{ mt: 3, ml: 1 }}
-                >
-                  {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
-                </Button>
+                  sx={{ mt: 3, ml: 1 }}>Next</Button>
+                  }
+
+
               </Box>
           </>)}
 
