@@ -28,10 +28,10 @@ export const adminLogin=async(req,res)=>{
     }
 }
 
-export const getallUnverifyClients = async(req,res)=>{
+export const getallClients = async(req,res)=>{
     try{
 
-        const allUnverifiedClients = await client.find({approved:false});
+        const allUnverifiedClients = await client.find({});
 
         if(allUnverifiedClients){
             return res.status(200).send({success:true,data:allUnverifiedClients})

@@ -13,7 +13,6 @@ const RegistartionSub1 = ({clientData, setClientData}) => {
           };
 
  
-
   return (
     <>
      <Typography variant="h6" gutterBottom>
