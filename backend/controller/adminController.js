@@ -1,5 +1,6 @@
 import admin from '../models/adminSchema.js'
 import client from '../models/clientSchema.js'
+import { sendEmail } from '../services/sendEmail.service.js'
 
 import jwt from 'jsonwebtoken'
 
@@ -15,7 +16,7 @@ export const adminLogin=async(req,res)=>{
             return res.status(422).send({success:false,message:"No Admin for given data"})
         }
 
-        const authToken = jwt.sign({id:adminData._id}, "hiregeniusprathamjaysheelrudrahiregeniusprathamjaysheelrudrahiregeniusprathamjaysheelrudra")
+        const authToken = jwt.sign({id:adminData._id}, process.env.JWT_KEY)
         adminData.authToken = authToken;
 
         await adminData.save()
@@ -56,4 +57,8 @@ export const verifyClients = async(req,res)=>{
     }catch(error){
         return res.status(500).send({sucess:false,message:"Internal server error", data: error.message})
     }
+
+    // const data = await sendEmail("barotpratham266@gmail.com","Demo Subject","hii this is for demo message");
+    // console.log("email data : ",data)
+
 }
