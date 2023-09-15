@@ -18,6 +18,7 @@ import Main from "./pages/FormBuilder/Main";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Navigate } from "react-router-dom";
+import Registration from "./pages/ClientRegistration/Registration";
 
 const App = () => {
   return (
@@ -46,6 +47,7 @@ const App = () => {
           <Route path="candidate" element={<CandidatePage />} />
           <Route path="schedule-interview" element={<InterviewPage />} />
         </Route>
+        <Route path="/client/registration" element={<Registration />} />
       </Routes>
     </Router>
   );

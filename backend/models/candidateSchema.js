@@ -12,22 +12,25 @@ const candidateSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "Please provide password"],
+    default: null,
   },
-  interviews:[
+  username: {
+    type: String,
+    default: null,
+  },
+  interviews: [
     {
-        id:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref:"interview",
-        },
-        marks:{
-            type:Number,            
-        }
-    }
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "interview",
+      },
+      marks: {
+        type: Number,
+      },
+    },
   ],
-
 });
 
-const candidate = mongoose.model("candidate",candidateSchema);
+const candidate = mongoose.model("candidate", candidateSchema);
 
 export default candidate;
