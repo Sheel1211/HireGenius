@@ -5,6 +5,7 @@ import cors from "cors";
 import Routes from "./routes/index.js";
 import "./config/db.js";
 import { connectDB } from "./config/db.js";
+import fileUpload from "express-fileupload";
 
 dotenv.config();
 
@@ -18,6 +19,10 @@ app.use(
     origin: "*",
   })
 );
+
+app.use(fileUpload({
+  limits: { fileSize: 50 * 1024 * 1024 },
+}));
 
 app.use(express.json());
 

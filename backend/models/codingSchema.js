@@ -19,6 +19,7 @@ const codingSchema = new mongoose.Schema({
   duration: {
     type: Number,
     required: [true, "Please provide duration of coding test"],
+    // default:12
   },
   candidates: [{ type: mongoose.Schema.Types.ObjectId, ref: "candidate" }],
 });
