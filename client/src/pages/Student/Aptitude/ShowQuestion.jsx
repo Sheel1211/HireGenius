@@ -2,35 +2,67 @@ import {
   Box,
   Button,
   Checkbox,
+  Container,
   Divider,
+  FormControl,
   FormControlLabel,
   FormGroup,
-  IconButton,
   Radio,
   RadioGroup,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { spaceBetween } from "./styles";
+import {
+  addSelectedOptions,
+  setSelectedIndex,
+  setSelectedSection,
+} from "../../../store/slices/AptiDashboard";
 
-const ShowQuestion = ({ selectedQuestionIdx }) => {
-  const questions = useSelector((state) => state.Aptitude);
+const ShowQuestion = () => {
+  const dispatch = useDispatch();
+  const AptiDetails = useSelector((state) => state.AptiDashboard);
+  const questions = AptiDetails.sections[AptiDetails.selectedSection];
+  let selectedQuestionIdx = AptiDetails.selectedIndex;
 
-  console.log(questions[selectedQuestionIdx]);
-
-  const handleFullScreen = () => {
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen();
-    } else if (document.documentElement.mozRequestFullScreen) {
-      document.documentElement.mozRequestFullScreen();
-    } else if (document.documentElement.webkitRequestFullscreen) {
-      document.documentElement.webkitRequestFullscreen();
-    } else if (document.documentElement.msRequestFullscreen) {
-      document.documentElement.msRequestFullscreen();
+  const handlePrevClick = (currentIndex) => {
+    if (currentIndex === 0) {
+      const currentSection = AptiDetails.selectedSection;
+      const sectionKeys = Object.keys(AptiDetails.sections);
+      const currentSectionIndex = sectionKeys.indexOf(currentSection);
+      if (currentSectionIndex !== 0) {
+        dispatch(setSelectedSection(sectionKeys[currentSectionIndex - 1]));
+        const len =
+          AptiDetails.sections[sectionKeys[currentSectionIndex - 1]].length;
+        dispatch(setSelectedIndex(len - 1));
+      }
+    } else {
+      dispatch(setSelectedIndex(currentIndex - 1));
     }
   };
+
+  const handleSaveAndNextClick = (currentIndex) => {
+    const len = AptiDetails.sections[AptiDetails.selectedSection].length;
+    if (currentIndex === len - 1) {
+      const currentSection = AptiDetails.selectedSection;
+      const sectionKeys = Object.keys(AptiDetails.sections);
+      const currentSectionIndex = sectionKeys.indexOf(currentSection);
+      if (currentSectionIndex !== sectionKeys.length - 1) {
+        dispatch(setSelectedSection(sectionKeys[currentSectionIndex + 1]));
+        dispatch(setSelectedIndex(0));
+      }
+    } else {
+      dispatch(setSelectedIndex(currentIndex + 1));
+    }
+  };
+
+  const handleOptionSelect = (e, section, questionIndex, optionIndex) => {
+    dispatch(addSelectedOptions({ e, section, questionIndex, optionIndex }));
+  };
+
   return (
     <>
       <Box>
@@ -40,6 +72,8 @@ const ShowQuestion = ({ selectedQuestionIdx }) => {
             margin: 4,
             padding: 4,
             boxShadow: 2,
+            maxHeight: "550px",
+            overflowY: "auto",
           }}
         >
           <Box
@@ -92,28 +126,52 @@ const ShowQuestion = ({ selectedQuestionIdx }) => {
 
           {questions[selectedQuestionIdx].answerType === "Radio" && (
             <>
-              <Divider />
-              <RadioGroup>
-                {questions[selectedQuestionIdx].options.map((option, index) => {
-                  // console.log(option)
-                  return (
-                    <FormControlLabel
-                      sx={{ userSelect: "none" }}
-                      onCopy={(e) => e.preventDefault()}
-                      key={index}
-                      value={option.option}
-                      control={<Radio size="small" />}
-                      label={option.option}
-                    />
-                  );
-                })}
-              </RadioGroup>
+              <Divider sx={{ my: 2 }} />
+              <FormControl>
+                <RadioGroup>
+                  {questions[selectedQuestionIdx].options.map(
+                    (option, index) => {
+                      return (
+                        <FormControlLabel
+                          sx={{ userSelect: "none" }}
+                          onCopy={(e) => e.preventDefault()}
+                          key={index}
+                          value={option.option}
+                          control={
+                            <Radio
+                              size="small"
+                              checked={AptiDetails.sections[
+                                AptiDetails.selectedSection
+                              ][selectedQuestionIdx].selectedOptions.includes(
+                                index
+                              )}
+                              onChange={(e) =>
+                                handleOptionSelect(
+                                  e,
+                                  AptiDetails.selectedSection,
+                                  selectedQuestionIdx,
+                                  index
+                                )
+                              }
+                            />
+                          }
+                          label={
+                            <Typography sx={{ fontSize: "1.2rem" }}>
+                              {option.option}
+                            </Typography>
+                          }
+                        />
+                      );
+                    }
+                  )}
+                </RadioGroup>
+              </FormControl>
             </>
           )}
 
           {questions[selectedQuestionIdx].answerType === "Checkbox" && (
             <>
-              <Divider />
+              <Divider sx={{ my: 2 }} />
               <FormGroup>
                 {questions[selectedQuestionIdx].options.map((option, index) => {
                   return (
@@ -121,7 +179,24 @@ const ShowQuestion = ({ selectedQuestionIdx }) => {
                       sx={{ userSelect: "none" }}
                       key={index}
                       value={option.option}
-                      control={<Checkbox size="small" />}
+                      control={
+                        <Checkbox
+                          size="small"
+                          checked={AptiDetails.sections[
+                            AptiDetails.selectedSection
+                          ][selectedQuestionIdx].selectedOptions.includes(
+                            index
+                          )}
+                          onChange={(e) =>
+                            handleOptionSelect(
+                              e,
+                              AptiDetails.selectedSection,
+                              selectedQuestionIdx,
+                              index
+                            )
+                          }
+                        />
+                      }
                       label={option.option}
                     />
                   );
@@ -140,8 +215,31 @@ const ShowQuestion = ({ selectedQuestionIdx }) => {
             </>
           )}
         </Box>
+        <Container
+          maxWidth="md"
+          sx={{ position: "absolute", bottom: 50, ml: 2 }}
+        >
+          <Box
+            sx={{
+              ...spaceBetween,
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => handlePrevClick(selectedQuestionIdx)}
+            >
+              Previous
+            </Button>
+            <Button variant="contained"> Clear </Button>
+            <Button
+              variant="contained"
+              onClick={() => handleSaveAndNextClick(selectedQuestionIdx)}
+            >
+              Next
+            </Button>
+          </Box>
+        </Container>
       </Box>
-      <Button onClick={handleFullScreen}>Full Screen</Button>
     </>
   );
 };

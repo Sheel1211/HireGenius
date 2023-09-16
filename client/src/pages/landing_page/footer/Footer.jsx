@@ -51,20 +51,20 @@ const companyMenu = [
 ];
 
 const NavigationItem = ({ label, path }) => {
-    console.log(path)
+  console.log(path);
   return (
     <Link to={path}>
-    <MuiLink
-      to={path}
-      underline="hover"
-      sx={{
-        display: "block",
-        mb: 1,
-        color: "primary.contrastText",
-      }}
-    >
-      {label}
-    </MuiLink>
+      <MuiLink
+        to={path}
+        underline="hover"
+        sx={{
+          display: "block",
+          mb: 1,
+          color: "primary.contrastText",
+        }}
+      >
+        {label}
+      </MuiLink>
     </Link>
   );
 };
@@ -94,14 +94,9 @@ const FooterNavigation = () => {
     <Grid container spacing={2}>
       <Grid item xs={12} md={4}>
         {/* <FooterSectionTitle title="Course" /> */}
-        {courseMenu.map(({ label, path }, index) => (
-          // <NavigationItem
-          //   key={index + path}
-          //   label={label}
-          //   path={/* path */ "#"}
-          // />
+        {/* {courseMenu.map(({ label, path }, index) => (
           <></>
-        ))}
+        ))} */}
       </Grid>
       <Grid item xs={12} md={4}>
         <FooterSectionTitle title="Menu" />

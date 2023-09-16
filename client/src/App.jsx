@@ -15,24 +15,17 @@ import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
-    // <>
-    //   {/* <FormBuilder /> */}
-    //   <Landing />
-    //   {/* <CsvParser /> */}
-    //   {/* <StudentAptitude /> */}
-    // </>
-
     <Router>
       <ToastContainer />
-      <Header />
+      {/* <Header /> */}
       <Routes>
         <Route path="/" exact element={<Landing />} />
         <Route path="/compiler" element={<CompilerHome />} />
         <Route path="/compiler/playground" element={<Playground />} />
-        <Route path="/form" element={<FormBuilder />} />
+        <Route path="/create/aptitude" element={<FormBuilder />} />
+        <Route path="/aptitude/:aptitudeId" element={<StudentAptitude />} />
         <Route path="/parser" element={<CsvParser />} />
         <Route path="/apt" element={<StudentAptitude />} />
-        <Route path="/formBuilder" element={<Main />} />
       </Routes>
     </Router>
   );

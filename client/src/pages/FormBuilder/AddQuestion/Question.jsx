@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   FormControlLabel,
@@ -6,7 +6,6 @@ import {
   RadioGroup,
   FormControl,
   TextField,
-  Button,
   FormLabel,
   Tooltip,
   IconButton,
@@ -27,8 +26,13 @@ import {
 const Question = () => {
   const dispatch = useDispatch();
   const singleQuestion = useSelector((state) => state.SingleQuestion);
-  const { questionCategory, question, questionImageURL, questionImageDesc } =
-    singleQuestion;
+  const {
+    questionType,
+    questionCategory,
+    question,
+    questionImageURL,
+    questionImageDesc,
+  } = singleQuestion;
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -55,23 +59,29 @@ const Question = () => {
         >
           <FormControlLabel
             value="Quantitative"
-            control={<Radio size="small" />}
+            control={
+              <Radio size="small" checked={questionType === "Quantitative"} />
+            }
             label="Quantitative"
           />
           <FormControlLabel
-            value="Logical Reasoning"
-            control={<Radio size="small" />}
-            label="Logical Reasoning"
+            value="Reasoning"
+            control={
+              <Radio size="small" checked={questionType === "Reasoning"} />
+            }
+            label="Reasoning"
           />
           <FormControlLabel
             value="Verbal"
-            control={<Radio size="small" />}
+            control={<Radio size="small" checked={questionType === "Verbal"} />}
             label="Verbal"
           />
           <FormControlLabel
-            value="Domain"
-            control={<Radio size="small" />}
-            label="Domain"
+            value="Technical"
+            control={
+              <Radio size="small" checked={questionType === "Technical"} />
+            }
+            label="Technical"
           />
         </RadioGroup>
         <>

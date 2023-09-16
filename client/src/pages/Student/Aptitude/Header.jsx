@@ -4,10 +4,22 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import AdbIcon from "@mui/icons-material/Adb";
-import { Avatar, Grid } from "@mui/material";
+import { Avatar, Button, Grid } from "@mui/material";
+import { center } from "./styles";
 
 const Header = () => {
+  const handleFullScreen = () => {
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    } else if (document.documentElement.mozRequestFullScreen) {
+      document.documentElement.mozRequestFullScreen();
+    } else if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen();
+    } else if (document.documentElement.msRequestFullscreen) {
+      document.documentElement.msRequestFullscreen();
+    }
+  };
+
   return (
     <AppBar position="sticky" sx={{ boxShadow: 0 }}>
       <Container maxWidth="xl">
@@ -35,8 +47,11 @@ const Header = () => {
                     HG
                   </Typography>
                 </Avatar>
-                <Typography variant="h6" sx={{ fontFamily: "monospace" }}>
-                  HI... Username{" "}
+                <Typography
+                  variant="h6"
+                  sx={{ fontFamily: "monospace", mr: 2 }}
+                >
+                  HI... Username
                 </Typography>
               </Box>
             </Grid>
@@ -55,20 +70,31 @@ const Header = () => {
                   variant="h6"
                   sx={{ fontFamily: "monospace" }}
                 >
-                  30:00:00
+                  30:00 (MM:SS)
                 </Typography>
               </Box>
-              <Box>
-                <Avatar
+              <Box sx={center}>
+                {/* <Button
+                  variant="contained"
                   sx={{
-                    bgcolor: "white",
-                    color: "#2196f3",
-                    fontFamily: "monospace",
+                    color: "black",
+                    background: "white",
+                    ":hover": { background: "lightgray", color: "black" },
                   }}
-                  alt="Jay Patel"
+                  onClick={handleFullScreen}
                 >
-                  JP
-                </Avatar>
+                  Full Screen
+                </Button> */}
+                <Button
+                  variant="contained"
+                  sx={{
+                    color: "black",
+                    background: "white",
+                    ":hover": { background: "lightgray", color: "black" },
+                  }}
+                >
+                  Submit Test
+                </Button>
               </Box>
             </Grid>
           </Grid>

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const codingSchema = new mongoose.Schema({
   interviewId: {
@@ -6,9 +6,7 @@ const codingSchema = new mongoose.Schema({
   },
   questions: [
     {
-      question: {
-        type: String,
-      },
+      question: { type: String },
       testcases: [
         {
           type: String,
@@ -23,7 +21,6 @@ const codingSchema = new mongoose.Schema({
   candidates: [{ type: mongoose.Schema.Types.ObjectId, ref: "candidate" }],
 });
 
-
-const coding = mongoose.model("coding",codingSchema);
+const coding = mongoose.model("coding", codingSchema);
 
 export default coding;
