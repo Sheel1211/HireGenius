@@ -16,7 +16,7 @@ console.log("send email",clientEmail,subjectData,message);
     from: "hiregenius.co.in@gmail.com",
     to: clientEmail,
     subject: subjectData,
-    html: `${message}`,
+    html: `<h2>${message}</h2>`,
   };
 
   return new Promise((resolve,reject)=>{

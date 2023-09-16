@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 function Copyright(props) {
   return (
@@ -38,19 +39,28 @@ const adminLogin = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const email=data.get("email")
-    const password = data.get("password")
+    const email = data.get("email");
+    const password = data.get("password");
 
     // console.log({
     //   email: data.get("email"),
     //   password: data.get("password"),
     // });
 
-    axios.post("http://127.0.0.1:4000/api/admin/admin-login",{email,password},{ headers: { "Content-Type": "application/json" } }).then((res)=>{
-    console.log("res : ",res.data);
-    }).catch((err)=>{
-        console.log("err",err);
-    })
+    axios
+      .post(
+        "http://127.0.0.1:4000/api/admin/admin-login",
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
+      )
+      .then((res) => {
+        console.log("res : ", res.data);
+
+        Cookies.set("token", res.data.token, { expires: 7 });
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
 
   return (
@@ -97,16 +107,15 @@ const adminLogin = () => {
               id="password"
               autoComplete="current-password"
             />
-           
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-                Log In
-                </Button>
-           
+              Log In
+            </Button>
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
