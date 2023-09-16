@@ -56,6 +56,10 @@ const clientSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  rejected: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const client = mongoose.model("client", clientSchema);
