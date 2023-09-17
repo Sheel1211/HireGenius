@@ -5,10 +5,10 @@ import candidate from "../models/candidateSchema.js";
 
 const isauthenticated = async (req, res, next) => {
   // console.log(req.cookies);
-  console.log("Hello");
+  // console.log("Hello");
   try {
     const { token } = req.cookies;
-    // console.log("token",token);
+    console.log("token",token);
 
     if (!token) {
       return res.status(400).json({

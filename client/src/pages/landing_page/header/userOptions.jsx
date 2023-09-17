@@ -8,7 +8,7 @@ import { Dashboard, List, Logout, Person } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Item } from "../../FormBuilder/Style";
-import { logoutUser } from "../../../store/slices/AdminSlice";
+import { logoutUser } from "../../../store/slices/UserSlice";
 
 const UserOptions = ({ user }) => {
   const [open, setOpen] = React.useState(false);

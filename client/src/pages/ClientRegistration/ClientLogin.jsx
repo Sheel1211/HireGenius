@@ -15,7 +15,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import { clientLogin as ClientSlice } from "../../store/slices/ClientSlice.js";
 import { UserLogin } from "../../store/slices/UserSlice.js";
 import { useDispatch } from "react-redux";
 

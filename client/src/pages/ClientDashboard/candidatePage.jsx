@@ -1,11 +1,22 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Grid, Button } from "@mui/material";
+import { Grid, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useState, useEffect } from "react";
 import Papa from "papaparse";
+import axios from "axios";
+
+const config = {
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+  mode: "cors",
+  credentials: "include",
+  withCredentials: true,
+};
 
 const columns = [
   // { field: "id", headerName: "ID", width: 70 },
@@ -50,8 +61,9 @@ const VisuallyHiddenInput = styled("input")`
 
 export default function CandidatePage() {
   const [rows, setRows] = useState([]);
-
   const [csv, setCsv] = useState(null);
+  
+
   // const [candidates, setCandidates] = useState([]);
 
   const [data, setData] = useState([
@@ -85,6 +97,19 @@ export default function CandidatePage() {
     }
   };
 
+  const addCandidates=async()=>{
+    const title = prompt("Enter your interview title")
+    
+    if(!title){
+      return alert("please eneter a title");
+    }
+
+    axios.post("http://127.0.0.1:4000/api/client/add/candidates",{rows,title},config).then((res)=>{
+    
+    }).catch((err)=>{
+      console.log("err",err);
+    })
+  }
   useEffect(() => {
     console.log("rows", rows);
   }, [rows]);
@@ -112,11 +137,13 @@ export default function CandidatePage() {
               href="#file-upload"
               onChange={(e) => {
                 setCsv(e.target.files[0]);
+                handleReadCSV();
               }}
             >
               Upload a file
               <VisuallyHiddenInput type="file" />
             </Button>
+            <Typography>{csv && csv.name}</Typography>
           </label>{" "}
         </Grid>
         <Grid item xs={4}>
@@ -127,6 +154,11 @@ export default function CandidatePage() {
         <Grid item xs={4}>
           <Button variant="contained" onClick={handleWriteCSV}>
             Download CSV Example
+          </Button>
+        </Grid>
+        <Grid item xs={4}>
+          <Button variant="contained" onClick={addCandidates}>
+            Add candidates
           </Button>
         </Grid>
       </Grid>

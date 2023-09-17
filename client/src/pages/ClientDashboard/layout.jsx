@@ -13,16 +13,11 @@ import SideBarConfig from "./sideBarConfig";
 import Logo from "./Logo";
 import { styled, alpha } from "@mui/material/styles";
 import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 92;
 const NAV_WIDTH = 280;
-
-const account = {
-  displayName: "Jaydon Frankie",
-  email: "demo@minimals.cc",
-  //   photoURL: "/assets/images/avatars/avatar_default.jpg",
-};
 
 const StyledAccount = styled("div")(({ theme }) => ({
   display: "flex",
@@ -52,18 +47,24 @@ const Main = styled("div")(({ theme }) => ({
 }));
 
 const layout = () => {
+  const user = useSelector((state) => state.User);
+
+  const account = {
+    displayName: user.User.name,
+    email: user.User.email,
+    photoURL: user.User.logo.url,
+  };
+
   return (
     <StyledRoot>
       <Box>
         <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
-          <Logo />
+        <img src={account.photoURL} alt="photoURL"/>
         </Box>
 
         <Box sx={{ mb: 5, mx: 2.5 }}>
           <Link underline="none">
             <StyledAccount>
-              <Avatar src={account.photoURL} alt="photoURL" />
-
               <Box sx={{ ml: 2 }}>
                 <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
                   {account.displayName}

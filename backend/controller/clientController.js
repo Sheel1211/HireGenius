@@ -1,5 +1,7 @@
 import { uploadFile } from "../services/uploadFileS3.service.js";
 import client from "../models/clientSchema.js";
+import candidate from "../models/candidateSchema.js";
+import interview from "../models/interviewSchema.js";
 import jwt from 'jsonwebtoken'
 import { generateUniquePassword } from "../services/generateUniquePassword.js";
 
@@ -123,10 +125,69 @@ export const clientLogin = async(req,res)=>{
 }
 
 export const addCandidatesWithUsernameAndPassword =async(req,res)=>{
-    const {name,email} = req.body;
-    console.log(email,name);
-    const password = generateUniquePassword(name,email)
-    console.log("Password",password);
-    
+    // const {rows} = req.body;
+    // const arr=[];
+    // console.log("rows : ",rows);
+
+
+
+    // await rows.map(async(item,index)=>{
+    //   if(item.id=='')return;
+    //   console.log(index," => ",item)
+    //   const password = generateUniquePassword();
+
+    //   const candidateDetails = new candidate({
+    //     name:item.name,
+    //     email:item.email,
+    //     password,
+    //     username:item.email.split('@')[0]
+    //   });
+    //   console.log("loading ",index);
+    //   await candidateDetails.save();
+
+    //   const candi = await candidate.find({email:item.email});
+
+    //   console.log(candi);
+    //   arr.push(candi._id);
+
+    // })
+
+    // console.log("arr ",arr);
+
+    const { rows,title } = req.body;
+const arr = [];
+console.log("rows : ", rows);
+// console.log(req.user._id);
+
+await Promise.all(rows.map(async (item, index) => {
+  if (item.id == '') return;
+  console.log(index, " => ", item);
+  const password = generateUniquePassword();
+
+  const candidateDetails = new candidate({
+    name: item.name,
+    email: item.email,
+    password,
+    username: item.email.split('@')[0]
+  });
+  console.log("loading ", index);
+  await candidateDetails.save();
+
+  const candi = await candidate.findOne({ email: item.email });
+
+  console.log(candi);
+  arr.push(candi._id);
+
+
+}));
+
+const addToInterview = new interview({
+  candidates:arr,
+  title,
+  client:req.user._id
+});
+addToInterview.save();
+console.log("arr ", arr);
+
 }
 

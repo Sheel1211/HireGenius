@@ -7,19 +7,19 @@ import { Grid, Container, Typography } from "@mui/material";
 import Iconify from "./components/iconify";
 // sections
 import AppTasks from "./sections/app/appTask";
+import { useSelector } from "react-redux";
 
 export default function DashboardAppPage() {
   const theme = useTheme();
+  const user = useSelector((state) => state.User);
 
   return (
     <>
-      {/* <Helmet>
-        <title> Dashboard | Minimal UI </title>
-      </Helmet> */}
+     
 
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Hi, Welcome back
+          Hi, Welcome {user.User.email}
         </Typography>
 
         <Grid container spacing={3}>
