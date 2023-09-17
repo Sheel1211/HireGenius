@@ -31,11 +31,6 @@ const Test = () => {
   const { aptitudeId } = params;
 
   useEffect(() => {
-    const currentMinutes = new Date().getMinutes();
-    const currentSeconds = new Date().getSeconds();
-  }, []);
-
-  useEffect(() => {
     axios
       .get(`http://localhost:4000/api/aptitude/questions/${aptitudeId}`)
       .then((res) => {

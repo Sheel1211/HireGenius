@@ -3,6 +3,10 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 const ThankYou = () => {
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
+
   return (
     <>
       <Container
@@ -19,7 +23,7 @@ const ThankYou = () => {
       >
         <Box>
           <Typography variant="h5">
-            Thank you for submitting the test.
+            Thank you for attempting the test.
           </Typography>
           <Typography variant="body1">You may close the window now.</Typography>
         </Box>
