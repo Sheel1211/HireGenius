@@ -7,6 +7,7 @@ import "./config/db.js";
 import { connectDB } from "./config/db.js";
 import fileUpload from "express-fileupload";
 import cookieParser from "cookie-parser";
+import AptitudeRoute from "./routes/aptiRoutes.js"
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", Routes);
+app.use("/api", AptitudeRoute);
 
 app.listen(process.env.PORT || 4000, () => {
   console.log(`Server running at http://${hostname}:${port}/`);

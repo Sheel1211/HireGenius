@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextOption from "./TextOption";
 import {
   Alert,
@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAnswerType } from "../../../store/slices/SingleQuestion";
 import ImageOption from "./ImageOption";
 
-const Answer = () => {
+const Answer = ({ isQuestionAdded }) => {
   const [showOption, setShowOption] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [optionTypeDialog, setOptionTypeDialog] = useState(false);
@@ -29,6 +29,10 @@ const Answer = () => {
   const dispatch = useDispatch();
   const singleQuestion = useSelector((state) => state.SingleQuestion);
   const { answerType } = singleQuestion;
+
+  useEffect(() => {
+    setShowOption([]);
+  }, [isQuestionAdded]);
 
   const handleAddOption = () => {
     if (showOption.length + 1 > 4) {

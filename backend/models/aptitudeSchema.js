@@ -1,28 +1,24 @@
 import mongoose from "mongoose";
 
-const aptitudeSchema = new mongoose.Schema({
-  interviewId: {
-    type: mongoose.Schema.Types.ObjectId,
-  },
-  questions: [
-    {
-      question: {
-        type: String,
-      },
-      options: [
-        {
-          type: String,
-        },
-      ],
+const aptitudeSchema = new mongoose.Schema(
+  {
+    aptitudeId: {
+      type: String,
     },
-  ],
-  duration: {
-    type: Number,
-    required: [true, "Please provide duration of aptitude test"],
+    questions: [{}],
+    duration: {
+      type: Number, // Minutes
+      default: 0,
+    },
+    isFinished: {
+      type: Boolean,
+      default: false,
+    },
+    candidates: [{ type: mongoose.Schema.Types.ObjectId, ref: "candidate" }],
   },
-  candidates: [{ type: mongoose.Schema.Types.ObjectId, ref: "candidate" }],
-});
+  { timestamps: true }
+);
 
-const aptitude = mongoose.model("aptitude",aptitudeSchema);
+const aptitude = mongoose.model("Aptitude", aptitudeSchema);
 
 export default aptitude;

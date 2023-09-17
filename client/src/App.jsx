@@ -8,8 +8,6 @@ import InterviewPage from "./pages/ClientDashboard/interviewPage";
 import AdminDashboard from "./pages/Admin/adminDashboard";
 import AdminLogin from "./pages/Admin/adminLogin";
 import FormBuilder from "./pages/FormBuilder/Main";
-import CsvParser from "./pages/CsvParser/Main";
-import StudentAptitude from "./pages/Student/Aptitude";
 import Playground from "./pages/compiler/Playground";
 import ClientProfile from "./pages/Admin/clientProfile";
 import Landing from "./pages/landing_page/Landing";
@@ -25,6 +23,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import ClientLogin from "./pages/ClientRegistration/ClientLogin";
 import { getUserDetails } from "./store/slices/UserSlice";
+import CandidateAptitude from "./pages/Candidate/Aptitude";
 
 const config = {
   headers: {
@@ -64,6 +63,7 @@ const App = () => {
     return <div>Loading...</div>;
   }
 
+
   return (
     <Router>
       <ToastContainer />
@@ -72,9 +72,11 @@ const App = () => {
         <Route path="/" exact element={<Landing />} />
         <Route path="/compiler" element={<CompilerHome />} />
         <Route path="/compiler/playground" element={<Playground />} />
-        <Route path="/form" element={<FormBuilder />} />
-        <Route path="/parser" element={<CsvParser />} />
-        <Route path="/apt" element={<StudentAptitude />} />
+        <Route path="/create/aptitude" element={<FormBuilder />} />
+        <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />
+
+        
+        {/* <Route path="/apt" element={<StudentAptitude />} /> */}
         <Route path="/formBuilder" element={<Main />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -92,5 +94,7 @@ const App = () => {
     </Router>
   );
 };
+
+
 
 export default App;

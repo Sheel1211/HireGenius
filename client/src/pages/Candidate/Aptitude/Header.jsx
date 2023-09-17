@@ -4,10 +4,25 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import AdbIcon from "@mui/icons-material/Adb";
-import { Avatar, Grid } from "@mui/material";
+import { Avatar, Button, Grid } from "@mui/material";
+import { center } from "./styles";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedPage } from "../../../store/slices/AptiDashboard";
+import { useParams } from "react-router-dom";
+import CountdownTimer from "./CountdownTimer";
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const params = useParams();
+  const AptiDetails = useSelector((state) => state.AptiDashboard);
+  const initialTime = AptiDetails.duration * 60;
+
+  const handleSubmitTest = () => {
+    localStorage.setItem(`${params.aptitudeId}`, "4");
+    dispatch(setSelectedPage("4"));
+
+    // calculate the grades
+  };
   return (
     <AppBar position="sticky" sx={{ boxShadow: 0 }}>
       <Container maxWidth="xl">
@@ -35,8 +50,11 @@ const Header = () => {
                     HG
                   </Typography>
                 </Avatar>
-                <Typography variant="h6" sx={{ fontFamily: "monospace" }}>
-                  HI... Username{" "}
+                <Typography
+                  variant="h6"
+                  sx={{ fontFamily: "monospace", mr: 2 }}
+                >
+                  HI... Username
                 </Typography>
               </Box>
             </Grid>
@@ -55,20 +73,33 @@ const Header = () => {
                   variant="h6"
                   sx={{ fontFamily: "monospace" }}
                 >
-                  30:00:00
+                  <CountdownTimer initialTime={initialTime} />
+                  {/* 30:00 (MM:SS) */}
                 </Typography>
               </Box>
-              <Box>
-                <Avatar
+              <Box sx={center}>
+                {/* <Button
+                  variant="contained"
                   sx={{
-                    bgcolor: "white",
-                    color: "#2196f3",
-                    fontFamily: "monospace",
+                    color: "black",
+                    background: "white",
+                    ":hover": { background: "lightgray", color: "black" },
                   }}
-                  alt="Jay Patel"
+                  onClick={handleFullScreen}
                 >
-                  JP
-                </Avatar>
+                  Full Screen
+                </Button> */}
+                <Button
+                  variant="contained"
+                  sx={{
+                    color: "black",
+                    background: "white",
+                    ":hover": { background: "lightgray", color: "black" },
+                  }}
+                  onClick={handleSubmitTest}
+                >
+                  Submit Test
+                </Button>
               </Box>
             </Grid>
           </Grid>
