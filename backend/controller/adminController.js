@@ -2,7 +2,7 @@ import admin from '../models/adminSchema.js'
 import client from '../models/clientSchema.js'
 import { sendEmail } from '../services/sendEmail.service.js'
 
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken' 
 
 export const adminLogin=async(req,res)=>{
     try{
@@ -21,26 +21,31 @@ export const adminLogin=async(req,res)=>{
 
         await adminData.save()
 
-        return res.status(200).send({success:true,message:"admin loggedIn succcessfully",token:authToken})
+        return res.status(200).cookie("token", authToken, {
+            expires: new Date(Date.now() + 10 * 60 * 1000),
+            httpOnly: true,    
+            sameSite:'none',
+            
+          }).send({success:true,message:"admin loggedIn successfully",token:authToken,adminData})
 
     } catch(error){
-        return res.status(500).send({sucess:false,message:"Internal server error", data: error.message})
+        return res.status(500).send({success:false,message:"Internal server error", data: error.message})
     }
 }
 
 export const getallPendingClients = async(req,res)=>{
     try{
-
+        // console.log("Hello")
         const allUnverifiedClients = await client.find({ approved: false,rejected: false});
 
         if(allUnverifiedClients){
             return res.status(200).send({success:true,data:allUnverifiedClients})
         }else{
-            return res.status(422).send({sucess:false,message:"No unverified Clients are there"})
+            return res.status(422).send({success:false,message:"No unverified Clients are there"})
         }
 
     }catch(error){
-        return res.status(500).send({sucess:false,message:"Internal server error", data: error.message})
+        return res.status(500).send({success:false,message:"Internal server error", data: error.message})
     }
 }
 
@@ -52,11 +57,11 @@ export const getallRejectedClients = async(req,res)=>{
         if(allRejectedClients){
             return res.status(200).send({success:true,data:allRejectedClients})
         }else{
-            return res.status(422).send({sucess:false,message:"No rejected Clients are there"})
+            return res.status(422).send({success:false,message:"No rejected Clients are there"})
         }
 
     }catch(error){
-        return res.status(500).send({sucess:false,message:"Internal server error", data: error.message})
+        return res.status(500).send({success:false,message:"Internal server error", data: error.message})
     }
 }
 
@@ -68,11 +73,11 @@ export const getallApprovedClients = async(req,res)=>{
         if(allApprovedClients){
             return res.status(200).send({success:true,data:allApprovedClients})
         }else{
-            return res.status(422).send({sucess:false,message:"No Approved Clients are there"})
+            return res.status(422).send({success:false,message:"No Approved Clients are there"})
         }
 
     }catch(error){
-        return res.status(500).send({sucess:false,message:"Internal server error", data: error.message})
+        return res.status(500).send({success:false,message:"Internal server error", data: error.message})
     }
 }
 
@@ -87,13 +92,13 @@ export const verifyClients = async(req,res)=>{
 
             const data = await sendEmail("barotpratham266@gmail.com","Hiregenius Application Status",`Application Status: Approved. ${message}`);
             console.log("email data : ",data)
-            return res.status(200).send({sucess:true,message:"Client is Verified successfully"})
+            return res.status(200).send({success:true,message:"Client is Verified successfully"})
         }else{
-            return res.status(422).send({sucess:false,message:"Something went wrong!"})
+            return res.status(422).send({success:false,message:"Something went wrong!"})
         }
 
     }catch(error){
-        return res.status(500).send({sucess:false,message:"Internal server error", data: error.message})
+        return res.status(500).send({success:false,message:"Internal server error", data: error.message})
     }
 
 
@@ -109,12 +114,12 @@ export const rejectClients = async(req,res)=>{
         if(clientData){
             const data = await sendEmail("barotpratham266@gmail.com","Hiregenius Application Status",`Application Status: Rejected. ${message}`);
             console.log("email data : ",data)
-            return res.status(200).send({sucess:true,message:"Client is Rejected successfully"})
+            return res.status(200).send({success:true,message:"Client is Rejected successfully"})
         }else{
-            return res.status(422).send({sucess:false,message:"Something went wrong!"})
+            return res.status(422).send({success:false,message:"Something went wrong!"})
         }
 
     }catch(error){
-        return res.status(500).send({sucess:false,message:"Internal server error", data: error.message})
+        return res.status(500).send({success:false,message:"Internal server error", data: error.message})
     }
 }

@@ -14,6 +14,19 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { adminLogin as adminSlice } from "../../store/slices/AdminSlice.js";
+import { useNavigate } from "react-router-dom";
+
+const config = {
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+  mode: "cors",
+  credentials: "include",
+  withCredentials: true,
+};
 
 function Copyright(props) {
   return (
@@ -36,6 +49,9 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 const adminLogin = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -51,12 +67,13 @@ const adminLogin = () => {
       .post(
         "http://127.0.0.1:4000/api/admin/admin-login",
         { email, password },
-        { headers: { "Content-Type": "application/json" } }
+        config
       )
       .then((res) => {
         console.log("res : ", res.data);
-
+        dispatch(adminSlice(res.data.adminData));
         Cookies.set("token", res.data.token, { expires: 7 });
+        navigate("/admindashboard")
       })
       .catch((err) => {
         console.log("err", err);

@@ -40,6 +40,16 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+const config = {
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+  mode: "cors",
+  credentials: "include",
+  withCredentials: true,
+};
 
 const adminDashboard = () => {
   const [selectedID, setSelectedID] = useState(null);
@@ -62,45 +72,47 @@ const adminDashboard = () => {
 
   const navigate = useNavigate();
 
+  const adminData = useSelector((state) => state.Admin);
+  console.log("adminData",adminData);
+
   const getAllPendingClientsData = () => {
     axios
-    .get("http://127.0.0.1:4000/api/admin/getall-clients")
-    .then((res) => {
-      setUSERLIST(res.data.data);
-      console.log(res.data.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .get("http://127.0.0.1:4000/api/admin/getall-clients", config)
+      .then((res) => {
+        setUSERLIST(res.data.data);
+        console.log(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const getAllApprovedClientsData = ()=>{
+  const getAllApprovedClientsData = () => {
     axios
-    .get("http://127.0.0.1:4000/api/admin/getall-approved-clients")
-    .then((res) => {
-      setUSERLIST(res.data.data);
-      console.log(res.data.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
+      .get("http://127.0.0.1:4000/api/admin/getall-approved-clients", config)
+      .then((res) => {
+        setUSERLIST(res.data.data);
+        console.log(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  const getAllRejectedClientsData = ()=>{
+  const getAllRejectedClientsData = () => {
     axios
-    .get("http://127.0.0.1:4000/api/admin/getall-rejected-clients")
-    .then((res) => {
-      setUSERLIST(res.data.data);
-      console.log(res.data.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
-  
+      .get("http://127.0.0.1:4000/api/admin/getall-rejected-clients", config)
+      .then((res) => {
+        setUSERLIST(res.data.data);
+        console.log(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
-    getAllPendingClientsData()
+    getAllPendingClientsData();
   }, []);
 
   const seeClientProfile = (selectedID) => {
@@ -117,7 +129,7 @@ const adminDashboard = () => {
     { id: "contactno", label: "Contact", alignRight: false },
     { id: "sector", label: "Sector", alignRight: false },
     { id: "approved", label: "Verified", alignRight: false },
-    { id: "View", label: "View", },
+    { id: "View", label: "View" },
   ];
 
   // CANDIDATE LIST HEAD ----------------------------------------------------------------------------------------------
@@ -378,27 +390,22 @@ const adminDashboard = () => {
     return (
       <>
         <Container>
-        <Typography variant="h4" gutterBottom mb={5}>
-              Admin
-        </Typography>
+          <Typography variant="h4" gutterBottom mb={5}>
+            Admin {adminData.admin.email}
+          </Typography>
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="space-between"
             mb={3}
           >
-            
-            <Button
-              variant="contained"
-              onClick={getAllPendingClientsData}
-            >
+            <Button variant="contained" onClick={getAllPendingClientsData}>
               Pending Clients
             </Button>
             <Button
               variant="contained"
               color="success"
               onClick={getAllApprovedClientsData}
-
             >
               Approved Clients
             </Button>
@@ -488,15 +495,18 @@ const adminDashboard = () => {
 
                               <TableCell align="left">{sector}</TableCell>
                               <TableCell align="left">
-                              <Label
-                                  color={approved ? "success" : "error"} 
-                                >
-                                {approved ? "Yes" : "No"}
+                                <Label color={approved ? "success" : "error"}>
+                                  {approved ? "Yes" : "No"}
                                 </Label>
-                              </TableCell>          
+                              </TableCell>
 
                               <TableCell align="right">
-                              <Button variant="outlined" onClick={()=>seeClientProfile(_id)}>Profile</Button>
+                                <Button
+                                  variant="outlined"
+                                  onClick={() => seeClientProfile(_id)}
+                                >
+                                  Profile
+                                </Button>
                               </TableCell>
                             </TableRow>
                           </React.Fragment>

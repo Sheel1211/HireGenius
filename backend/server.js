@@ -6,6 +6,7 @@ import Routes from "./routes/index.js";
 import "./config/db.js";
 import { connectDB } from "./config/db.js";
 import fileUpload from "express-fileupload";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -13,16 +14,19 @@ connectDB();
 const hostname = process.env.HOST_NAME || "127.0.0.1";
 const port = process.env.PORT || 4000;
 
-
+app.use(cookieParser());
 app.use(
   cors({
-    origin: "*",
+    origin: ["http://127.0.0.1:5173"],
+    credentials: true,
   })
 );
 
-app.use(fileUpload({
-  limits: { fileSize: 50 * 1024 * 1024 },
-}));
+app.use(
+  fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+  })
+);
 
 app.use(express.json());
 
