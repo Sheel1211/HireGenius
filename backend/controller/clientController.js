@@ -1,5 +1,7 @@
 import { uploadFile } from "../services/uploadFileS3.service.js";
 import client from "../models/clientSchema.js";
+import jwt from 'jsonwebtoken'
+import { generateUniquePassword } from "../services/generateUniquePassword.js";
 
 export const clientRegistration = async(req, res) => {
   
@@ -90,3 +92,37 @@ export const getClientData = async(req,res)=>{
       return res.status(500).send({success:false, message:"Internal Server Error"}) 
     }
 }
+
+export const clientLogin = async(req,res)=>{
+  try{
+
+    const {email,password } = req.body;
+
+    const clientData = await client.findOne({email,password})
+
+    if(!clientData || clientData ===  undefined || clientData === null){
+        return res.status(204).send({success:false,message:"No client for given data"})
+    }else{
+        const approveClientData = await client.findOne({email:email,password:password,approved:true,rejected:false})
+        if(!approveClientData || approveClientData ===  undefined || approveClientData === null){
+          return res.status(202).send({success:false,message:"You are not Approved as client"})
+        }else{
+          const authToken = jwt.sign({id:approveClientData._id}, process.env.JWT_KEY)
+          approveClientData.authToken = authToken;
+          await approveClientData.save()
+          return res.status(200).send({success:true,message:"client loggedIn succcessfully",clientData:approveClientData})
+        }
+    }
+} catch(error){
+    return res.status(500).send({sucess:false,message:"Internal server error", data: error.message})
+}
+}
+
+export const addCandidatesWithUsernameAndPassword =async(req,res)=>{
+    const {name,email} = req.body;
+    console.log(email,name);
+    const password = generateUniquePassword(name,email)
+    console.log("Password",password);
+    
+}
+

@@ -21,6 +21,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Registartion from "./pages/ClientRegistration/Registration";
 import { Navigate } from "react-router-dom";
+import ClientLogin from "./pages/ClientRegistration/ClientLogin";
 
 const App = () => {
   return (
@@ -40,6 +41,8 @@ const App = () => {
         <Route path="/admin/client-profile" element={<ClientProfile/>}/>
 
         <Route path="/client/registration" element={<Registartion/>} />
+        <Route path = "/client/login" element={<ClientLogin/>}/>
+        
         <Route path="/clientdashboard" element={<ClientDashboard />}>
           <Route index element={<ClientDashboardAppPage />} />
           <Route path="app" element={<ClientDashboardAppPage />} />

@@ -60,6 +60,10 @@ const clientSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  authToken: {
+    type: String,
+    default: ""
+}
 });
 
 const client = mongoose.model("client", clientSchema);
