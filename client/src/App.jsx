@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Signin from "./pages/auth/Signin";
 import "./index.css";
 import ClientDashboard from "./pages/ClientDashboard/layout";
@@ -6,7 +6,7 @@ import ClientDashboardAppPage from "./pages/ClientDashboard/appPage";
 import CandidatePage from "./pages/ClientDashboard/candidatePage";
 import InterviewPage from "./pages/ClientDashboard/interviewPage";
 import AdminDashboard from "./pages/Admin/adminDashboard";
-import AdminLogin from './pages/Admin/adminLogin';
+import AdminLogin from "./pages/Admin/adminLogin";
 import FormBuilder from "./pages/FormBuilder/Main";
 import CsvParser from "./pages/CsvParser/Main";
 import StudentAptitude from "./pages/Student/Aptitude";
@@ -21,9 +21,49 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Registartion from "./pages/ClientRegistration/Registration";
 import { Navigate } from "react-router-dom";
+import axios from "axios";
+import { useDispatch } from "react-redux";
 import ClientLogin from "./pages/ClientRegistration/ClientLogin";
+import { getUserDetails } from "./store/slices/UserSlice";
+
+const config = {
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+  mode: "cors",
+  credentials: "include",
+  withCredentials: true,
+};
 
 const App = () => {
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:4000/api/user/me",
+          config
+        );
+        const user = response.data.user;
+        dispatch(getUserDetails(user));
+        setIsLoading(false);
+      } catch (error) {
+        // Handle errors, e.g., unauthorized access
+        setIsLoading(false);
+      }
+    }
+    fetchData();
+    
+  }, [dispatch]);
+
+  if (isLoading) {
+    
+    return <div>Loading...</div>;
+  }
+
   return (
     <Router>
       <ToastContainer />
@@ -37,12 +77,11 @@ const App = () => {
         <Route path="/apt" element={<StudentAptitude />} />
         <Route path="/formBuilder" element={<Main />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
-        <Route path="/admin/login" element={<AdminLogin/>}/>
-        <Route path="/admin/client-profile" element={<ClientProfile/>}/>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/client-profile" element={<ClientProfile />} />
 
-        <Route path="/client/registration" element={<Registartion/>} />
-        <Route path = "/client/login" element={<ClientLogin/>}/>
-        
+        <Route path="/client/registration" element={<Registartion />} />
+        <Route path="/client/login" element={<ClientLogin />} />
         <Route path="/clientdashboard" element={<ClientDashboard />}>
           <Route index element={<ClientDashboardAppPage />} />
           <Route path="app" element={<ClientDashboardAppPage />} />

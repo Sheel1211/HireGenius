@@ -17,6 +17,15 @@ import ModalDialog from '@mui/joy/ModalDialog';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import DeleteForever from '@mui/icons-material/DeleteForever';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
+const config = {
+  headers:{
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+  },
+  mode:'cors',
+  credentials:'include',
+  withCredentials:true
+}
 
 const clientProfile = () => {
   const location = useLocation();
@@ -27,7 +36,7 @@ const clientProfile = () => {
 
   const getClientData = () => {
     axios
-      .get(`http://127.0.0.1:4000/api/client/client-data/${selectedID}`)
+      .get(`http://127.0.0.1:4000/api/client/client-data/${selectedID}`,config)
       .then((res) => {
         console.log(res.data.data);
         setClientData(res.data.data);
@@ -39,9 +48,9 @@ const clientProfile = () => {
 
   const hanldeApprove=(message)=>{
   
-    axios.post(`http://127.0.0.1:4000/api/admin/verify-client/${selectedID}`,{message}).then((res)=>{ 
+    axios.post(`http://127.0.0.1:4000/api/admin/verify-client/${selectedID}`,{message},config).then((res)=>{ 
       console.log(res.data);
-      if(res.data.sucess === true){
+      if(res.data.success === true){
         alert("Verified Successfully");
       }else{
         alert("Something went wrong!");
@@ -54,8 +63,8 @@ const clientProfile = () => {
 
   const hanldeReject=(message)=>{
     
-    axios.post(`http://127.0.0.1:4000/api/admin/reject-client/${selectedID}`,{message}).then((res)=>{ 
-      if(res.data.sucess === true){
+    axios.post(`http://127.0.0.1:4000/api/admin/reject-client/${selectedID}`,{message},config).then((res)=>{ 
+      if(res.data.success === true){
         alert("Rejected Successfully");
       }else{
         alert("Something went wrong!");

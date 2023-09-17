@@ -1,12 +1,15 @@
 import  express  from "express";
-import { adminLogin, getallApprovedClients, getallPendingClients, getallRejectedClients, rejectClients, verifyClients } from "../controller/adminController.js";
+import { adminLogin, adminLogout, getallApprovedClients, getallPendingClients, getallRejectedClients, loadAdminDetails, rejectClients, verifyClients } from "../controller/adminController.js";
+import isauthenticated from "../middleware/auth.js";
 const router  = express.Router();
 
 router.route("/admin-login").post(adminLogin);
-router.route("/getall-clients").get(getallPendingClients);
-router.route("/getall-rejected-clients").get(getallRejectedClients);
-router.route("/getall-approved-clients").get(getallApprovedClients);
-router.route("/verify-client/:clientId").post(verifyClients);
-router.route("/reject-client/:clientId").post(rejectClients);
+router.route("/me").get(isauthenticated,loadAdminDetails);
+router.route("/admin-logout").get(isauthenticated,adminLogout);
+router.route("/getall-clients").get(isauthenticated,getallPendingClients);
+router.route("/getall-rejected-clients").get(isauthenticated,getallRejectedClients);
+router.route("/getall-approved-clients").get(isauthenticated,getallApprovedClients);
+router.route("/verify-client/:clientId").post(isauthenticated,verifyClients);
+router.route("/reject-client/:clientId").post(isauthenticated,rejectClients);
 
 export default router;

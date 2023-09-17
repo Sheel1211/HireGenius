@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,62 +14,65 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
+import { clientLogin as ClientSlice } from "../../store/slices/ClientSlice.js";
+import { UserLogin } from "../../store/slices/UserSlice.js";
+import { useDispatch } from "react-redux";
 
 function Copyright(props) {
-    return (
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        align="center"
-        {...props}
-      >
-        {"Copyright © "}
-        <Link color="inherit" href="https://mui.com/">
-          Your Website
-        </Link>{" "}
-        {new Date().getFullYear()}
-        {"."}
-      </Typography>
-    );
-  }
-  
-  const defaultTheme = createTheme();
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
+
+const defaultTheme = createTheme();
 
 const ClientLogin = () => {
-    const navigate=useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        const email = data.get("email");
-        const password = data.get("password");
-    
-   
-        axios
-          .post(
-            "http://127.0.0.1:4000/api/client/login",
-            { email, password },
-            { headers: { "Content-Type": "application/json" } }
-          )
-          .then((res) => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const email = data.get("email");
+    const password = data.get("password");
 
-              if(res.status === 200){
-                console.log( res.data)
-                navigate('/clientdashboard')
-            }else if(res.status === 202){
-                alert("You are not Approved as client")
-            }else if(res.status === 204)
-                 alert("No client for given data")
-          })
-          .catch((err) => {
-            alert("Something went wrong!")
-        });
-      };
+    axios
+      .post(
+        "http://127.0.0.1:4000/api/client/login",
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("res.data", res.data);
+          Cookies.set("token", res.data.user.authToken, { expires: 7 });
+          dispatch(UserLogin(res.data.user));
+          console.log("Hello world")
+          navigate("/clientdashboard");
+        } else if (res.status === 202) {
+          alert("You are not Approved as client");
+        } else if (res.status === 204) alert("No client for given data");
+      })
+      .catch((err) => {
+        alert("Something went wrong!");
+      });
+  };
 
   return (
-      <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -126,7 +129,7 @@ const ClientLogin = () => {
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
-  )
-}
+  );
+};
 
-export default ClientLogin
+export default ClientLogin;

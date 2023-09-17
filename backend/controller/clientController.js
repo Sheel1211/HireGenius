@@ -110,7 +110,11 @@ export const clientLogin = async(req,res)=>{
           const authToken = jwt.sign({id:approveClientData._id}, process.env.JWT_KEY)
           approveClientData.authToken = authToken;
           await approveClientData.save()
-          return res.status(200).send({success:true,message:"client loggedIn succcessfully",clientData:approveClientData})
+          return res.status(200).cookie("token", authToken, {
+            expires: new Date(Date.now() + 10 * 60 * 1000),
+            httpOnly: true,
+            sameSite: "none",
+          }).send({success:true,message:"client loggedIn succcessfully",user:approveClientData,type:"client"})
         }
     }
 } catch(error){

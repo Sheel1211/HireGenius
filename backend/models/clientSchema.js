@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 import validator from "validator"
 const clientSchema = new mongoose.Schema({
+  role:{
+    type:String,
+    default:"client"
+},
   name: {
     type: String,
     required: [true, "Enter your name"],
