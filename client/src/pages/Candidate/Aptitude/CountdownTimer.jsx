@@ -1,14 +1,27 @@
 import React, { useState, useEffect } from "react";
 
-const CountdownTimer = ({ initialTime }) => {
-  const [time, setTime] = useState(initialTime);
+const CountdownTimer = ({ initialTime, onTimeExpired }) => {
+  const initialTimeRemaining =
+    localStorage.getItem("timeRemaining") || initialTime;
+  const [time, setTime] = useState(parseInt(initialTimeRemaining, 10));
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+      setTime((prevTime) => {
+        const newTime = prevTime > 0 ? prevTime - 1 : 0;
+        localStorage.setItem("timeRemaining", newTime.toString());
+
+        if (newTime === 0) {
+          onTimeExpired();
+        }
+        return newTime;
+      });
     }, 1000);
 
-    return () => clearInterval(intervalId);
+    return () => {
+      clearInterval(intervalId);
+      localStorage.removeItem("timeRemaining");
+    };
   }, []);
 
   const formatTime = (time) => {

@@ -17,12 +17,43 @@ const Header = () => {
   const AptiDetails = useSelector((state) => state.AptiDashboard);
   const initialTime = AptiDetails.duration * 60;
 
+  const calculateGrades = () => {
+    let right = 0;
+    let total = AptiDetails.questions.length;
+    const sections = AptiDetails.sections;
+    console.log(sections);
+    for (let section in sections) {
+      const sectionArr = sections[section];
+      sectionArr.forEach((value, index) => {
+        const { selectedOptions, answers: correctAnswers, options } = value;
+        const selectedAnswers = selectedOptions.map(
+          (selectedOptionIdx) => options[selectedOptionIdx].option
+        );
+
+        const isCorrect = correctAnswers.every((correctAnswer) =>
+          selectedAnswers.includes(correctAnswer)
+        );
+
+        if (isCorrect) {
+          right++;
+        }
+      });
+    }
+
+    console.log(right, total);
+  };
+
   const handleSubmitTest = () => {
     localStorage.setItem(`${params.aptitudeId}`, "4");
     dispatch(setSelectedPage("4"));
-
-    // calculate the grades
+    calculateGrades();
   };
+
+  const onTimeExpired = () => {
+    localStorage.setItem(`${params.aptitudeId}`, "4");
+    dispatch(setSelectedPage("4"));
+  };
+
   return (
     <AppBar position="sticky" sx={{ boxShadow: 0 }}>
       <Container maxWidth="xl">
@@ -73,22 +104,14 @@ const Header = () => {
                   variant="h6"
                   sx={{ fontFamily: "monospace" }}
                 >
-                  <CountdownTimer initialTime={initialTime} />
-                  {/* 30:00 (MM:SS) */}
+                  {/* <CountdownTimer
+                    initialTime={initialTime}
+                    onTimeExpired={onTimeExpired}
+                  /> */}
+                  30:00
                 </Typography>
               </Box>
               <Box sx={center}>
-                {/* <Button
-                  variant="contained"
-                  sx={{
-                    color: "black",
-                    background: "white",
-                    ":hover": { background: "lightgray", color: "black" },
-                  }}
-                  onClick={handleFullScreen}
-                >
-                  Full Screen
-                </Button> */}
                 <Button
                   variant="contained"
                   sx={{
