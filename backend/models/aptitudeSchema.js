@@ -8,6 +8,11 @@ const aptitudeSchema = new mongoose.Schema(
     questions: [{}],
     duration: {
       type: Number, // Minutes
+      default: 0,
+    },
+    isFinished: {
+      type: Boolean,
+      default: false,
     },
     candidates: [{ type: mongoose.Schema.Types.ObjectId, ref: "candidate" }],
   },

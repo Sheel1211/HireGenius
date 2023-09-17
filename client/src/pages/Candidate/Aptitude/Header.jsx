@@ -6,20 +6,23 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Avatar, Button, Grid } from "@mui/material";
 import { center } from "./styles";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedPage } from "../../../store/slices/AptiDashboard";
+import { useParams } from "react-router-dom";
+import CountdownTimer from "./CountdownTimer";
 
 const Header = () => {
-  const handleFullScreen = () => {
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen();
-    } else if (document.documentElement.mozRequestFullScreen) {
-      document.documentElement.mozRequestFullScreen();
-    } else if (document.documentElement.webkitRequestFullscreen) {
-      document.documentElement.webkitRequestFullscreen();
-    } else if (document.documentElement.msRequestFullscreen) {
-      document.documentElement.msRequestFullscreen();
-    }
-  };
+  const dispatch = useDispatch();
+  const params = useParams();
+  const AptiDetails = useSelector((state) => state.AptiDashboard);
+  const initialTime = AptiDetails.duration * 60;
 
+  const handleSubmitTest = () => {
+    localStorage.setItem(`${params.aptitudeId}`, "4");
+    dispatch(setSelectedPage("4"));
+
+    // calculate the grades
+  };
   return (
     <AppBar position="sticky" sx={{ boxShadow: 0 }}>
       <Container maxWidth="xl">
@@ -70,7 +73,8 @@ const Header = () => {
                   variant="h6"
                   sx={{ fontFamily: "monospace" }}
                 >
-                  30:00 (MM:SS)
+                  <CountdownTimer initialTime={initialTime} />
+                  {/* 30:00 (MM:SS) */}
                 </Typography>
               </Box>
               <Box sx={center}>
@@ -92,6 +96,7 @@ const Header = () => {
                     background: "white",
                     ":hover": { background: "lightgray", color: "black" },
                   }}
+                  onClick={handleSubmitTest}
                 >
                   Submit Test
                 </Button>

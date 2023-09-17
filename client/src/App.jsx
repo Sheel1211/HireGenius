@@ -3,7 +3,6 @@ import Signin from "./pages/auth/Signin";
 import "./index.css";
 import FormBuilder from "./pages/FormBuilder/Main";
 import CsvParser from "./pages/CsvParser/Main";
-import StudentAptitude from "./pages/Student/Aptitude";
 import Playground from "./pages/compiler/Playground";
 import Landing from "./pages/landing_page/Landing";
 import CompilerHome from "./pages/compiler/Home";
@@ -12,6 +11,7 @@ import Header from "./pages/landing_page/header/Header";
 import Main from "./pages/FormBuilder/Main";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CandidateAptitude from "./pages/Candidate/Aptitude";
 
 const App = () => {
   return (
@@ -23,9 +23,9 @@ const App = () => {
         <Route path="/compiler" element={<CompilerHome />} />
         <Route path="/compiler/playground" element={<Playground />} />
         <Route path="/create/aptitude" element={<FormBuilder />} />
-        <Route path="/aptitude/:aptitudeId" element={<StudentAptitude />} />
+        <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />
+
         <Route path="/parser" element={<CsvParser />} />
-        <Route path="/apt" element={<StudentAptitude />} />
       </Routes>
     </Router>
   );

@@ -4,16 +4,18 @@ const { v4: uuidv4 } = require("uuid");
 const saveQuestions = async (req, res) => {
   try {
     // Save all the question
-    const { aptitudeId, questions } = req.body;
+    const { aptitudeId, questions, duration } = req.body;
     const aptitude = await Aptitude.findOne({ aptitudeId: aptitudeId });
     aptitude.questions = questions;
+    aptitude.duration = duration;
     await aptitude.save();
 
     // Generate Link logic
+    const AptitudeLink = `http://localhost:5173/aptitude/${aptitudeId}`;
 
     res
       .status(200)
-      .json({ success: true, message: "Question added", AptitudeLink: "" });
+      .json({ success: true, message: "Question added", AptitudeLink });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
@@ -42,9 +44,11 @@ const getAptitudeQuestions = async (req, res) => {
     if (!aptitude) {
       throw new Error("No Aptitude Record Found");
     }
+    const { questions, duration } = aptitude;
     res.status(200).json({
       success: true,
-      questions: aptitude.questions,
+      questions,
+      duration,
       message: "Aptitude created",
     });
   } catch (error) {
@@ -52,4 +56,39 @@ const getAptitudeQuestions = async (req, res) => {
   }
 };
 
-module.exports = { saveQuestions, createAptitude, getAptitudeQuestions };
+const candidateLogin = async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: "Login successfully",
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+const isValidAptitude = async (req, res, next) => {
+  try {
+    const { aptitudeId } = req.params;
+    const validAptitude = await Aptitude.findOne({ aptitudeId });
+    console.log(req.params);
+    console.log(validAptitude);
+    if (!validAptitude) {
+      throw new Error("Not a valid aptitude link");
+    }
+    res.status(200).json({
+      success: true,
+      message: "Valid aptitude",
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+module.exports = {
+  saveQuestions,
+  createAptitude,
+  getAptitudeQuestions,
+  candidateLogin,
+  isValidAptitude,
+};

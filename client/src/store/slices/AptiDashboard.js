@@ -5,8 +5,6 @@ import {
   TECHNICAL,
   VERBAL,
 } from "../../helpers/helper";
-import { produce } from "immer"; // Import Immer
-import axios from "axios";
 
 const initialState = {
   questions: [],
@@ -19,6 +17,8 @@ const initialState = {
   selectedSection: "",
   isLoading: true,
   selectedOptions: [],
+  selectedPage: "0",
+  duration: 0,
 };
 
 export const AptiDashboardSlice = createSlice({
@@ -122,6 +122,12 @@ export const AptiDashboardSlice = createSlice({
       updatedSections[section] = updatedQuestions;
       state.sections = updatedSections;
     },
+    setSelectedPage(state, action) {
+      return { ...state, selectedPage: action.payload };
+    },
+    setDuration(state, action) {
+      return { ...state, duration: action.payload };
+    },
   },
 });
 
@@ -136,5 +142,7 @@ export const {
   setSelectedSection,
   setSections,
   addSelectedOptions,
+  setSelectedPage,
+  setDuration,
 } = AptiDashboardSlice.actions;
 export default AptiDashboardSlice.reducer;

@@ -4,7 +4,6 @@ import AllQuestions from "./AllQuestions";
 import { Box, Button, Card, Container, Grid, Typography } from "@mui/material";
 import Header from "./Header";
 import NewTab from "../Security/NewTab";
-import PreventReload from "../Security/PreventReload";
 import Section from "./Section";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -18,15 +17,23 @@ import {
   setSelectedIndex,
   setSelectedSection,
   setSections,
+  setSelectedPage,
+  setDuration,
 } from "../../../store/slices/AptiDashboard";
 import { QUANTITATIVE } from "../../../helpers/helper";
 import { spaceBetween } from "./styles";
+import PreventKeys from "../Security/PreventKeys";
 
-const index = () => {
+const Test = () => {
   const dispatch = useDispatch();
   const AptiDetails = useSelector((state) => state.AptiDashboard);
   const params = useParams();
   const { aptitudeId } = params;
+
+  useEffect(() => {
+    const currentMinutes = new Date().getMinutes();
+    const currentSeconds = new Date().getSeconds();
+  }, []);
 
   useEffect(() => {
     axios
@@ -38,6 +45,7 @@ const index = () => {
         dispatch(setSelectedSection(QUANTITATIVE));
         dispatch(setSelectedIndex(0));
         dispatch(setIsLoading(false));
+        dispatch(setDuration(res.data.duration));
       })
       .catch((error) => {
         dispatch(setIsLoading(false));
@@ -72,9 +80,7 @@ const index = () => {
       <Header />
       <Box sx={{ mt: 2 }}>
         {/* <NewTab /> */}
-        {/* <PreventReload /> */}
-        {/* can not open inspect element */}
-        {/* can not exit full screen mode */}
+        {/* <PreventKeys /> */}
         <Grid container spacing={2} columns={20}>
           <Grid item xs={7}>
             <Card
@@ -168,4 +174,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Test;

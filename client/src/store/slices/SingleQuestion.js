@@ -39,17 +39,19 @@ export const SingleQuestionSlice = createSlice({
     },
     setOptions(state, action) {
       const { value, optionNumber } = action.payload;
+      console.log(action.payload);
       state.options[optionNumber - 1] = {
         option: value,
         optionURL: action.payload.imageURL ? action.payload.imageURL : "",
       };
     },
     setAnswers(state, action) {
-      const { optionNumber, e } = action.payload;
+      const { SingleQuestion, optionNumber, e } = action.payload;
 
       if (e.target.checked) {
         if (!state.answers.includes(optionNumber)) {
-          state.answers.push(optionNumber);
+          const optionValue = SingleQuestion.options[optionNumber - 1].option;
+          state.answers.push(optionValue);
         }
       } else {
         state.answers = state.answers.filter(
