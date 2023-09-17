@@ -5,17 +5,42 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { Dashboard, List, Logout, Person } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Item } from "../../FormBuilder/Style";
+import { logoutUser } from "../../../store/slices/AdminSlice";
 
 const UserOptions = ({ user }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const actions = [
-    { icon: <Dashboard />, name: "Dashboard" },
-    { icon: <List />, name: "Previous Interviews" },
-    { icon: <Person />, name: "Profile" },
-    { icon: <Logout />, name: "Logout" },
+    { icon: <Dashboard />, name: "Dashboard", func: viewDashboard },
+    { icon: <List />, name: "Previous Interviews", func: viewList },
+    { icon: <Person />, name: "Profile", func: viewProfile },
+    { icon: <Logout />, name: "Logout", func: logOutUser },
   ];
+
+  function viewDashboard() {
+    navigate("/admin/login");
+    handleClose();
+  }
+
+  function viewList() {
+    handleClose();
+  }
+
+  function viewProfile() {
+    handleClose();
+  }
+
+  function logOutUser() {
+    dispatch(logoutUser());
+    navigate("/admin/login")
+    handleClose();
+  }
 
   return (
     <Fragment>
@@ -34,7 +59,7 @@ const UserOptions = ({ user }) => {
             key={action.name}
             icon={action.icon}
             tooltipTitle={action.name}
-            onClick={handleClose}
+            onClick={action.func}
           />
         ))}
       </SpeedDial>

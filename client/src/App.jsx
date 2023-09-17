@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Signin from "./pages/auth/Signin";
 import "./index.css";
 import ClientDashboard from "./pages/ClientDashboard/layout";
@@ -21,8 +21,48 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Registartion from "./pages/ClientRegistration/Registration";
 import { Navigate } from "react-router-dom";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { getAdminDetails } from "./store/slices/AdminSlice";
+
+const config = {
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+  mode: "cors",
+  credentials: "include",
+  withCredentials: true,
+};
 
 const App = () => {
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:4000/api/admin/me",
+          config
+        );
+        const admin = response.data.user;
+        dispatch(getAdminDetails(admin));
+        setIsLoading(false);
+      } catch (error) {
+        // Handle errors, e.g., unauthorized access
+        setIsLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [dispatch]);
+
+  if (isLoading) {
+    
+    return <div>Loading...</div>;
+  }
+
   return (
     <Router>
       <ToastContainer />
