@@ -5,10 +5,10 @@ import candidate from "../models/candidateSchema.js";
 
 const isauthenticated = async (req, res, next) => {
   // console.log(req.cookies);
-  // console.log("Hello");
+  
   try {
     const { token } = req.cookies;
-    console.log("token",token);
+    // console.log("token",token);
 
     if (!token) {
       return res.status(400).json({
@@ -19,7 +19,7 @@ const isauthenticated = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_KEY);
 
-    console.log("decoded", decoded);
+    // console.log("decoded", decoded);
     const adminData = await admin.findById({ _id: decoded.id });
 
     if (!adminData || adminData === undefined || adminData === null) {
@@ -49,8 +49,8 @@ const isauthenticated = async (req, res, next) => {
       req.user = adminData;
       req.type = "admin";
     }
-    console.log("type: ",req.type);
-    console.log("user: ",req.user);
+    // console.log("type: ",req.type);
+    // console.log("user: ",req.user);
     next();
   } catch (e) {
     // console.log("errorrrrr")

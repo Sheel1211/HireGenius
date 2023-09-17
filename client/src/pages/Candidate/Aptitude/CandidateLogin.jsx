@@ -14,6 +14,15 @@ import { useDispatch } from "react-redux";
 import { setSelectedPage } from "../../../store/slices/AptiDashboard";
 
 const defaultTheme = createTheme();
+const config = {
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+  mode: "cors",
+  credentials: "include",
+  withCredentials: true,
+};
 
 const CandidateLogin = () => {
   const dispatch = useDispatch();
@@ -21,7 +30,7 @@ const CandidateLogin = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/aptitude/check/${params.aptitudeId}`)
+      .get(`http://localhost:4000/api/aptitude/check/${params.aptitudeId}`,config)
       .catch((error) => {
         toast.error("Something went wrong!", {
           position: "top-center",

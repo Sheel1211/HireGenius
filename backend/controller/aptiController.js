@@ -5,6 +5,7 @@ export const saveQuestions = async (req, res) => {
   try {
     // Save all the question
     const { aptitudeId, questions, duration } = req.body;
+    console.log("aptitudeId",aptitudeId,"duration",duration)
     const aptitude = await Aptitude.findOne({ aptitudeId: aptitudeId });
     aptitude.questions = questions;
     aptitude.duration = duration;

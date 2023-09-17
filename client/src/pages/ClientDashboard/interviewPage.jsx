@@ -1,9 +1,37 @@
 import { Box } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 // import Grid from "@mui/system/Unstable_Grid";
 import { Grid, Container, Typography } from "@mui/material";
+const config = {
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+  mode: "cors",
+  credentials: "include",
+  withCredentials: true,
+};
+
 
 export default function interviewPage() {
+  const navigate=useNavigate();
+  const createAptitude =async()=>{
+    
+    axios.post("http://127.0.0.1:4000/api/createAptitude",config).then((res)=>{
+      console.log(res.data.aptitude);
+        const dat = res.data.aptitude;
+
+      navigate("/create/aptitude", {
+        state: {dat},
+      });
+
+    }).catch((e)=>{
+      console.log(e);
+    });
+    
+  }
+
   return (
     <Box sx={{ width: "100%", paddingLeft: "50px" }}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -30,7 +58,7 @@ export default function interviewPage() {
             Coding Round
           </Typography>
         </Grid>
-        <Grid xs={4}>
+        <Grid xs={4} onClick = {createAptitude}>
           <Link to="#">
             <Box
               component="img"

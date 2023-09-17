@@ -21,6 +21,15 @@ import Slide from "@mui/material/Slide";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
+const config = {
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+  mode: "cors",
+  credentials: "include",
+  withCredentials: true,
+};
 
 const index = () => {
   // It will show the popup when you reload the page
@@ -41,6 +50,8 @@ const index = () => {
   const [isQuestionAdded, setIsQuestionAdded] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [time, setTime] = useState(60);
+  const [link, setLink] = useState(null);
+  const [linkmodal, setLinkModal] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -62,15 +73,19 @@ const index = () => {
 
   const handleGenerateLink = () => {
     const data = {
-      aptitudeId: "81c3f02d-ef1b-452d-a7ae-afe0a9c108a5",
+      aptitudeId: localStorage.getItem("aptitudeid"),
       questions,
       duration: time,
     };
 
     axios
-      .patch("http://localhost:4000/api/saveQuestions", data)
+      .patch("http://localhost:4000/api/saveQuestions", data, config)
       .then((res) => {
         console.log(res);
+        //alert(res.data.AptitudeLink)
+        setLink(res.data.AptitudeLink);
+        localStorage.setItem("AptitudeLink",res.data.AptitudeLink)
+        setLinkModal(true)
       })
       .catch((error) => {
         console.log(error);
@@ -80,6 +95,32 @@ const index = () => {
 
   return (
     <>
+      {linkmodal && (
+        <Dialog
+          maxWidth="md"
+          open={linkmodal}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <Box sx={{ p: 4 }}>
+            <Typography variant="h5" sx={{ my: 2 }}>
+              Copy Link
+            </Typography>
+            <TextField
+              fullWidth
+              label="Copy link"
+              variant="outlined"
+              value={link}
+            />
+          </Box>
+          <DialogActions>
+            <Button onClick={()=>setLinkModal(false)}>Close</Button>
+            <Button>Copy</Button>
+          </DialogActions>
+        </Dialog>
+      )}
       <Box
         sx={{
           width: "100%",

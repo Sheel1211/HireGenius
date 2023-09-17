@@ -187,7 +187,9 @@ const addToInterview = new interview({
   client:req.user._id
 });
 addToInterview.save();
-console.log("arr ", arr);
 
+
+console.log("arr ", arr);
 }
+
 
