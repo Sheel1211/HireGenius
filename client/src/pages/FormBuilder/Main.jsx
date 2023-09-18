@@ -48,13 +48,14 @@ const Main = () => {
       )} */}
 
       <>
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid
-            container
-            spacing={2}
-            columns={16}
-            sx={{ background: "#eeeeee" }}
-          >
+        <Box
+          sx={{
+            flexGrow: 1,
+            height: "100vh",
+            background: "#eeeeee",
+          }}
+        >
+          <Grid container spacing={2} columns={16} sx={{}}>
             <Grid item xs={8}>
               <Box
                 sx={{

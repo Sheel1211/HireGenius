@@ -32,6 +32,7 @@ const Answer = ({ isQuestionAdded }) => {
 
   useEffect(() => {
     setShowOption([]);
+    setShowAlert(false);
   }, [isQuestionAdded]);
 
   const handleAddOption = () => {
