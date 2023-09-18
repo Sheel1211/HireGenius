@@ -7,7 +7,7 @@ export default function interviewPage() {
   return (
     <Box sx={{ width: "100%", paddingLeft: "50px" }}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid xs={4}>
+        <Grid xs={4} item>
           <Link to="#">
             <Box
               component="img"

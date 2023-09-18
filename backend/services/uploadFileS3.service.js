@@ -19,6 +19,7 @@ export const uploadFile = async(file,fileName)=>{
         Key:`${new Date().getTime().toString()}`+`_${fileName}`,
         Body: fileContent
     }
+
     return new Promise((resolve,reject)=>{
         s3.upload(params,(err,data)=>{
             if(err){
