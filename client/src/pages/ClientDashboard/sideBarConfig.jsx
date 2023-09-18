@@ -1,12 +1,3 @@
-// import SvgColor from "../../assets/SvgColor/svgColor";
-
-// const icon = (name) => (
-//   <SvgColor
-//     src={`/assets/icons/navbar/${name}.svg`}
-//     sx={{ width: 1, height: 1 }}
-//   />
-// );
-
 const navConfig = [
   {
     title: "dashboard",
@@ -23,21 +14,6 @@ const navConfig = [
     path: "/clientdashboard/schedule-interview",
     // icon: icon("ic_cart"),
   },
-  // {
-  //   title: "blog",
-  //   path: "/clientdashboard/candidate",
-  // icon: icon("ic_blog"),
-  // },
-  // {
-  //   title: "login",
-  //   path: "/clientdashboard/candidate",
-  //   // // icon: icon("ic_lock"),
-  // },
-  // {
-  //   title: "Not found",
-  //   path: "/clientdashboard/candidate",
-  //   // // icon: icon("ic_disabled"),
-  // },
 ];
 
 export default navConfig;

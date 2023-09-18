@@ -3,10 +3,15 @@ import { Box, Card, Grid } from "@mui/material";
 import { Item, PlusIcon } from "./Style";
 import AddQuestion from "./AddQuestion";
 import ShowQuestions from "./ShowQuestions";
+import { useLocation } from "react-router-dom";
 
 const Main = () => {
   //   const [isPartitionOpen, setIsPartitionOpen] = useState(false);
+      const location  = useLocation();
+      const {dat} = location.state;
 
+      localStorage.setItem("aptitudeid",dat.aptitudeId);
+      
   return (
     <>
       {/* {!isPartitionOpen && (
@@ -48,13 +53,14 @@ const Main = () => {
       )} */}
 
       <>
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid
-            container
-            spacing={2}
-            columns={16}
-            sx={{ background: "#eeeeee" }}
-          >
+        <Box
+          sx={{
+            flexGrow: 1,
+            height: "100vh",
+            background: "#eeeeee",
+          }}
+        >
+          <Grid container spacing={2} columns={16} sx={{}}>
             <Grid item xs={8}>
               <Box
                 sx={{

@@ -1,5 +1,9 @@
 import { uploadFile } from "../services/uploadFileS3.service.js";
 import client from "../models/clientSchema.js";
+import candidate from "../models/candidateSchema.js";
+import interview from "../models/interviewSchema.js";
+import jwt from 'jsonwebtoken'
+import { generateUniquePassword } from "../services/generateUniquePassword.js";
 
 export const clientRegistration = async(req, res) => {
   
@@ -90,3 +94,103 @@ export const getClientData = async(req,res)=>{
       return res.status(500).send({success:false, message:"Internal Server Error"}) 
     }
 }
+
+export const clientLogin = async(req,res)=>{
+  try{
+
+    const {email,password } = req.body;
+
+    const clientData = await client.findOne({email,password})
+
+    if(!clientData || clientData ===  undefined || clientData === null){
+        return res.status(204).send({success:false,message:"No client for given data"})
+    }else{
+        const approveClientData = await client.findOne({email:email,password:password,approved:true,rejected:false})
+        if(!approveClientData || approveClientData ===  undefined || approveClientData === null){
+          return res.status(202).send({success:false,message:"You are not Approved as client"})
+        }else{
+          const authToken = jwt.sign({id:approveClientData._id}, process.env.JWT_KEY)
+          approveClientData.authToken = authToken;
+          await approveClientData.save()
+          return res.status(200).cookie("token", authToken, {
+            expires: new Date(Date.now() + 10 * 60 * 1000),
+            httpOnly: true,
+            sameSite: "none",
+          }).send({success:true,message:"client loggedIn succcessfully",user:approveClientData,type:"client"})
+        }
+    }
+} catch(error){
+    return res.status(500).send({sucess:false,message:"Internal server error", data: error.message})
+}
+}
+
+export const addCandidatesWithUsernameAndPassword =async(req,res)=>{
+    // const {rows} = req.body;
+    // const arr=[];
+    // console.log("rows : ",rows);
+
+
+
+    // await rows.map(async(item,index)=>{
+    //   if(item.id=='')return;
+    //   console.log(index," => ",item)
+    //   const password = generateUniquePassword();
+
+    //   const candidateDetails = new candidate({
+    //     name:item.name,
+    //     email:item.email,
+    //     password,
+    //     username:item.email.split('@')[0]
+    //   });
+    //   console.log("loading ",index);
+    //   await candidateDetails.save();
+
+    //   const candi = await candidate.find({email:item.email});
+
+    //   console.log(candi);
+    //   arr.push(candi._id);
+
+    // })
+
+    // console.log("arr ",arr);
+
+    const { rows,title } = req.body;
+const arr = [];
+console.log("rows : ", rows);
+// console.log(req.user._id);
+
+await Promise.all
+(rows.map(async (item, index) => {
+  if (item.id == '') return;
+  console.log(index, " => ", item);
+  const password = generateUniquePassword();
+
+  const candidateDetails = new candidate({
+    name: item.name,
+    email: item.email,
+    password,
+    username: item.email.split('@')[0]
+  });
+  console.log("loading ", index);
+  await candidateDetails.save();
+
+  const candi = await candidate.findOne({ email: item.email });
+
+  console.log(candi);
+  arr.push(candi._id);
+
+
+}));
+
+const addToInterview = new interview({
+  candidates:arr,
+  title,
+  client:req.user._id
+});
+addToInterview.save();
+
+
+console.log("arr ", arr);
+}
+
+

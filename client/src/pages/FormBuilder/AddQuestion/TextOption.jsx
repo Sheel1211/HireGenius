@@ -7,10 +7,11 @@ import {
   Checkbox,
 } from "@mui/material";
 import { setOptions, setAnswers } from "../../../store/slices/SingleQuestion";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const TextOption = ({ optionNumber }) => {
   const [singleTextOption, setSingleTextOption] = useState("");
+  const SingleQuestion = useSelector((state) => state.SingleQuestion);
   const dispatch = useDispatch();
 
   const handleOptions = (value, optionNumber) => {
@@ -18,7 +19,7 @@ const TextOption = ({ optionNumber }) => {
   };
 
   const handleAnswers = (optionNumber, e) => {
-    dispatch(setAnswers({ optionNumber, e }));
+    dispatch(setAnswers({ SingleQuestion, optionNumber, e }));
   };
 
   return (

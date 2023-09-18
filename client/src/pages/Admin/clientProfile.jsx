@@ -17,6 +17,15 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
+const config = {
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+  mode: "cors",
+  credentials: "include",
+  withCredentials: true,
+};
 
 const clientProfile = () => {
   const location = useLocation();
@@ -24,10 +33,11 @@ const clientProfile = () => {
   const { selectedID } = location.state;
   const [client, setClientData] = useState({});
   const [open, setOpen] = useState(false);
+  const [emailMessage, setEmailMessage] = useState("");
 
   const getClientData = () => {
     axios
-      .get(`http://127.0.0.1:4000/api/client/client-data/${selectedID}`)
+      .get(`http://127.0.0.1:4000/api/client/client-data/${selectedID}`, config)
       .then((res) => {
         console.log(res.data.data);
         setClientData(res.data.data);
@@ -35,6 +45,48 @@ const clientProfile = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const hanldeApprove = (message) => {
+    axios
+      .post(
+        `http://127.0.0.1:4000/api/admin/verify-client/${selectedID}`,
+        { message },
+        config
+      )
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.success === true) {
+          alert("Verified Successfully");
+        } else {
+          alert("Something went wrong!");
+        }
+      })
+      .catch((error) => {
+        alert("Something went wrong!");
+      });
+    setOpen(false);
+  };
+
+  const hanldeReject = (message) => {
+    axios
+      .post(
+        `http://127.0.0.1:4000/api/admin/reject-client/${selectedID}`,
+        { message },
+        config
+      )
+      .then((res) => {
+        if (res.data.success === true) {
+          alert("Rejected Successfully");
+        } else {
+          alert("Something went wrong!");
+        }
+      })
+      .catch((error) => {
+        alert("Something went wrong!");
+      });
+    setOpen(false);
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -218,6 +270,8 @@ const clientProfile = () => {
                           name="author"
                           fullWidth
                           size="small"
+                          placeholder="Write some message"
+                          onChange={(e) => setEmailMessage(e.target.value)}
                           autoComplete="off"
                           variant="outlined"
                         />
@@ -227,7 +281,8 @@ const clientProfile = () => {
                           variant="solid"
                           color="success"
                           endDecorator={<VerifiedIcon />}
-                          onClick={() => setOpen(false)}
+                          onClick={() => hanldeApprove(emailMessage)}
+                          //onClick={() => setOpen(false)}
                         >
                           Approve
                         </Button>
@@ -235,9 +290,10 @@ const clientProfile = () => {
                           variant="solid"
                           color="danger"
                           endDecorator={<DeleteForever />}
-                          onClick={() => setOpen(false)}
+                          onClick={() => hanldeReject(emailMessage)}
+                          //onClick={() => setOpen(false)}
                         >
-                          Discard
+                          Reject
                         </Button>
                         <Button
                           variant="plain"

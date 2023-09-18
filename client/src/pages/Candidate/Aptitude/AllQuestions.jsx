@@ -4,9 +4,9 @@ import { useSelector } from "react-redux";
 
 const AllQuestions = ({ selectedQuestionIdx, setSelectedQuestionIdx }) => {
   const questions = useSelector((state) => state.Aptitude);
-
   console.log(selectedQuestionIdx);
   console.log(questions);
+  // Get questions section wise (Quantitative, Logical Reasoning, Verbal, Technical)
   return (
     <>
       <Box sx={{ padding: 2 }}>

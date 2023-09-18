@@ -40,6 +40,16 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+const config = {
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+  mode: "cors",
+  credentials: "include",
+  withCredentials: true,
+};
 
 const adminDashboard = () => {
   const [selectedID, setSelectedID] = useState(null);
@@ -62,39 +72,55 @@ const adminDashboard = () => {
 
   const navigate = useNavigate();
 
-  const getAllClientsData = (clients) => {
-    setUSERLIST(clients);
-  };
-  useEffect(() => {
+  const adminData = useSelector((state) => state.User);
+  console.log("adminData",adminData);
+
+  const getAllPendingClientsData = () => {
     axios
-      .get("http://127.0.0.1:4000/api/admin/getall-clients")
+      .get("http://127.0.0.1:4000/api/admin/getall-clients", config)
       .then((res) => {
-        getAllClientsData(res.data.data);
+        setUSERLIST(res.data.data);
         console.log(res.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const getAllApprovedClientsData = () => {
+    axios
+      .get("http://127.0.0.1:4000/api/admin/getall-approved-clients", config)
+      .then((res) => {
+        setUSERLIST(res.data.data);
+        console.log(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getAllRejectedClientsData = () => {
+    axios
+      .get("http://127.0.0.1:4000/api/admin/getall-rejected-clients", config)
+      .then((res) => {
+        setUSERLIST(res.data.data);
+        console.log(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getAllPendingClientsData();
   }, []);
 
-  const seeClientProfile = () => {
+  const seeClientProfile = (selectedID) => {
     console.log(selectedID);
     navigate("/admin/client-profile", {
       state: { selectedID },
     });
   };
-
-  // const USERLIST = [
-  //     {
-  //     id:1,
-  //     name: "Rudra Patel",
-  //     email: "UXdesigner@gmail.com",
-  //     url: "RudraJewellers.com",
-  //     contactno: 7894561235,
-  //     approved: false,
-  //     sector: "private",
-  //   },
-  // ];
 
   const TABLE_HEAD = [
     { id: "name", label: "Name", alignRight: false },
@@ -103,6 +129,7 @@ const adminDashboard = () => {
     { id: "contactno", label: "Contact", alignRight: false },
     { id: "sector", label: "Sector", alignRight: false },
     { id: "approved", label: "Verified", alignRight: false },
+    { id: "View", label: "View" },
   ];
 
   // CANDIDATE LIST HEAD ----------------------------------------------------------------------------------------------
@@ -363,20 +390,31 @@ const adminDashboard = () => {
     return (
       <>
         <Container>
+          <Typography variant="h4" gutterBottom mb={5}>
+            Admin {adminData.User.email}
+          </Typography>
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="space-between"
-            mb={5}
+            mb={3}
           >
-            <Typography variant="h4" gutterBottom>
-              Admin
-            </Typography>
+            <Button variant="contained" onClick={getAllPendingClientsData}>
+              Pending Clients
+            </Button>
             <Button
               variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
+              color="success"
+              onClick={getAllApprovedClientsData}
             >
-              New User
+              Approved Clients
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={getAllRejectedClientsData}
+            >
+              Rejected Clients
             </Button>
           </Stack>
 
@@ -457,71 +495,20 @@ const adminDashboard = () => {
 
                               <TableCell align="left">{sector}</TableCell>
                               <TableCell align="left">
-                                {approved ? "Yes" : "No"}
-                              </TableCell>
-
-                              <TableCell align="left">
-                                <Label
-                                  color={
-                                    (status === "banned" && "error") ||
-                                    "success"
-                                  }
-                                >
-                                  {sentenceCase(status)}
+                                <Label color={approved ? "success" : "error"}>
+                                  {approved ? "Yes" : "No"}
                                 </Label>
                               </TableCell>
 
                               <TableCell align="right">
-                                <IconButton
-                                  size="large"
-                                  color="inherit"
-                                  onClick={() => handleOpenMenu(event, _id)}
+                                <Button
+                                  variant="outlined"
+                                  onClick={() => seeClientProfile(_id)}
                                 >
-                                  <Iconify icon={"eva:more-vertical-fill"} />
-                                </IconButton>
+                                  Profile
+                                </Button>
                               </TableCell>
                             </TableRow>
-                            
-                            <Popover
-                              open={Boolean(open)}
-                              anchorEl={open}
-                              onClose={handleCloseMenu}
-                              anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "left",
-                              }}
-                              transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                              }}
-                              PaperProps={{
-                                sx: {
-                                  p: 1,
-                                  width: 140,
-                                  "& .MuiMenuItem-root": {
-                                    px: 1,
-                                    typography: "body2",
-                                    borderRadius: 0.75,
-                                  },
-                                },
-                              }}
-                            >
-                              <MenuItem onClick={seeClientProfile}>
-                                <Iconify
-                                  icon={"eva:edit-fill"}
-                                  sx={{ mr: 2 }}
-                                />
-                                View profile
-                              </MenuItem>
-
-                              <MenuItem sx={{ color: "error.main" }}>
-                                <Iconify
-                                  icon={"eva:trash-2-outline"}
-                                  sx={{ mr: 2 }}
-                                />
-                                Delete
-                              </MenuItem>
-                            </Popover>
                           </React.Fragment>
                         );
                       })}

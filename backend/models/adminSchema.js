@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 import validator from "validator";
 
 const adminSchema = new mongoose.Schema({
+    role:{
+        type:String,
+        default:"admin"
+    },
     email:{
         type:String,
         required: [true, "Enter your email"],

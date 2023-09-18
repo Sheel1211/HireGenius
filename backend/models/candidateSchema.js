@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
-
+import validator from "validator";
 const candidateSchema = new mongoose.Schema({
+  role:{
+    type:String,
+    default:"candidate"
+},
   name: {
     type: String,
     required: [true, "Please provide candidate name"],

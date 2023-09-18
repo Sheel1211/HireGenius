@@ -1,14 +1,11 @@
 import mongoose from "mongoose";
-
 const codingSchema = new mongoose.Schema({
   interviewId: {
     type: mongoose.Schema.Types.ObjectId,
   },
   questions: [
     {
-      question: {
-        type: String,
-      },
+      question: { type: String },
       testcases: [
         {
           type: String,
@@ -19,11 +16,11 @@ const codingSchema = new mongoose.Schema({
   duration: {
     type: Number,
     required: [true, "Please provide duration of coding test"],
+    // default:12
   },
   candidates: [{ type: mongoose.Schema.Types.ObjectId, ref: "candidate" }],
 });
 
-
-const coding = mongoose.model("coding",codingSchema);
+const coding = mongoose.model("coding", codingSchema);
 
 export default coding;
