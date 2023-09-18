@@ -5,7 +5,7 @@ export const saveQuestions = async (req, res) => {
   try {
     // Save all the question
     const { aptitudeId, questions, duration } = req.body;
-    console.log("aptitudeId",aptitudeId,"duration",duration)
+    // console.log("aptitudeId",aptitudeId,"duration",duration)
     const aptitude = await Aptitude.findOne({ aptitudeId: aptitudeId });
     aptitude.questions = questions;
     aptitude.duration = duration;
@@ -13,7 +13,7 @@ export const saveQuestions = async (req, res) => {
     
     // Generate Link logic
     const AptitudeLink = `http://localhost:5173/aptitude/${aptitudeId}`;
-    console.log("link",AptitudeLink)
+    // console.log("link",AptitudeLink)
 
     res
       .status(200)
@@ -42,7 +42,6 @@ export const getAptitudeQuestions = async (req, res) => {
   try {
     const { aptitudeId } = req.params;
     const aptitude = await Aptitude.findOne({ aptitudeId });
-
     if (!aptitude) {
       throw new Error("No Aptitude Record Found");
     }
@@ -72,9 +71,11 @@ const candidateLogin = async (req, res) => {
 export const isValidAptitude = async (req, res, next) => {
   try {
     const { aptitudeId } = req.params;
+    // console.log("params",req.params);
     const validAptitude = await Aptitude.findOne({ aptitudeId });
-    console.log(req.params);
-    console.log(validAptitude);
+    // console.log(req.params);
+    // console.log("params",req.params);
+    // console.log(validAptitude);
     if (!validAptitude) {
       throw new Error("Not a valid aptitude link");
     }

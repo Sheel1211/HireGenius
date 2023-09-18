@@ -76,12 +76,11 @@ const App = () => {
         <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />
 
         
-        {/* <Route path="/apt" element={<StudentAptitude />} /> */}
+        
         <Route path="/formBuilder" element={<Main />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/client-profile" element={<ClientProfile />} />
-
         <Route path="/client/registration" element={<Registartion />} />
         <Route path="/client/login" element={<ClientLogin />} />
         <Route path="/clientdashboard" element={<ClientDashboard />}>

@@ -73,6 +73,7 @@ export const loadAdminDetails = async (req, res) => {
     success: true,
     user,
   });
+
 };
 
 export const getallPendingClients = async (req, res) => {
@@ -156,7 +157,7 @@ export const verifyClients = async (req, res) => {
       { _id: clientId },
       { approved: true }
     );
-
+      
     if (clientData) {
       const data = await sendEmail(
         "barotpratham266@gmail.com",

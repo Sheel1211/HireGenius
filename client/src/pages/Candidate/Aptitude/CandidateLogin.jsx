@@ -30,7 +30,9 @@ const CandidateLogin = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/aptitude/check/${params.aptitudeId}`,config)
+      .get(`http://localhost:4000/api/aptitude/check/${params.aptitudeId}`).then((res)=>{
+        console.log(res);
+      })
       .catch((error) => {
         toast.error("Something went wrong!", {
           position: "top-center",

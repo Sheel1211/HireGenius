@@ -42,7 +42,7 @@ const Test = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/aptitude/questions/${aptitudeId}`,config)
+      .get(`http://localhost:4000/api/aptitude/questions/${aptitudeId}`)
       .then((res) => {
         dispatch(setQuestions(res.data.questions));
         const data = res.data.questions;
