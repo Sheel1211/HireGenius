@@ -159,7 +159,8 @@ const arr = [];
 console.log("rows : ", rows);
 // console.log(req.user._id);
 
-await Promise.all(rows.map(async (item, index) => {
+await Promise.all
+(rows.map(async (item, index) => {
   if (item.id == '') return;
   console.log(index, " => ", item);
   const password = generateUniquePassword();
