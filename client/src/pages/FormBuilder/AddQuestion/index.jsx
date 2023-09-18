@@ -55,19 +55,22 @@ const index = () => {
 
   useEffect(() => {
     const allQuestions = JSON.parse(localStorage.getItem("Aptitude"));
-    dispatch(addMultipleQuestions(allQuestions));
+    if (allQuestions) {
+      dispatch(addMultipleQuestions(allQuestions));
+    }
   }, []);
 
   const handleClose = () => {
     setOpen(false);
   };
 
+  console.log(singleQuestion);
   const handleSubmit = () => {
-    if (validateSingleQuestion(singleQuestion)) {
-      dispatch(addQuestion(singleQuestion));
-      dispatch(clearQuestion());
-      setIsQuestionAdded(true);
-    }
+    // if (validateSingleQuestion(singleQuestion)) {
+    //   dispatch(addQuestion(singleQuestion));
+    //   dispatch(clearQuestion());
+    //   setIsQuestionAdded(true);
+    // }
   };
   const questions = useSelector((state) => state.Aptitude);
 
@@ -77,7 +80,7 @@ const index = () => {
 
   const handleGenerateLink = () => {
     const data = {
-      aptitudeId: "52ce80b5-6be2-43ef-96e7-bec8cc0162a5",
+      aptitudeId: "8e33492c-82df-4278-bc26-802c7f55e923",
       questions,
       duration: time,
     };

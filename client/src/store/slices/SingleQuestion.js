@@ -48,15 +48,19 @@ export const SingleQuestionSlice = createSlice({
     setAnswers(state, action) {
       const { SingleQuestion, optionNumber, e } = action.payload;
 
+      const answers = Array.from(new Set(SingleQuestion.answers));
+      const optionValue = SingleQuestion.options[optionNumber - 1].option;
+
       if (e.target.checked) {
-        if (!state.answers.includes(optionNumber)) {
-          const optionValue = SingleQuestion.options[optionNumber - 1].option;
-          state.answers.push(optionValue);
+        if (!answers.includes(optionValue)) {
+          answers.push(optionValue);
+          return { ...state, answers };
         }
       } else {
-        state.answers = state.answers.filter(
-          (number) => number !== optionNumber
-        );
+        if (answers.includes(optionValue)) {
+          answers.splice(answers.indexOf(optionValue), 1);
+        }
+        return { ...state, answers };
       }
     },
     clearQuestion(state, action) {

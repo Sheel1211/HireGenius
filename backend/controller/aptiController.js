@@ -5,7 +5,13 @@ const saveQuestions = async (req, res) => {
   try {
     // Save all the question
     const { aptitudeId, questions, duration } = req.body;
+
+    // console.log(rea.body);
+
     const aptitude = await Aptitude.findOne({ aptitudeId: aptitudeId });
+
+    // console.log("Hi", aptitude);
+    // console.log("first");
     aptitude.questions = questions;
     aptitude.duration = duration;
     await aptitude.save();
@@ -71,8 +77,8 @@ const isValidAptitude = async (req, res, next) => {
   try {
     const { aptitudeId } = req.params;
     const validAptitude = await Aptitude.findOne({ aptitudeId });
-    console.log(req.params);
-    console.log(validAptitude);
+    // console.log(req.params);
+    // console.log(validAptitude);
     if (!validAptitude) {
       throw new Error("Not a valid aptitude link");
     }
