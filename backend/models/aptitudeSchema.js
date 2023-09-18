@@ -7,7 +7,7 @@ const aptitudeSchema = new mongoose.Schema(
     },
     questions: [{}],
     duration: {
-      type: Number, // Minutes
+      type: Number,
       default: 0,
     },
     isFinished: {

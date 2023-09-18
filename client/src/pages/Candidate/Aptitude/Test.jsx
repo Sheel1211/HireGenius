@@ -44,6 +44,7 @@ const Test = () => {
     axios
       .get(`http://localhost:4000/api/aptitude/questions/${aptitudeId}`)
       .then((res) => {
+        console.log(res);
         dispatch(setQuestions(res.data.questions));
         const data = res.data.questions;
         dispatch(setSections(data));

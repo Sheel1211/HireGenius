@@ -6,7 +6,13 @@ export const saveQuestions = async (req, res) => {
     // Save all the question
     const { aptitudeId, questions, duration } = req.body;
     // console.log("aptitudeId",aptitudeId,"duration",duration)
+
+    // console.log(rea.body);
+
     const aptitude = await Aptitude.findOne({ aptitudeId: aptitudeId });
+
+    // console.log("Hi", aptitude);
+    // console.log("first");
     aptitude.questions = questions;
     aptitude.duration = duration;
     await aptitude.save();

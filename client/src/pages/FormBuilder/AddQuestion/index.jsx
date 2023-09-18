@@ -12,7 +12,10 @@ import {
 import Question from "./Question";
 import Answer from "./Answer";
 import { useDispatch, useSelector } from "react-redux";
-import { addQuestion } from "../../../store/slices/AptitudeSlice";
+import {
+  addQuestion,
+  addMultipleQuestions,
+} from "../../../store/slices/AptitudeSlice";
 import validateSingleQuestion from "./validateSingleQuestion";
 import { clearQuestion } from "../../../store/slices/SingleQuestion";
 import axios from "axios";
@@ -47,23 +50,38 @@ const index = () => {
 
   const dispatch = useDispatch();
   const singleQuestion = useSelector((state) => state.SingleQuestion);
+  const Aptitude = useSelector((state) => state.Aptitude);
   const [isQuestionAdded, setIsQuestionAdded] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [time, setTime] = useState(60);
   const [link, setLink] = useState(null);
   const [linkmodal, setLinkModal] = useState(false);
 
+  console.log(Aptitude);
+
+  useEffect(() => {
+    if (!isQuestionAdded) return;
+    localStorage.setItem("Aptitude", JSON.stringify(Aptitude));
+  }, [isQuestionAdded]);
+
+  useEffect(() => {
+    const allQuestions = JSON.parse(localStorage.getItem("Aptitude"));
+    if (allQuestions) {
+      dispatch(addMultipleQuestions(allQuestions));
+    }
+  }, []);
+
   const handleClose = () => {
     setOpen(false);
   };
 
+  console.log(singleQuestion);
   const handleSubmit = () => {
-    if (validateSingleQuestion(singleQuestion)) {
-      dispatch(addQuestion(singleQuestion));
-      dispatch(clearQuestion());
-      setIsQuestionAdded(true);
-    }
-    // console.log(singleQuestion);
+    // if (validateSingleQuestion(singleQuestion)) {
+    //   dispatch(addQuestion(singleQuestion));
+    //   dispatch(clearQuestion());
+    //   setIsQuestionAdded(true);
+    // }
   };
   const questions = useSelector((state) => state.Aptitude);
 
