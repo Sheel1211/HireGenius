@@ -75,13 +75,12 @@ const index = () => {
     setOpen(false);
   };
 
-  console.log(singleQuestion);
   const handleSubmit = () => {
-    // if (validateSingleQuestion(singleQuestion)) {
-    //   dispatch(addQuestion(singleQuestion));
-    //   dispatch(clearQuestion());
-    //   setIsQuestionAdded(true);
-    // }
+    if (validateSingleQuestion(singleQuestion)) {
+      dispatch(addQuestion(singleQuestion));
+      dispatch(clearQuestion());
+      setIsQuestionAdded(true);
+    }
   };
   const questions = useSelector((state) => state.Aptitude);
 
