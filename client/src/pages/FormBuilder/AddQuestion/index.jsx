@@ -82,6 +82,7 @@ const index = () => {
       setIsQuestionAdded(true);
     }
   };
+
   const questions = useSelector((state) => state.Aptitude);
 
   const handleDuration = () => {
