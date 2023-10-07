@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Signin from "./pages/auth/Signin";
+
 import "./index.css";
 import ClientDashboard from "./pages/ClientDashboard/layout";
 import ClientDashboardAppPage from "./pages/ClientDashboard/appPage";
@@ -15,15 +16,16 @@ import CompilerHome from "./pages/compiler/Home";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Header from "./pages/landing_page/header/Header";
 import Main from "./pages/FormBuilder/Main";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Registartion from "./pages/ClientRegistration/Registration";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ClientLogin from "./pages/ClientRegistration/ClientLogin";
 import { getUserDetails } from "./store/slices/UserSlice";
 import CandidateAptitude from "./pages/Candidate/Aptitude";
+import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 const config = {
   headers: {
@@ -35,10 +37,14 @@ const config = {
   withCredentials: true,
 };
 
+
+
 const App = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
 
+  const userDetails = useSelector((state) => state.User);
+  console.log("details", userDetails);
   useEffect(() => {
     async function fetchData() {
       try {
@@ -55,14 +61,11 @@ const App = () => {
       }
     }
     fetchData();
-    
   }, [dispatch]);
 
   if (isLoading) {
-    
     return <div>Loading...</div>;
   }
-
 
   return (
     <Router>
@@ -70,32 +73,45 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" exact element={<Landing />} />
+
+        {/* Candidate */}
+        <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />
         <Route path="/compiler" element={<CompilerHome />} />
         <Route path="/compiler/playground" element={<Playground />} />
-        <Route path="/create/aptitude" element={<FormBuilder />} />
-        <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />
 
-        
-        
-        <Route path="/formBuilder" element={<Main />} />
-        <Route path="/admindashboard" element={<AdminDashboard />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/client-profile" element={<ClientProfile />} />
+        {/* Client */}
         <Route path="/client/registration" element={<Registartion />} />
         <Route path="/client/login" element={<ClientLogin />} />
-
-        <Route path="/clientdashboard" element={<ClientDashboard />}>
-          <Route index element={<ClientDashboardAppPage />} />
-          <Route path="app" element={<ClientDashboardAppPage />} />
-          <Route path="candidate" element={<CandidatePage />} />
-          <Route path="schedule-interview" element={<InterviewPage />} />
-        </Route>
+        <Route path="/admin/login" element={<AdminLogin />} />
         
+        {userDetails &&
+          userDetails.User &&
+          userDetails.User.role === "client" && (
+            <>
+              <Route path="/create/aptitude" element={<FormBuilder />} />
+              <Route path="/formBuilder" element={<Main />} />
+              <Route path="/clientdashboard" element={<ClientDashboard />}>
+                <Route index element={<ClientDashboardAppPage />} />
+                <Route path="app" element={<ClientDashboardAppPage />} />
+                <Route path="candidate" element={<CandidatePage />} />
+                <Route path="schedule-interview" element={<InterviewPage />} />
+              </Route>
+            </>
+          )}
+        {userDetails &&
+          userDetails.User &&
+          userDetails.User.role === "admin" && (
+            <>
+              <Route path="/admindashboard" element={<AdminDashboard />} />
+              <Route path="/admin/client-profile" element={<ClientProfile />} />
+            </>
+          )}
+        {/* Admin */}
+
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
   );
 };
-
-
 
 export default App;

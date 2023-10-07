@@ -12,6 +12,6 @@ const interviewSchema = new mongoose.Schema({
   rounds: [{ type: mongoose.Schema.Types.ObjectId }],
   client:{ type: mongoose.Schema.Types.ObjectId }
 });
-
+ 
 const interview = mongoose.model("interview", interviewSchema);
 export default interview;
