@@ -19,33 +19,9 @@ const config = {
 };
 
 const columns = [
-  // { field: "id", headerName: "ID", width: 70 },
   { field: "name", headerName: "Name", width: 130 },
   { field: "email", headerName: "Email", width: 130 },
-  // {
-  //   field: "age",
-  //   headerName: "Age",
-  //   type: "number",
-  //   width: 90,
-  // },
-  // {
-  //   field: "fullName",
-  //   headerName: "Full name",
-  //   description: "This column has a value getter and is not sortable.",
-  //   sortable: false,
-  //   width: 160,
-  //   valueGetter: (params) =>
-  //     `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-  // },
 ];
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
 
 const VisuallyHiddenInput = styled("input")`
   clip: rect(0 0 0 0);
@@ -62,7 +38,6 @@ const VisuallyHiddenInput = styled("input")`
 export default function CandidatePage() {
   const [rows, setRows] = useState([]);
   const [csv, setCsv] = useState(null);
-  
 
   // const [candidates, setCandidates] = useState([]);
 
@@ -97,19 +72,26 @@ export default function CandidatePage() {
     }
   };
 
-  const addCandidates=async()=>{
-    const title = prompt("Enter your interview title")
-    
-    if(!title){
+  const addCandidates = async () => {
+    const title = prompt("Enter your interview title");
+
+    if (!title) {
       return alert("please eneter a title");
     }
 
-    axios.post("http://127.0.0.1:4000/api/client/add/candidates",{rows,title},config).then((res)=>{
-    
-    }).catch((err)=>{
-      console.log("err",err);
-    })
-  }
+    axios
+      .post(
+        "http://127.0.0.1:4000/api/client/add/candidates",
+        { rows, title },
+        config
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
   useEffect(() => {
     console.log("rows", rows);
   }, [rows]);
