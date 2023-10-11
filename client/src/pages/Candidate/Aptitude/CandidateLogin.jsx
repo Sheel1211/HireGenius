@@ -54,7 +54,7 @@ const CandidateLogin = () => {
       username: data.get("username"),
       password: data.get("password"),
     });
-
+    
     // Logic to check verified candidate
     localStorage.setItem(`${params.aptitudeId}`, "1");
     dispatch(setSelectedPage("1"));

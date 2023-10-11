@@ -4,26 +4,31 @@ import { v4 as  uuidv4 } from "uuid";
 export const saveQuestions = async (req, res) => {
   try {
     // Save all the question
+    console.log("yes in save qiestions")
     const { aptitudeId, questions, duration } = req.body;
-    // console.log("aptitudeId",aptitudeId,"duration",duration)
-
-    // console.log(rea.body);
-
-    const aptitude = await Aptitude.findOne({ aptitudeId: aptitudeId });
-
-    // console.log("Hi", aptitude);
-    // console.log("first");
-    aptitude.questions = questions;
-    aptitude.duration = duration;
-    await aptitude.save();
     
-    // Generate Link logic
-    const AptitudeLink = `http://localhost:5173/aptitude/${aptitudeId}`;
-    // console.log("link",AptitudeLink)
+    // console.log("aptitudeId",aptitudeId,"duration",duration)
+        
+    console.log("Questions : ",questions)
 
-    res
-      .status(200)
-      .json({ success: true, message: "Question added", AptitudeLink });
+    console.log("images : ",req.files);
+
+
+    // const aptitude = await Aptitude.findOne({ aptitudeId: aptitudeId });
+
+    // // console.log("Hi", aptitude);
+    // // console.log("first");
+    // aptitude.questions = questions;
+    // aptitude.duration = duration;
+    // await aptitude.save();
+    
+    // // Generate Link logic
+    // const AptitudeLink = `http://localhost:5173/aptitude/${aptitudeId}`;
+    // // console.log("link",AptitudeLink)
+
+    // res
+    //   .status(200)
+    //   .json({ success: true, message: "Question added", AptitudeLink });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

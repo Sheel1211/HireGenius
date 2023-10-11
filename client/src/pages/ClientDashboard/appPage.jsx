@@ -95,7 +95,7 @@ export default function DashboardAppPage() {
                   <TableCell component="th" scope="row">
                     {row.title}
                   </TableCell>
-                  <TableCell align="right">{row.candidates[0].length}</TableCell>
+                  {/* <TableCell align="right">{row.candidates[0].length}</TableCell> */}
                   <TableCell align="right">{row.rounds.length}</TableCell>
                 </TableRow>
               ))}

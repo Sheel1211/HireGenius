@@ -96,17 +96,18 @@ const index = () => {
       duration: time,
     };
 
+    console.log(data);
     axios
       .patch("http://localhost:4000/api/saveQuestions", data, config)
       .then((res) => {
-        console.log(res);
+        console.log("in res",res);
         //alert(res.data.AptitudeLink)
         setLink(res.data.AptitudeLink);
         localStorage.setItem("AptitudeLink",res.data.AptitudeLink)
         setLinkModal(true)
       })
       .catch((error) => {
-        console.log(error);
+        console.log("in catch",error);
       });
     setOpen(false);
   };

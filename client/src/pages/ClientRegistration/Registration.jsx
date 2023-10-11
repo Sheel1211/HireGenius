@@ -210,6 +210,8 @@ const Registration = ()=>{
         }else if(!certi || !logo){
           alert("files are not Uploaded")
         }else{
+
+      
           axios
           .post(
             "http://127.0.0.1:4000/api/client/registration",
