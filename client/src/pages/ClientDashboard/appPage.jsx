@@ -18,7 +18,11 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import CandidatePage from "./candidatePage";
+import { Navigate, useNavigate } from "react-router-dom";
+
+function createData(name, calories, fat, carbs, protein) {
+  return { name, calories, fat, carbs, protein };
+}
 
 const config = {
   headers: {
@@ -63,12 +67,11 @@ export default function DashboardAppPage() {
   const theme = useTheme();
   const user = useSelector((state) => state.User);
   const [allInterviews, setAllInterviews] = useState([]);
-  // const [candidates, setCandidates] = useState([]);
-  const [showCandidates, setShowCandidates] = useState(false);
-  const [selectedCandidates, setSelectedCandidates] = useState([]);
-
+  const [candidates, setCandidates] = useState([]);
+  const navigate = useNavigate();
   const sendEmailWithLink = (candidates) => {
     const aptLink = localStorage.getItem("AptitudeLink");
+    // console.log(candidates)
 
     axios
       .post(
@@ -78,13 +81,8 @@ export default function DashboardAppPage() {
       )
       .then((res) => {})
       .catch((error) => {
-        alert("erro in app.jsx");
+        alert("error in app.jsx" + error.message);
       });
-  };
-
-  const handleViewCandidates = (candidates) => {
-    setSelectedCandidates(candidates);
-    setShowCandidates(!showCandidates);
   };
 
   useEffect(() => {
@@ -94,9 +92,7 @@ export default function DashboardAppPage() {
         console.log(res.data);
         setAllInterviews(res.data.interviews);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((e) => console.log(e));
   }, []);
 
   return (
@@ -120,35 +116,24 @@ export default function DashboardAppPage() {
                   {allInterviews.map((row) => (
                     <TableRow
                       key={row._id}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-
-                      // onClick={()=>sendEmailWithLink(row.candidates)
-                      // }
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        sendEmailWithLink(row.candidates);
+                        navigate("/clientdashboard/schedule-interview");
+                      }}
                     >
                       <TableCell component="th" scope="row">
                         {row.title}
                       </TableCell>
                       <TableCell align="right">
-                        {/* {row.candidates[0].length} */}
-                        hi
+                        {row.candidates.length}
                       </TableCell>
                       <TableCell align="right">{row.rounds.length}</TableCell>
-                      <TableCell>
-                        <Button
-                          onClick={() =>
-                            handleViewCandidates(row.candidates[0])
-                          }
-                        >
-                          View candidates
-                        </Button>
-                      </TableCell>
                     </TableRow>
                   ))}
-                  {showCandidates && (
-                    <>
-                      <CandidateListTable candidates={selectedCandidates} />
-                    </>
-                  )}
                 </TableBody>
               </Table>
             </TableContainer>

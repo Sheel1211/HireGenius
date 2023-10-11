@@ -6,7 +6,6 @@ import Question from "./Question";
 import { Buffer } from "buffer";
 import EditorContainer from "./EditorContainer";
 import axios from "axios";
-
 export const languageMap = {
   cpp: {
     id: 54,
@@ -172,7 +171,7 @@ const Playground = () => {
   }
   return (
     <React.Fragment>
-      <Header />
+      {/* <Header /> */}
       <CssBaseline />
       <Container
         sx={{
@@ -204,6 +203,7 @@ const Playground = () => {
               currentInput={currentInput}
               setCurrentInput={setCurrentInput}
             />
+            {/* <Landing /> */}
           </Grid>
         </Grid>
       </Container>

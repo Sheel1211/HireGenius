@@ -3,13 +3,60 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import TextareaAutosize from '@mui/base/TextareaAutosize';
-import { styled } from '@mui/system';
-// import { Grid } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
-import React, { useState } from "react";
 import CodeEditor from "./CodeEditor";
 import { Button, Divider, Typography } from "@mui/material";
+
+import React, { useEffect, useState } from "react";
+import CodeEditorWindow from "./components/CodeEditorWindow";
+import axios from "axios";
+import { classnames } from "./utils/general";
+import { languageOptions } from "./constants/languageOptions";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { defineTheme } from "./lib/defineTheme";
+import useKeyPress from "./hooks/useKeyPress";
+import OutputWindow from "./components/OutputWindow";
+import CustomInput from "./components/CustomInput";
+import OutputDetails from "./components/OutputDetails";
+import ThemeDropdown from "./components/ThemeDropdown";
+import LanguagesDropdown from "./components/LanguagesDropdown";
+
+let REACT_APP_RAPID_API_URL = "https://judge0-ce.p.rapidapi.com/submissions";
+let REACT_APP_RAPID_API_HOST = "judge0-ce.p.rapidapi.com";
+let REACT_APP_RAPID_API_KEY =
+  "a77dcef814mshdad0f602ecd8767p1b6a1djsnd2c8bfa00c1a";
+
+const javascriptDefault = `/**
+* Problem: Binary Search: Search a sorted array for a target value.
+*/
+
+// Time: O(log n)
+const binarySearch = (arr, target) => {
+ return binarySearchHelper(arr, target, 0, arr.length - 1);
+};
+
+const binarySearchHelper = (arr, target, start, end) => {
+ if (start > end) {
+   return false;
+ }
+ let mid = Math.floor((start + end) / 2);
+ if (arr[mid] === target) {
+   return mid;
+ }
+ if (arr[mid] < target) {
+   return binarySearchHelper(arr, target, mid + 1, end);
+ }
+ if (arr[mid] > target) {
+   return binarySearchHelper(arr, target, start, mid - 1);
+ }
+};
+
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const target = 5;
+console.log(binarySearch(arr, target));
+`;
 
 export const languageMap = {
   cpp: {
@@ -49,240 +96,246 @@ export const languageMap = {
   },
 };
 
-const blue = {
-  100: '#DAECFF',
-  200: '#b6daff',
-  400: '#3399FF',
-  500: '#007FFF',
-  600: '#0072E5',
-  900: '#003A75',
-};
+const EditorContainer = () => {
+  const [code, setCode] = useState(javascriptDefault);
+  const [customInput, setCustomInput] = useState("");
+  const [outputDetails, setOutputDetails] = useState(null);
+  const [processing, setProcessing] = useState(null);
+  const [theme, setTheme] = useState("cobalt");
+  const [language, setLanguage] = useState(languageOptions[0]);
 
-const grey = {
-  50: '#f6f8fa',
-  100: '#eaeef2',
-  200: '#d0d7de',
-  300: '#afb8c1',
-  400: '#8c959f',
-  500: '#6e7781',
-  600: '#57606a',
-  700: '#424a53',
-  800: '#32383f',
-  900: '#24292f',
-};
+  const enterPress = useKeyPress("Enter");
+  const ctrlPress = useKeyPress("Control");
 
-
-const StyledTextarea = styled(TextareaAutosize)(
-  ({ theme }) => `
-  width: 320px;
-  font-family: IBM Plex Sans, sans-serif;
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1.5;
-  padding: 12px;
-  border-radius: 12px 12px 0 12px;
-  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-  background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-  border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-  box-shadow: 0px 2px 2px ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
-
-  &:hover {
-    border-color: ${blue[400]};
-  }
-
-  &:focus {
-    border-color: ${blue[400]};
-    box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? blue[500] : blue[200]};
-  }
-
-  // firefox
-  &:focus-visible {
-    outline: 0;
-  }
-`,
-);
-const EditorContainer = ({
-  title,
-  currentLanguage,
-  setCurrentLanguage,
-  currentCode,
-  setCurrentCode,
-  runCode,
-  getFile,
-  isFullScreen,
-  setIsFullScreen,
-  currentOutput,
-  setCurrentInput,
-  currentInput,
-  
-}) => {
-  const themeOptions = [
-    { value: "githubDark", label: "githubDark" },
-    { value: "githubLight", label: "githubLight" },
-    { value: "bespin", label: "bespin" },
-    { value: "duotoneDark", label: "duotoneDark" },
-    { value: "duotoneLight", label: "duotoneLight" },
-    { value: "dracula", label: "dracula" },
-    { value: "xcodeDark", label: "xcodeDark" },
-    { value: "xcodeLight", label: "xcodeLight" },
-    { value: "vscodeDark", label: "vscodeDark" },
-    { value: "vscodeLight", label: "vscodeLight" },
-    { value: "okaidia", label: "okaidia" },
-  ];
-
-  const languageOptions = [
-    { value: "cpp", label: "cpp" },
-    { value: "c", label: "c" },
-    { value: "javascript", label: "javascript" },
-    { value: "java", label: "java" },
-    { value: "python", label: "python" },
-  ];
-
-  const handleThemeChange = (selectedOption) => {
-    // theme=selectedOption.target.value
-    setCurrentTheme(selectedOption.target.value);
+  const onSelectChange = (sl) => {
+    console.log("selected Option...", sl);
+    setLanguage(sl);
   };
 
-  const handleLanguageChange = (selectedOption) => {
-    setLanguage(selectedOption.target.value);
-    setCurrentLanguage(selectedOption.target.value);
-    setCurrentCode(languageMap[selectedOption.target.value].defaultCode);
-    console.log(selectedOption.target.value);
-  };
-
-  const [currentTheme, setCurrentTheme] = useState({
-    value: "githubDark",
-    label: "githubDark",
-  });
-
-  
-  const [language, setLanguage] = useState(() => {
-    for (let i = 0; i < languageOptions.length; i++) {
-      if (languageOptions[i].value === currentLanguage) {
-        return languageOptions[i];
+  useEffect(() => {
+    if (enterPress && ctrlPress) {
+      console.log("enterPress", enterPress);
+      console.log("ctrlPress", ctrlPress);
+      handleCompile();
+    }
+  }, [ctrlPress, enterPress]);
+  const onChange = (action, data) => {
+    switch (action) {
+      case "code": {
+        setCode(data);
+        break;
+      }
+      default: {
+        console.warn("case not handled!", action, data);
       }
     }
-    return languageOptions[0];
-  });
+  };
+  const handleCompile = () => {
+    setProcessing(true);
+    const formData = {
+      language_id: language.id,
+      // encode source code in base64
+      source_code: btoa(code),
+      stdin: btoa(customInput),
+    };
+    const options = {
+      method: "POST",
+      url: REACT_APP_RAPID_API_URL,
+      params: { base64_encoded: "true", fields: "*" },
+      headers: {
+        "content-type": "application/json",
+        "Content-Type": "application/json",
+        "X-RapidAPI-Host": REACT_APP_RAPID_API_HOST,
+        "X-RapidAPI-Key": REACT_APP_RAPID_API_KEY,
+      },
+      data: formData,
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log("res.data", response.data);
+        const token = response.data.token;
+        checkStatus(token);
+      })
+      .catch((err) => {
+        let error = err.response ? err.response.data : err;
+        // get error status
+        let status = err.response.status;
+        console.log("status", status);
+        if (status === 429) {
+          console.log("too many requests", status);
+
+          showErrorToast(
+            `Quota of 100 requests exceeded for the Day! Please read the blog on freeCodeCamp to learn how to setup your own RAPID API Judge0!`,
+            10000
+          );
+        }
+        setProcessing(false);
+        console.log("catch block...", error);
+      });
+  };
+
+  const checkStatus = async (token) => {
+    const options = {
+      method: "GET",
+      url: REACT_APP_RAPID_API_URL + "/" + token,
+      params: { base64_encoded: "true", fields: "*" },
+      headers: {
+        "X-RapidAPI-Host": REACT_APP_RAPID_API_HOST,
+        "X-RapidAPI-Key": REACT_APP_RAPID_API_KEY,
+      },
+    };
+    try {
+      let response = await axios.request(options);
+      let statusId = response.data.status?.id;
+
+      // Processed - we have a result
+      if (statusId === 1 || statusId === 2) {
+        // still processing
+        setTimeout(() => {
+          checkStatus(token);
+        }, 2000);
+        return;
+      } else {
+        setProcessing(false);
+        setOutputDetails(response.data);
+        showSuccessToast(`Compiled Successfully!`);
+        console.log("response.data", response.data);
+        return;
+      }
+    } catch (err) {
+      console.log("err", err);
+      setProcessing(false);
+      showErrorToast();
+    }
+  };
+
+  function handleThemeChange(th) {
+    const theme = th;
+    console.log("theme...", theme);
+
+    if (["light", "vs-dark"].includes(theme.value)) {
+      setTheme(theme);
+    } else {
+      defineTheme(theme.value).then((_) => setTheme(theme));
+    }
+  }
+  useEffect(() => {
+    defineTheme("oceanic-next").then((_) =>
+      setTheme({ value: "oceanic-next", label: "Oceanic Next" })
+    );
+  }, []);
+
+  const showSuccessToast = (msg) => {
+    toast.success(msg || `Compiled Successfully!`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+  const showErrorToast = (msg, timer) => {
+    toast.error(msg || `Something went wrong! Please try again.`, {
+      position: "top-right",
+      autoClose: timer ? timer : 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
   return (
-    <React.Fragment>
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
+      <Container sx={{ display: "flex", flexDirection: "row" }}>
+        <Box sx={{ paddingX: 4, paddingY: 2 }}>
+          <LanguagesDropdown onSelectChange={onSelectChange} />
+        </Box>
+        <Box sx={{ paddingX: 4, paddingY: 2 }}>
+          <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />
+        </Box>
+      </Container>
       <Container
         sx={{
           display: "flex",
           flexDirection: "column",
-          Width: "100%",
-          minHeight: "100vh",
-          overflow: "hidden",
+          alignItems: "start",
+          paddingX: 4,
+          paddingY: 4,
+          gap: 4,
         }}
       >
         <Box
           sx={{
             display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            height: "100%",
+            justifyContent: "flex-start",
             alignItems: "flex-end",
-            justifyContent: "space-between",
-            paddingRight: "1vmax",
-            overflow: "hidden",
           }}
         >
-          <FormControl sx={{ m: 1, minWidth: 200 }}>
-            <InputLabel id="demo-simple-select-autowidth-label">
-              Language
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-autowidth-label"
-              id="demo-simple-select-autowidth"
-              value={currentLanguage}
-              onChange={handleLanguageChange}
-              autoWidth
-              label="Language"
-            >
-              {languageOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl sx={{ m: 1, minWidth: 200 }}>
-            <InputLabel id="demo-simple-select-autowidth-label">
-              Theme
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-autowidth-label"
-              id="demo-simple-select-autowidth"
-              value={currentTheme}
-              onChange={handleThemeChange}
-              autoWidth
-              label="Theme"
-            >
-              {themeOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <CodeEditorWindow
+            code={code}
+            onChange={onChange}
+            language={language?.value}
+            theme={theme.value}
+          />
         </Box>
 
-        <Container
+        <Box
           sx={{
-            Height: "100vh",
-            minWidth: "100%",
+            flex: "1 0 30%",
+            display: "flex",
+            flexDirection: "column",
           }}
-          border={2}
         >
-          <CodeEditor
-            currentLanguage={currentLanguage}
-            currentTheme={currentTheme}
-            currentCode={currentCode}
-            setCurrentCode={setCurrentCode}
-          />
+          <OutputWindow outputDetails={outputDetails} />
           <Box
             sx={{
               display: "flex",
-              alignItems: "center",
-              justifyContent: "space-evenly",
-              margin: "2vmax",
+              flexDirection: "column",
+              alignItems: "flex-end",
             }}
           >
-            <Button variant="contained" onClick={runCode}>Run Code</Button>
-            <Button variant="contained" color="success">
-              Submit Code
-            </Button>
+            <CustomInput
+              customInput={customInput}
+              setCustomInput={setCustomInput}
+            />
           </Box>
-          <Divider />
-        </Container>
-
-        <Container>
-          <Grid container spacing={2}>
-            <Grid xs={6}>
-              <Container>
-                <Typography variant="h5">INPUT:</Typography>
-                <StyledTextarea
-                  aria-label="minimum height"
-                  minRows={3}
-                  placeholder="Enter Test Cases"
-                  onChange={(e)=>{setCurrentInput(e.target.value)}}
-                />
-              </Container>
-            </Grid>
-            <Grid xs={6}>
-            <Container>
-                <Typography variant="h5">OUTPUT:</Typography>
-                <StyledTextarea
-                  aria-label="minimum height"
-                  minRows={3}
-                  placeholder={currentOutput}
-                  disabled
-                  
-                />
-              </Container>
-            </Grid>
-          </Grid>
-        </Container>
+        </Box>
+        <Box sx={{display:'flex',flexDirection:'column'}}>
+          <Button
+            onClick={handleCompile}
+            disabled={!code}
+            className={classnames(
+              "mt-4 border-2 border-black z-10 rounded-md shadow-[5px_5px_0px_0px_rgba(0,0,0)] px-4 py-2 hover:shadow transition duration-200 bg-white flex-shrink-0",
+              !code ? "opacity-50" : ""
+            )}
+          >
+            {processing ? "Processing..." : "Compile and Execute"}
+          </Button>
+          {outputDetails && <OutputDetails outputDetails={outputDetails} />}
+        </Box>
       </Container>
-    </React.Fragment>
+    </>
   );
 };
 

@@ -197,6 +197,7 @@ export const clientLogin = async (req, res) => {
 };
 
 export const addCandidatesWithUsernameAndPassword = async (req, res) => {
+<<<<<<< HEAD
   // const {rows} = req.body;
   // const arr=[];
   // console.log("rows : ",rows);
@@ -259,4 +260,43 @@ export const addCandidatesWithUsernameAndPassword = async (req, res) => {
   addToInterview.save();
 
   console.log("arr ", arr);
+=======
+  const { rows, title } = req.body;
+  const candidateIds = [];
+
+  await Promise.all(
+    rows.map(async (item, index) => {
+      if (item.id == "") return;
+      console.log(index, " => ", item);
+      const password = generateUniquePassword();
+
+      const candidateDetails = new candidate({
+        name: item.name,
+        email: item.email,
+        password,
+        username: item.email.split("@")[0],
+      });
+
+      await candidateDetails.save();
+
+      const candi = await candidate.findOne({ email: item.email });
+
+      console.log("Hello candidate " + candi);
+      candidateIds.push({"candidateId":candi._id});
+      console.log("Here's array of candidates: " + candidateIds);
+    })
+  );
+  
+  const addToInterview = new interview({
+    candidates: candidateIds, 
+    title,
+    client: req.user._id,
+  });
+
+  await addToInterview.save();
+
+  // Now you should have the correct association between candidates and interviews.
+
+  console.log("Array of candidate ObjectIds: ", candidateIds);
+>>>>>>> 378f56e4a11273fd25ce21778512e57cf62102f1
 };
