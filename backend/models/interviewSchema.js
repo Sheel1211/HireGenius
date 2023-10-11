@@ -9,11 +9,15 @@ const interviewSchema = new mongoose.Schema({
   ],
   title: { type: String },
   candidates: [
-    {
-      candidateId: { type: mongoose.Schema.Types.ObjectId },
-      isRejected: { type: Boolean, default: false },
-    },
+    new mongoose.Schema(
+      {
+        candidateId: { type: mongoose.Schema.Types.ObjectId, ref: "candidate" },
+        isRejected: { type: Boolean, default: false },
+      },
+      { _id: false } // Suppress the creation of a new _id field for subdocuments
+    ),
   ],
+
   rounds: [{ type: mongoose.Schema.Types.ObjectId }],
   client: { type: mongoose.Schema.Types.ObjectId },
 });
