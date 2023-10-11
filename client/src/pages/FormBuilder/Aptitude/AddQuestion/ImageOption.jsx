@@ -12,7 +12,10 @@ import {
   Dialog,
 } from "@mui/material";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
-import { setOptions, setAnswers } from "../../../store/slices/SingleQuestion";
+import {
+  setOptions,
+  setAnswers,
+} from "../../../../store/slices/SingleQuestion";
 import { useDispatch } from "react-redux";
 
 const ImageOption = ({ optionNumber }) => {

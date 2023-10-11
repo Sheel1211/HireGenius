@@ -21,7 +21,7 @@ import {
   setQuestionImage,
   setQuestionImageURL,
   setQuestionImageDesc,
-} from "../../../store/slices/SingleQuestion";
+} from "../../../../store/slices/SingleQuestion";
 
 const Question = () => {
   const dispatch = useDispatch();

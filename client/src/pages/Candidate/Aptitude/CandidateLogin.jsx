@@ -23,7 +23,8 @@ const CandidateLogin = () => {
     axios
       .get(`http://localhost:4000/api/aptitude/check/${params.aptitudeId}`)
       .catch((error) => {
-        toast.error("Something went wrong!", {
+        console.log(error);
+        error("Something went wrong!", {
           position: "top-center",
           autoClose: 1000,
           hideProgressBar: false,

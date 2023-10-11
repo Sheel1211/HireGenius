@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { PlusIcon } from "../Style";
 import { useDispatch, useSelector } from "react-redux";
-import { setAnswerType } from "../../../store/slices/SingleQuestion";
+import { setAnswerType } from "../../../../store/slices/SingleQuestion";
 import ImageOption from "./ImageOption";
 
 const Answer = ({ isQuestionAdded }) => {

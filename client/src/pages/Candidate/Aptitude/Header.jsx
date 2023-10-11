@@ -104,11 +104,10 @@ const Header = () => {
                   variant="h6"
                   sx={{ fontFamily: "monospace" }}
                 >
-                  {/* <CountdownTimer
+                  <CountdownTimer
                     initialTime={initialTime}
                     onTimeExpired={onTimeExpired}
-                  /> */}
-                  30:00
+                  />
                 </Typography>
               </Box>
               <Box sx={center}>

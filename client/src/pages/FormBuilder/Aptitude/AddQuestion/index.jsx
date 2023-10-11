@@ -15,11 +15,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addQuestion,
   addMultipleQuestions,
-} from "../../../store/slices/AptitudeSlice";
+} from "../../../../store/slices/AptitudeSlice";
 import validateSingleQuestion from "./validateSingleQuestion";
-import { clearQuestion } from "../../../store/slices/SingleQuestion";
+import { clearQuestion } from "../../../../store/slices/SingleQuestion";
 import axios from "axios";
 import Slide from "@mui/material/Slide";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -74,12 +76,25 @@ const index = () => {
   const questions = useSelector((state) => state.Aptitude);
 
   const handleDuration = () => {
+    if (questions.length === 0) {
+      toast.warn("Please add some questions...", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
     setOpen(true);
   };
 
   const handleGenerateLink = () => {
     const data = {
-      aptitudeId: "8e33492c-82df-4278-bc26-802c7f55e923",
+      aptitudeId: "ddbe2880-eae6-46cb-a82c-fb35752cc956",
       questions,
       duration: time,
     };
@@ -165,6 +180,11 @@ const index = () => {
             value={time}
             onChange={(e) => setTime(e.target.value)}
           />
+        </Box>
+        <Box>
+          <Typography variant="h5" sx={{ my: 2 }}>
+            Negative marking
+          </Typography>
         </Box>
         <DialogActions>
           <Button onClick={handleClose}>Disagree</Button>
