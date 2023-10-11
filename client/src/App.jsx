@@ -25,6 +25,7 @@ import ClientLogin from "./pages/ClientRegistration/ClientLogin";
 import { getUserDetails } from "./store/slices/UserSlice";
 import CandidateAptitude from "./pages/Candidate/Aptitude";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import CompilerForm from "./pages/FormBuilder/compilerForm/CompilerForm";
 
 const config = {
   headers: {
@@ -72,6 +73,7 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" exact element={<Landing />} />
+        <Route path="/compiler-form" element={<CompilerForm />} />
 
         {/* <Route path="/meet" element={<MeetHome/>}/> */}
         {/* Candidate */}

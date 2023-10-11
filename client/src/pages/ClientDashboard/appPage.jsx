@@ -17,6 +17,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -43,24 +44,32 @@ const rows = [
 export default function DashboardAppPage() {
   const theme = useTheme();
   const user = useSelector((state) => state.User);
-  const [allInterviews,setAllInterviews] = useState([]);
-  const [candidates,setCandidates] = useState([]);
+  const [allInterviews, setAllInterviews] = useState([]);
+  const [candidates, setCandidates] = useState([]);
+  const navigate = useNavigate();
+  const sendEmailWithLink = (candidates) => {
+    const aptLink = localStorage.getItem("AptitudeLink");
+    // console.log(candidates)
 
-  const sendEmailWithLink=(candidates)=>{
-    const aptLink = localStorage.getItem("AptitudeLink")
-    
-    axios.post("http://127.0.0.1:4000/api/interview/sendemail-to-candidates",{aptLink,candidates},config).then((res)=>{
-      
-    }).catch((error)=>{
-      alert("erro in app.jsx")
-    })
-  }
+    axios
+      .post(
+        "http://127.0.0.1:4000/api/interview/sendemail-to-candidates",
+        { aptLink, candidates },
+        config
+      )
+      .then((res) => {})
+      .catch((error) => {
+        alert("error in app.jsx" + error.message);
+      });
+  };
 
   useEffect(() => {
     axios
       .get("http://127.0.0.1:4000/api/interview/all-interviews", config)
-      .then((res) => {console.log(res.data)
-        setAllInterviews(res.data.interviews)})
+      .then((res) => {
+        console.log(res.data);
+        setAllInterviews(res.data.interviews);
+      })
       .catch((e) => console.log(e));
   }, []);
 
@@ -70,42 +79,41 @@ export default function DashboardAppPage() {
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome {user.User.email}
         </Typography>
-      {
-        allInterviews &&
-        <Grid container spacing={3}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Title</TableCell>
-                <TableCell align="right">Candidates</TableCell>
-                <TableCell align="right">Rounds</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-
-              {allInterviews.map((row) => (
-                <TableRow
-                  key={row._id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-
-                  onClick={()=>sendEmailWithLink(row.candidates)
-                  }
-                >
-                  <TableCell component="th" scope="row">
-                    {row.title}
-                  </TableCell>
-                  {/* <TableCell align="right">{row.candidates[0].length}</TableCell> */}
-                  <TableCell align="right">{row.rounds.length}</TableCell>
-                </TableRow>
-              ))}
-
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Grid>
-      }
-       
+        {allInterviews && (
+          <Grid container spacing={3}>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Title</TableCell>
+                    <TableCell align="right">Candidates</TableCell>
+                    <TableCell align="right">Rounds</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {allInterviews.map((row) => (
+                    <TableRow
+                      key={row._id}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 },cursor: 'pointer', }}
+                      onClick={() => {
+                        sendEmailWithLink(row.candidates);
+                        navigate("/clientdashboard/schedule-interview");
+                      }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.title}
+                      </TableCell>
+                      <TableCell align="right">
+                        {row.candidates.length}
+                      </TableCell>
+                      <TableCell align="right">{row.rounds.length}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+        )}
       </Container>
     </>
   );
