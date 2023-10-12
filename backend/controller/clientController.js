@@ -26,14 +26,7 @@ export const clientRegistration = async (req, res) => {
       if (clientExist) {
         return res.status(422).send({ message: "Client Already registered" });
       } else {
-        // console.log("data : ",name);
-        // console.log(email);
-        // console.log(password);
-        // console.log(url);
-        // console.log(description);
-        // console.log(contactno);
-        // console.log(sector);
-
+      
         const certificate = await uploadFile(
           req.files.validcertificate,
           `${name}_Certi`
