@@ -35,7 +35,7 @@ const config = {
 };
 
 const CandidateListTable = ({ candidates }) => {
-  console.log(candidates);
+  // console.log(candidates);
   return (
     <>
       <TableContainer component={Paper}>
@@ -43,19 +43,19 @@ const CandidateListTable = ({ candidates }) => {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
+              <TableCell>Email</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {candidates.map((candidate, index) => (
-              <TableRow
-                key={index}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {candidate}
-                </TableCell>
-              </TableRow>
-            ))}
+            {/* {console.log("candidates", candidates)} */}
+            {candidates.map((candidate, index) =>
+              candidate.map((c, key) => (
+                <TableRow key={key}>
+                  <TableCell>{c.name}</TableCell>
+                  <TableCell>{c.email}</TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -69,10 +69,9 @@ export default function DashboardAppPage() {
   const [allInterviews, setAllInterviews] = useState([]);
   const [candidates, setCandidates] = useState([]);
   const navigate = useNavigate();
+
   const sendEmailWithLink = (candidates) => {
     const aptLink = localStorage.getItem("AptitudeLink");
-    // console.log(candidates)
-
     axios
       .post(
         "http://127.0.0.1:4000/api/interview/sendemail-to-candidates",
@@ -87,10 +86,41 @@ export default function DashboardAppPage() {
 
   const [showCandidates, setShowCandidates] = useState(false);
   const [selectedCandidates, setSelectedCandidates] = useState([]);
+  const [allCandidates, setAllCandidates] = useState([]);
+
+  const allData = (candidates) => {
+    const candidateIds = [];
+
+    candidates.map((data) => candidateIds.push(data.candidateId));
+    console.log("Here is array :" + candidateIds);
+    const baseUrl = "http://127.0.0.1:4000/api/candidate/getCandidate";
+    const requests = candidateIds.map((candidateId) => {
+      return axios.post(baseUrl, { candidateId }, config);
+    });
+
+    const candidateAllDetails = [];
+
+    Promise.all(requests)
+      .then((res) => {
+        res.forEach((re, index) => {
+          console.log(re, index);
+          candidateAllDetails.push(re.data.candidate);
+          console.log(
+            "all candidate details after request: ",
+            candidateAllDetails
+          );
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setAllCandidates(candidateAllDetails);
+  };
 
   const handleViewCandidates = (candidates) => {
-    setSelectedCandidates(candidates);
-    setShowCandidates(true);
+    setSelectedCandidates(allCandidates);
+    setShowCandidates(!showCandidates);
   };
 
   useEffect(() => {
@@ -118,45 +148,61 @@ export default function DashboardAppPage() {
                     <TableCell>Title</TableCell>
                     <TableCell align="right">Candidates</TableCell>
                     <TableCell align="right">Rounds</TableCell>
+                    <TableCell align="right">Options</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {allInterviews.map((row) => (
-                    <TableRow
-                      key={row._id}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                        cursor: "pointer",
-                      }}
-                      onClick={() => {
-                        sendEmailWithLink(row.candidates);
-                        navigate("/clientdashboard/schedule-interview");
-                      }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {row.title}
-                      </TableCell>
-                      <TableCell align="right">
-                        {row.candidates.length}
-                      </TableCell>
-                      <TableCell align="right">{row.rounds.length}</TableCell>
-                      <TableCell>
-                        <Button
-                          onClick={() =>
-                            handleViewCandidates(row.candidates[0])
-                          }
-                        >
-                          View candidates
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {allInterviews &&
+                    allInterviews.map((row) => (
+                      <TableRow
+                        key={row._id}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                          cursor: "pointer",
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {row.title}
+                        </TableCell>
+                        <TableCell align="right">
+                          {row.candidates.length}
+                        </TableCell>
+                        <TableCell align="right">{row.rounds.length}</TableCell>
+                        <TableCell align="right">
+                          <Button
+                            onClick={() => handleViewCandidates(row.candidates)}
+                          >
+                            View candidates
+                          </Button>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Button onClick={() => allData(row.candidates)}>
+                            View
+                          </Button>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Button
+                            onClick={() => sendEmailWithLink(row.candidates)}
+                          >
+                            Send Email
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              navigate("/clientdashboard/schedule-interview");
+                            }}
+                          >
+                            Schedule Interview
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </TableContainer>
             {showCandidates && (
               <div>
                 <h2>Candidates:</h2>
+                {/* {console.log("selected andis", selectedCandidates)} */}
                 <CandidateListTable candidates={selectedCandidates} />
               </div>
             )}
