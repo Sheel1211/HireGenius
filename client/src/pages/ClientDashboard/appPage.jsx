@@ -85,6 +85,14 @@ export default function DashboardAppPage() {
       });
   };
 
+  const [showCandidates, setShowCandidates] = useState(false);
+  const [selectedCandidates, setSelectedCandidates] = useState([]);
+
+  const handleViewCandidates = (candidates) => {
+    setSelectedCandidates(candidates);
+    setShowCandidates(true);
+  };
+
   useEffect(() => {
     axios
       .get("http://127.0.0.1:4000/api/interview/all-interviews", config)
@@ -132,11 +140,26 @@ export default function DashboardAppPage() {
                         {row.candidates.length}
                       </TableCell>
                       <TableCell align="right">{row.rounds.length}</TableCell>
+                      <TableCell>
+                        <Button
+                          onClick={() =>
+                            handleViewCandidates(row.candidates[0])
+                          }
+                        >
+                          View candidates
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
+            {showCandidates && (
+              <div>
+                <h2>Candidates:</h2>
+                <CandidateListTable candidates={selectedCandidates} />
+              </div>
+            )}
           </Grid>
         )}
       </Container>
