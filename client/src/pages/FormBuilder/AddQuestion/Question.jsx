@@ -141,48 +141,58 @@ const Question = () => {
                   justifyContent: "start",
                 }}
               >
+                {/* <TextField
+                  type="file"
+                  id="photo"
+                  sx={{ display: "none" }}
+                  onChange={(e) => {
+                    dispatch(setQuestionImage(e.target.files[0])),
+                      dispatch(
+                        setQuestionImageURL(
+                          URL.createObjectURL(e.target.files[0])
+                        )
+                      );
+                  }}
+                /> */}
                 <TextField
                   type="file"
                   id="photo"
                   sx={{ display: "none" }}
                   onChange={(e) => {
-                    dispatch(setQuestionImage(e.target.files[0])),          
-          axios
-          .post(
-            "http://127.0.0.1:4000/api/create-image-link",
-            {
-              img:e.target.files[0]
-            },
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          )
-          .then((res) => {
-            console.log("response", res.data.message);
-            if(res.data.success=== true){
-              dispatch(
-                setQuestionImageURL(
-                  res.data.message
-                  // URL.createObjectURL(e.target.files[0])
-                )
-              );
-              alert("uploaded")
-
-            }else{
-                alert("error")
-            }
-          })
-          .catch((error) => {
-            console.log("error", error);
-            alert("something went wrong")
-          });
-
-                     
+                    dispatch(setQuestionImage(e.target.files[0])),
+                      axios
+                        .post(
+                          "http://127.0.0.1:4000/api/create-image-link",
+                          {
+                            img: e.target.files[0],
+                          },
+                          {
+                            headers: {
+                              "Content-Type": "multipart/form-data",
+                            },
+                          }
+                        )
+                        .then((res) => {
+                          console.log("response", res.data.message);
+                          if (res.data.success === true) {
+                            dispatch(
+                              setQuestionImageURL(
+                                res.data.message
+                                // URL.createObjectURL(e.target.files[0])
+                              )
+                            );
+                            alert("uploaded");
+                          } else {
+                            alert("error");
+                          }
+                        })
+                        .catch((error) => {
+                          console.log("error", error);
+                          alert("something went wrong");
+                        });
                   }}
                 />
-                
+
                 <FormLabel htmlFor="photo">
                   <Tooltip
                     title="Choose the question"

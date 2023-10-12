@@ -19,8 +19,9 @@ export const allInterviews = async(req,res)=>{
   
 export const sendEmailToAllCandidates = async(req,res)=>{
     try{
-        const {aptLink,candidates} = req.body;
+        const {aptLink,candidates,interviewId} = req.body;
         // console.log(req.body)
+
         await Promise.all(candidates.map(async(item,index)=>{
             console.log(index,"=>",item);
             const candidateData = await candidate.findById(item.candidateId);
@@ -33,7 +34,7 @@ export const sendEmailToAllCandidates = async(req,res)=>{
             console.log(email + " " + name + " " + username + " " + password);
             console.log(email," ",password," ",username," ",name)
 
-            const emailToCandi = await sendEmail(email,"Login Credentials",`Hii ${name}.<h2> your username:${username}</h2><h2>password:${password}</h2><h2>Test Link:${aptLink}</h2>`)
+            const emailToCandi = await sendEmail(email,"Login Credentials",`Hii ${name}.<h2> your username:${username}</h2><h2>password:${password}</h2><h2>Test Link:${aptLink}?interviewId=${interviewId}</h2>`)
 
             if(!emailToCandi){
                 console.log("email not sended");

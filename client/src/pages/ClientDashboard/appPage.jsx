@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { faker } from "@faker-js/faker";
 // @mui
 import { useTheme } from "@mui/material/styles";
-import { Grid, Container, Typography } from "@mui/material";
+import { Grid, Container, Typography, Button } from "@mui/material";
 // components
 import Iconify from "./components/iconify";
 // sections
@@ -47,14 +47,15 @@ export default function DashboardAppPage() {
   const [allInterviews, setAllInterviews] = useState([]);
   const [candidates, setCandidates] = useState([]);
   const navigate = useNavigate();
-  const sendEmailWithLink = (candidates) => {
+
+  const sendEmailWithLink = (candidates,interviewId) => {
     const aptLink = localStorage.getItem("AptitudeLink");
     // console.log(candidates)
 
     axios
       .post(
         "http://127.0.0.1:4000/api/interview/sendemail-to-candidates",
-        { aptLink, candidates },
+        { aptLink, candidates,interviewId },
         config
       )
       .then((res) => {})
@@ -88,17 +89,18 @@ export default function DashboardAppPage() {
                     <TableCell>Title</TableCell>
                     <TableCell align="right">Candidates</TableCell>
                     <TableCell align="right">Rounds</TableCell>
+                    <TableCell align="right">Options</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {allInterviews.map((row) => (
                     <TableRow
                       key={row._id}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 },cursor: 'pointer', }}
-                      onClick={() => {
-                        sendEmailWithLink(row.candidates);
-                        navigate("/clientdashboard/schedule-interview");
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                        cursor: "pointer",
                       }}
+                      
                     >
                       <TableCell component="th" scope="row">
                         {row.title}
@@ -107,6 +109,20 @@ export default function DashboardAppPage() {
                         {row.candidates.length}
                       </TableCell>
                       <TableCell align="right">{row.rounds.length}</TableCell>
+                      <TableCell align="right">
+                        <Button
+                          onClick={() => sendEmailWithLink(row.candidates,row._id)}
+                        >
+                          Send Email
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            navigate("/clientdashboard/schedule-interview");
+                          }}
+                        >
+                          Schedule Interview
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

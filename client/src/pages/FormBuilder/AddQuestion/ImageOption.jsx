@@ -57,7 +57,9 @@ const ImageOption = ({ optionNumber }) => {
           justifyContent: "start",
         }}
       >
-        <TextField
+        
+
+<TextField
           type="file"
           id={`option ${optionNumber}`}
           sx={{ display: "none" }}
@@ -101,7 +103,7 @@ const ImageOption = ({ optionNumber }) => {
             );
           }}
         />
-        
+
         <FormLabel htmlFor={`option ${optionNumber}`}>
           <Tooltip title="Choose the question" placement="top-start" arrow>
             <IconButton component="span" size="large">

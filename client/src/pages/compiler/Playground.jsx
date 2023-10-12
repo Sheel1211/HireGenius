@@ -1,7 +1,6 @@
 import { Container, CssBaseline } from "@mui/material";
 import React, { useState } from "react";
 import { Grid } from "@mui/material";
-import Header from "./Header";
 import Question from "./Question";
 import { Buffer } from "buffer";
 import EditorContainer from "./EditorContainer";

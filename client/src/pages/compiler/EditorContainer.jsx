@@ -1,9 +1,4 @@
 import { Box, Container } from "@mui/system";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import CodeEditor from "./CodeEditor";
 import { Button, Divider, Typography } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
@@ -305,6 +300,10 @@ const EditorContainer = () => {
             flex: "1 0 30%",
             display: "flex",
             flexDirection: "column",
+            width: "100%",
+            paddingX: 4,
+            paddingY: 4,
+            gap: 1,
           }}
         >
           <OutputWindow outputDetails={outputDetails} />
@@ -321,7 +320,8 @@ const EditorContainer = () => {
             />
           </Box>
         </Box>
-        <Box sx={{display:'flex',flexDirection:'column'}}>
+        <Box sx={{ display: "flex", flexDirection: "column",paddingX: 4,
+          paddingY: 2,}}>
           <Button
             onClick={handleCompile}
             disabled={!code}

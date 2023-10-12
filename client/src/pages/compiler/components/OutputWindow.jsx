@@ -80,8 +80,7 @@ const OutputWindow = ({ outputDetails }) => {
           fontWeight: "bold",
           fontSize: "1.25rem",
           bgClip: "text",
-          color: "blue",
-          backgroundImage: "linear-gradient(to right, #ffff, #1E293B)",
+          color: "rgb(30, 136, 229)",
           marginBottom: 2,
         }}
       >

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import PreventKeys from "../Security/PreventKeys";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSelectedPage } from "../../../store/slices/AptiDashboard";
 
 const Instructions1 = () => {
@@ -19,7 +19,11 @@ const Instructions1 = () => {
     localStorage.setItem(`${params.aptitudeId}`, "2");
     dispatch(setSelectedPage("2"));
   };
+  const user = useSelector((state) => state.User);
+  const navigate = useNavigate();
 
+  console.log("user",user.User)
+  
   return (
     <Container maxWidth="md" sx={{ boxShadow: 2, my: 2 }}>
       <Box marginTop={4} textAlign="start" sx={{ p: 4 }}>

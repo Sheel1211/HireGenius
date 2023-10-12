@@ -1,6 +1,6 @@
 export const getUserData = async (req, res) => {
-    try {       
-
+    try {         
+      console.log("request" + req)
       res.status(200).json({
         success: true,
         type:req.type,

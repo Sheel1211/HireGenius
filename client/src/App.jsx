@@ -53,6 +53,7 @@ const App = () => {
           config
         );
         const user = response.data.user;
+        console.log("user in app.jsx",user);
         dispatch(getUserDetails(user));
         setIsLoading(false);
       } catch (error) {
@@ -73,7 +74,7 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" exact element={<Landing />} />
-        <Route path="/compiler-form" element={<CompilerForm />} />
+        <Route path="/create/compiler" element={<CompilerForm />} />
 
         {/* <Route path="/meet" element={<MeetHome/>}/> */}
         {/* Candidate */}

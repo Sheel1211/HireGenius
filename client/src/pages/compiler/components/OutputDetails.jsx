@@ -5,14 +5,23 @@ import { Box } from "@mui/material";
 
 const OutputDetails = ({ outputDetails }) => {
   return (
-    <div className="metrics-container mt-4 flex flex-col space-y-3">
-      <Typography variant="body2" className="text-sm">
-        Status:
+    <Box
+      sx={{
+        marginTop: "1rem",
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+      }}
+    >
+      <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+        <Typography variant="body2" className="text-sm">
+          Status:
+        </Typography>
         <Box
           className="font-semibold px-2 py-1 rounded-md bg-gray-100"
           sx={{
             fontWeight: "bold",
-            fontSize: "0.875rem", // equivalent to text-sm
+            fontSize: "0.875rem",
             bgcolor: "#E5E7EB",
             paddingX: 2,
             paddingY: 1,
@@ -21,14 +30,17 @@ const OutputDetails = ({ outputDetails }) => {
         >
           {outputDetails?.status?.description}
         </Box>
-      </Typography>
-      <Typography variant="body2" className="text-sm">
-        Memory:
+      </Box>
+
+      <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+        <Typography variant="body2" className="text-sm">
+          Memory:
+        </Typography>
         <Box
           className="font-semibold px-2 py-1 rounded-md bg-gray-100"
           sx={{
             fontWeight: "bold",
-            fontSize: "0.875rem", // equivalent to text-sm
+            fontSize: "0.875rem",
             bgcolor: "#E5E7EB",
             paddingX: 2,
             paddingY: 1,
@@ -37,14 +49,17 @@ const OutputDetails = ({ outputDetails }) => {
         >
           {outputDetails?.memory}
         </Box>
-      </Typography>
-      <Typography variant="body2" className="text-sm">
-        Time:
+      </Box>
+
+      <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+        <Typography variant="body2" className="text-sm">
+          Time:
+        </Typography>
         <Box
           className="font-semibold px-2 py-1 rounded-md bg-gray-100"
           sx={{
             fontWeight: "bold",
-            fontSize: "0.875rem", // equivalent to text-sm
+            fontSize: "0.875rem",
             bgcolor: "#E5E7EB",
             paddingX: 2,
             paddingY: 1,
@@ -53,8 +68,8 @@ const OutputDetails = ({ outputDetails }) => {
         >
           {outputDetails?.time}
         </Box>
-      </Typography>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
