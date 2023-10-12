@@ -85,7 +85,7 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" exact element={<Landing />} />
-        <Route path="/compiler-form" element={<CompilerForm />} />
+        <Route path="/create/compiler" element={<CompilerForm />} />
 
         {/* Candidate */}
         <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />
