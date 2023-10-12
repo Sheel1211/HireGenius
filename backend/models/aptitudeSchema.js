@@ -10,6 +10,10 @@ const aptitudeSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    negativeMarking: {
+      type: Number,
+      default: 0,
+    },
     isFinished: {
       type: Boolean,
       default: false,

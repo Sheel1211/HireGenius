@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const saveQuestions = async (req, res) => {
   try {
     // Save all the question
-    const { aptitudeId, questions, duration } = req.body;
+    const { aptitudeId, questions, duration, negativeMarking } = req.body;
 
     // console.log(rea.body);
 
@@ -14,6 +14,7 @@ const saveQuestions = async (req, res) => {
     // console.log("first");
     aptitude.questions = questions;
     aptitude.duration = duration;
+    aptitude.negativeMarking = negativeMarking;
     await aptitude.save();
 
     // Generate Link logic
@@ -50,11 +51,12 @@ const getAptitudeQuestions = async (req, res) => {
     if (!aptitude) {
       throw new Error("No Aptitude Record Found");
     }
-    const { questions, duration } = aptitude;
+    const { questions, duration, negativeMarking } = aptitude;
     res.status(200).json({
       success: true,
       questions,
       duration,
+      negativeMarking,
       message: "Aptitude created",
     });
   } catch (error) {

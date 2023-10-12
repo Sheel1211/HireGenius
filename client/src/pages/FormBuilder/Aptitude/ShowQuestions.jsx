@@ -8,14 +8,26 @@ import {
   RadioGroup,
   TextField,
   Typography,
+  MenuItem,
 } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { StyledMenu } from "./Style";
 
 const ShowQuestions = () => {
   const questions = useSelector((state) => state.Aptitude);
   const lastQuestionRef = useRef(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     if (lastQuestionRef.current) {
@@ -85,9 +97,34 @@ const ShowQuestions = () => {
                   </>
                 )}
 
-                <IconButton>
+                <IconButton
+                  id="demo-customized-button"
+                  aria-controls={open ? "demo-customized-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  variant="contained"
+                  onClick={handleClick}
+                >
                   <MoreVertIcon />
                 </IconButton>
+                <StyledMenu
+                  id="demo-customized-menu"
+                  MenuListProps={{
+                    "aria-labelledby": "demo-customized-button",
+                  }}
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose} disableRipple>
+                    <EditIcon />
+                    Edit
+                  </MenuItem>
+                  <MenuItem onClick={handleClose} disableRipple>
+                    <DeleteIcon />
+                    Delete
+                  </MenuItem>
+                </StyledMenu>
               </Box>
 
               {question.answerType === "Radio" && (

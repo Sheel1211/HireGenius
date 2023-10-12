@@ -19,6 +19,7 @@ const initialState = {
   selectedOptions: [],
   selectedPage: "0",
   duration: 0,
+  negativeMarking: 0,
 };
 
 export const AptiDashboardSlice = createSlice({
@@ -128,6 +129,9 @@ export const AptiDashboardSlice = createSlice({
     setDuration(state, action) {
       return { ...state, duration: action.payload };
     },
+    setNegativeMarking(state, action) {
+      return { ...state, negativeMarking: action.payload };
+    },
   },
 });
 
@@ -144,5 +148,6 @@ export const {
   addSelectedOptions,
   setSelectedPage,
   setDuration,
+  setNegativeMarking,
 } = AptiDashboardSlice.actions;
 export default AptiDashboardSlice.reducer;

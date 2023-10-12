@@ -19,6 +19,7 @@ import {
   setSections,
   setSelectedPage,
   setDuration,
+  setNegativeMarking,
 } from "../../../store/slices/AptiDashboard";
 import { QUANTITATIVE } from "../../../helpers/helper";
 import { spaceBetween } from "./styles";
@@ -42,6 +43,7 @@ const Test = () => {
         dispatch(setSelectedIndex(0));
         dispatch(setIsLoading(false));
         dispatch(setDuration(res.data.duration));
+        dispatch(setNegativeMarking(res.data.negativeMarking));
       })
       .catch((error) => {
         dispatch(setIsLoading(false));

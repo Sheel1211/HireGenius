@@ -24,7 +24,6 @@ const App = () => {
         <Route path="/compiler/playground" element={<Playground />} />
         <Route path="/create/aptitude" element={<FormBuilder />} />
         <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />
-
         <Route path="/parser" element={<CsvParser />} />
       </Routes>
     </Router>

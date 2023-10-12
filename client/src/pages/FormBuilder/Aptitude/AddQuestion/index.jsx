@@ -47,6 +47,7 @@ const index = () => {
   const [isQuestionAdded, setIsQuestionAdded] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [time, setTime] = useState(60);
+  const [negativeMarking, setNegativeMarking] = useState(0);
 
   console.log(Aptitude);
 
@@ -93,10 +94,12 @@ const index = () => {
   };
 
   const handleGenerateLink = () => {
+    // id will be here after creating aptitude
     const data = {
-      aptitudeId: "ddbe2880-eae6-46cb-a82c-fb35752cc956",
+      aptitudeId: "66436651-a926-40bc-b5eb-dd453f41299b",
       questions,
       duration: time,
+      negativeMarking: negativeMarking,
     };
 
     axios
@@ -169,22 +172,32 @@ const index = () => {
         aria-describedby="alert-dialog-slide-description"
       >
         <Box sx={{ p: 4 }}>
-          <Typography variant="h5" sx={{ my: 2 }}>
-            Select Aptitude Duration in Minutes
-          </Typography>
-          <TextField
-            fullWidth
-            label="Time (in minutes)"
-            variant="outlined"
-            type="number"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-          />
-        </Box>
-        <Box>
-          <Typography variant="h5" sx={{ my: 2 }}>
-            Negative marking
-          </Typography>
+          <Box>
+            <Typography variant="h5" sx={{ my: 2 }}>
+              Select Aptitude Duration in Minutes
+            </Typography>
+            <TextField
+              fullWidth
+              label="Time (in minutes)"
+              variant="outlined"
+              type="number"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+            />
+          </Box>
+          <Box>
+            <Typography variant="h5" sx={{ my: 2 }}>
+              Negative marking (0% means no negative marking)
+            </Typography>
+            <TextField
+              fullWidth
+              label="Negative marking (in percentage)"
+              variant="outlined"
+              type="number"
+              value={negativeMarking}
+              onChange={(e) => setNegativeMarking(e.target.value)}
+            />
+          </Box>
         </Box>
         <DialogActions>
           <Button onClick={handleClose}>Disagree</Button>

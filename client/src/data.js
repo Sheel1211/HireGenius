@@ -13,6 +13,7 @@ export const dummyAptitudeData = [
     answers: ["3 : 2"], // index of answer
     questionType: "Quantitative",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question:
@@ -28,6 +29,7 @@ export const dummyAptitudeData = [
     answers: ["720 kmph"],
     questionType: "Quantitative",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question:
@@ -43,6 +45,7 @@ export const dummyAptitudeData = [
     answers: ["8/15"],
     questionType: "Quantitative",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question:
@@ -58,6 +61,7 @@ export const dummyAptitudeData = [
     answers: ["Rs. 6400"],
     questionType: "Quantitative",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question:
@@ -73,6 +77,7 @@ export const dummyAptitudeData = [
     answers: ["625"],
     questionType: "Quantitative",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question: 'Synonyms of "VENT"',
@@ -87,6 +92,7 @@ export const dummyAptitudeData = [
     answers: ["Opening"],
     questionType: "Verbal",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question:
@@ -102,6 +108,7 @@ export const dummyAptitudeData = [
     answers: ["on"],
     questionType: "Verbal",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question: "1->I	 2->immediately	3->salary  4->my	5->want",
@@ -116,6 +123,7 @@ export const dummyAptitudeData = [
     answers: ["15432"],
     questionType: "Verbal",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question: "Despite his best efforts to conceal his anger ......",
@@ -130,6 +138,7 @@ export const dummyAptitudeData = [
     answers: ["people came to know that he was annoyed"],
     questionType: "Verbal",
     answerType: "Checkbox",
+    marks: 2,
   },
   {
     question: "The small child does whatever his father was done.",
@@ -144,6 +153,7 @@ export const dummyAptitudeData = [
     answers: ["does"],
     questionType: "Verbal",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question:
@@ -159,6 +169,7 @@ export const dummyAptitudeData = [
     answers: ["P - M + N x Q"],
     questionType: "Reasoning",
     answerType: "Radio",
+    marks: 2,
   },
   {
     question: "120, 99, 80, 63, 48, ?",
@@ -173,6 +184,7 @@ export const dummyAptitudeData = [
     answers: ["35"],
     questionType: "Reasoning",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question: "The small child does whatever his father was done.",
@@ -187,6 +199,7 @@ export const dummyAptitudeData = [
     answers: ["does"],
     questionType: "Verbal",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question: "",
@@ -203,6 +216,7 @@ export const dummyAptitudeData = [
     answers: ["8"],
     questionType: "Reasoning",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question:
@@ -218,6 +232,7 @@ export const dummyAptitudeData = [
     answers: ["Between B and C"],
     questionType: "Reasoning",
     answerType: "Radio",
+    marks: 2,
   },
   {
     question: "Which of the following provides a reuse mechanism?",
@@ -232,6 +247,7 @@ export const dummyAptitudeData = [
     answers: ["Inheritance"],
     questionType: "Technical",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question: "What does the given declaration mean? int (*ptr)[10];",
@@ -246,6 +262,7 @@ export const dummyAptitudeData = [
     answers: ["ptr is a pointer to an array of 10 integers"],
     questionType: "Technical",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question: "Which will legally declare, construct, and initialize an array?",
@@ -260,6 +277,7 @@ export const dummyAptitudeData = [
     answers: ["int myList [] = {4, 3, 7};"],
     questionType: "Technical",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question: "Which SQL statement is used to insert new data in a database?",
@@ -274,6 +292,7 @@ export const dummyAptitudeData = [
     answers: ["INSERT INTO"],
     questionType: "Technical",
     answerType: "Radio",
+    marks: 1,
   },
   {
     question: "What are the valid statements for static keyword in Java?",
@@ -294,5 +313,6 @@ export const dummyAptitudeData = [
     ],
     questionType: "Technical",
     answerType: "Checkbox",
+    marks: 1,
   },
 ];

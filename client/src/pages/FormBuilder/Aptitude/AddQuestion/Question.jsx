@@ -21,6 +21,7 @@ import {
   setQuestionImage,
   setQuestionImageURL,
   setQuestionImageDesc,
+  setQuestionMarks,
 } from "../../../../store/slices/SingleQuestion";
 
 const Question = () => {
@@ -32,6 +33,7 @@ const Question = () => {
     question,
     questionImageURL,
     questionImageDesc,
+    questionMarks,
   } = singleQuestion;
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -43,6 +45,8 @@ const Question = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
+
+  console.log(singleQuestion);
 
   return (
     <>
@@ -190,6 +194,18 @@ const Question = () => {
             </FormControl>
           </>
         )}
+        <FormLabel sx={{ marginTop: 2 }} focused={false}>
+          Enter the marks for the question
+        </FormLabel>
+        <TextField
+          id="outlined-negativemarking"
+          variant="outlined"
+          required
+          size="small"
+          type="number"
+          value={questionMarks}
+          onChange={(e) => dispatch(setQuestionMarks(e.target.value))}
+        />
       </FormControl>
     </>
   );
