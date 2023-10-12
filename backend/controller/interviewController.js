@@ -31,17 +31,17 @@ export const sendEmailToAllCandidates = async(req,res)=>{
             const username  = candidateData.username;
             const name = candidateData.name;
             console.log(email + " " + name + " " + username + " " + password);
-            //console.log(email," ",password," ",username," ",name)
+            console.log(email," ",password," ",username," ",name)
 
-            // const emailToCandi = await sendEmail(email,"Login Credentials",`Hii ${name}.<h2> your username:${username}</h2><h2>password:${password}</h2><h2>Test Link:${aptLink}</h2>`)
+            const emailToCandi = await sendEmail(email,"Login Credentials",`Hii ${name}.<h2> your username:${username}</h2><h2>password:${password}</h2><h2>Test Link:${aptLink}</h2>`)
 
-            // if(!emailToCandi){
-            //     console.log("email not sended");
-            //     //res.status(400).json({ success: false, message:"Emails not sended to t"});
-            // }else{
-            //     console.log("email sended to : ",email);
-            //     //res.status(200).json({success:true,message:"Emails sended to the all candidates"})
-            // }
+            if(!emailToCandi){
+                console.log("email not sended");
+                //res.status(400).json({ success: false, message:"Emails not sended to t"});
+            }else{
+                console.log("email sended to : ",email);
+                //res.status(200).json({success:true,message:"Emails sended to the all candidates"})
+            }
         }))
         res.status(200).json({success:true,message:"Email sended to all the candidates."})
     }catch(err){
