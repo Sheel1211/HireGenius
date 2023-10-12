@@ -14,6 +14,7 @@ import {
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import { setOptions, setAnswers } from "../../../store/slices/SingleQuestion";
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 const ImageOption = ({ optionNumber }) => {
   const [singleImageOption, setSingleImageOption] = useState("");
@@ -62,14 +63,45 @@ const ImageOption = ({ optionNumber }) => {
           sx={{ display: "none" }}
           onChange={(e) => {
             setSingleImageOption(e.target.files[0]),
-              setShowImageOption(URL.createObjectURL(e.target.files[0]));
+            
+            axios
+            .post(
+              "http://127.0.0.1:4000/api/create-image-link",
+              {
+                img:e.target.files[0]
+              },
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            )
+            .then((res) => {
+              console.log("response", res.data.message);
+              if(res.data.success=== true){
+                setShowImageOption(res.data.message);
+                alert("uploaded")
+              }else{
+                  alert("error")
+              }
+            })
+            .catch((error) => {
+              console.log("error", error);
+              alert("something went wrong")
+            });
+
+
+            // setShowImageOption(URL.createObjectURL(e.target.files[0]));
+
             handleOptions(
               e.target.files[0],
               optionNumber,
-              URL.createObjectURL(e.target.files[0])
+              showImageOption
+              //URL.createObjectURL(e.target.files[0])
             );
           }}
         />
+        
         <FormLabel htmlFor={`option ${optionNumber}`}>
           <Tooltip title="Choose the question" placement="top-start" arrow>
             <IconButton component="span" size="large">

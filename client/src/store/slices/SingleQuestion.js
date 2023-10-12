@@ -27,6 +27,7 @@ export const SingleQuestionSlice = createSlice({
     },
     setQuestionImage(state, action) {
       state.questionImage = action.payload;
+      console.log("Heres my img " + state.questionImage);
     },
     setQuestionImageURL(state, action) {
       state.questionImageURL = action.payload;

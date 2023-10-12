@@ -1,5 +1,6 @@
 import Aptitude from "../models/aptitudeSchema.js";
 import { v4 as  uuidv4 } from "uuid";
+import { uploadFile } from "../services/uploadFileS3.service.js";
 
 export const saveQuestions = async (req, res) => {
   try {
@@ -99,4 +100,26 @@ export const isValidAptitude = async (req, res, next) => {
   }
 };
 
+export const createImageLink = async(req,res)=>{
+    const image = req.files.img;
+    // console.log(image);
+
+    try{
+      const uploadImage = await uploadFile(image, `${image.name}_${image.size}`);
+      // console.log("upload image : ",uploadImage)
+      if(uploadImage){
+      const uploadImageLocation = uploadImage.Location;
+        // console.log("upload image : ",uploadImageLocation)
+
+        return res.status(200).send({ success: true, message:uploadImageLocation});
+      
+      }else{
+        return res.status(400).send({ success: false, message:"file not uploaded"});
+      }
+    }catch{
+      return res.status(400).send({ success: false, message:"something went wrong!"});
+
+    }
+    
+}
 
