@@ -132,6 +132,32 @@ export const AptiDashboardSlice = createSlice({
     setNegativeMarking(state, action) {
       return { ...state, negativeMarking: action.payload };
     },
+    setColor(state, action) {
+      const { selectedQuestionIdx, currentSection } = action.payload;
+      const updatedSections = { ...state.sections };
+      const updatedQuestions = [...updatedSections[currentSection]];
+      const updatedQuestion = {
+        ...updatedQuestions[selectedQuestionIdx],
+        color: action.payload?.color ? action.payload.color : "secondary",
+      };
+
+      updatedQuestions[selectedQuestionIdx] = updatedQuestion;
+      updatedSections[currentSection] = updatedQuestions;
+      state.sections = updatedSections;
+    },
+    clearQuestion(state, action) {
+      const { selectedQuestionIdx, currentSection } = action.payload;
+      const updatedSections = { ...state.sections };
+      const updatedQuestions = [...updatedSections[currentSection]];
+      const updatedQuestion = {
+        ...updatedQuestions[selectedQuestionIdx],
+        selectedOptions: [],
+      };
+
+      updatedQuestions[selectedQuestionIdx] = updatedQuestion;
+      updatedSections[currentSection] = updatedQuestions;
+      state.sections = updatedSections;
+    },
   },
 });
 
@@ -149,5 +175,7 @@ export const {
   setSelectedPage,
   setDuration,
   setNegativeMarking,
+  setColor,
+  clearQuestion,
 } = AptiDashboardSlice.actions;
 export default AptiDashboardSlice.reducer;

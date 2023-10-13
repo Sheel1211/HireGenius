@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { AptitudeSlice } from "./slices/AptitudeSlice";
 import { SingleQuestionSlice } from "./slices/SingleQuestion";
+import {UserSlice} from "./slices/UserSlice";
 import { AptiDashboardSlice } from "./slices/AptiDashboard";
 
 export const store = configureStore({
@@ -11,6 +12,7 @@ export const store = configureStore({
   reducer: {
     Aptitude: AptitudeSlice.reducer,
     SingleQuestion: SingleQuestionSlice.reducer,
+    User: UserSlice.reducer,
     AptiDashboard: AptiDashboardSlice.reducer,
   },
 });

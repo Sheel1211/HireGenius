@@ -9,23 +9,27 @@ import {
   TextField,
   Typography,
   MenuItem,
+  Container,
 } from "@mui/material";
 import React, { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { StyledMenu } from "./Style";
+import { deleteQuestion } from "../../../store/slices/AptitudeSlice";
 
 const ShowQuestions = () => {
   const questions = useSelector((state) => state.Aptitude);
+  const dispatch = useDispatch();
   const lastQuestionRef = useRef(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+
+  const handleClose = (index) => {
     setAnchorEl(null);
   };
 
@@ -35,8 +39,60 @@ const ShowQuestions = () => {
     }
   }, [questions]);
 
+  const handleDeleteQuestion = (index) => {
+    dispatch(deleteQuestion(index));
+    handleClose();
+  };
+
+  useEffect(() => {
+    localStorage.setItem("Aptitude", JSON.stringify(questions));
+  }, [handleDeleteQuestion]);
+
+  const quantitativeCount = questions.reduce((count, obj) => {
+    if (obj.questionType === "Quantitative") {
+      return count + 1;
+    }
+    return count;
+  }, 0);
+
+  const reasoningCount = questions.reduce((count, obj) => {
+    if (obj.questionType === "Reasoning") {
+      return count + 1;
+    }
+    return count;
+  }, 0);
+
+  const verbalCount = questions.reduce((count, obj) => {
+    if (obj.questionType === "Verbal") {
+      return count + 1;
+    }
+    return count;
+  }, 0);
+
+  const technicalCount = questions.reduce((count, obj) => {
+    if (obj.questionType === "Technical") {
+      return count + 1;
+    }
+    return count;
+  }, 0);
+
+  console.log(questions);
+
   return (
     <>
+      <Box
+        sx={{
+          background: "white",
+          padding: 4,
+          margin: 4,
+          boxShadow: 2,
+        }}
+      >
+        <Typography> Quantitative - {quantitativeCount} </Typography>
+        <Typography> Reasoning - {reasoningCount} </Typography>
+        <Typography> Verbal - {verbalCount} </Typography>
+        <Typography> Technical - {technicalCount} </Typography>
+      </Box>
       {questions &&
         questions.map((question, index) => {
           return (
@@ -97,7 +153,11 @@ const ShowQuestions = () => {
                   </>
                 )}
 
-                <IconButton
+                <IconButton onClick={() => handleDeleteQuestion(index)}>
+                  <DeleteIcon />
+                </IconButton>
+
+                {/* <IconButton
                   id="demo-customized-button"
                   aria-controls={open ? "demo-customized-menu" : undefined}
                   aria-haspopup="true"
@@ -108,7 +168,7 @@ const ShowQuestions = () => {
                   <MoreVertIcon />
                 </IconButton>
                 <StyledMenu
-                  id="demo-customized-menu"
+                  id={index}
                   MenuListProps={{
                     "aria-labelledby": "demo-customized-button",
                   }}
@@ -120,11 +180,18 @@ const ShowQuestions = () => {
                     <EditIcon />
                     Edit
                   </MenuItem>
-                  <MenuItem onClick={handleClose} disableRipple>
+                  <MenuItem
+                    onClick={() => {
+                      console.log(question);
+                      console.log(index);
+                      handleDeleteQuestion(index);
+                    }}
+                    disableRipple
+                  >
                     <DeleteIcon />
                     Delete
                   </MenuItem>
-                </StyledMenu>
+                </StyledMenu> */}
               </Box>
 
               {question.answerType === "Radio" && (
@@ -144,9 +211,13 @@ const ShowQuestions = () => {
                           <FormControlLabel
                             sx={{ userSelect: "none" }}
                             onCopy={(e) => e.preventDefault()}
-                            value={option.optionURL ? "" : option.option}
+                            value={
+                              option?.optionURL
+                                ? option.optionURL
+                                : option.option
+                            }
                             control={<Radio size="small" />}
-                            label={option.optionURL ? "" : option.option}
+                            label={option?.optionURL ? "" : option.option}
                             name="radio"
                           />
                           <Box>
@@ -186,9 +257,13 @@ const ShowQuestions = () => {
                           <FormControlLabel
                             sx={{ userSelect: "none" }}
                             onCopy={(e) => e.preventDefault()}
-                            value={option.optionURL ? "" : option.option}
+                            value={
+                              option?.optionURL
+                                ? option.optionURL
+                                : option.option
+                            }
                             control={<Checkbox size="small" />}
-                            label={option.optionURL ? "" : option.option}
+                            label={option?.optionURL ? "" : option.option}
                             name="radio"
                           />
                           <Box>

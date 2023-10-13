@@ -2,6 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  setColor,
   setSelectedIndex,
   setSelectedSection,
 } from "../../../store/slices/AptiDashboard";
@@ -15,6 +16,7 @@ const Section = () => {
   const handleSection = (section) => {
     dispatch(setSelectedSection(section));
     dispatch(setSelectedIndex(0));
+    dispatch(setColor({ selectedQuestionIdx: 0, currentSection: section }));
   };
 
   return (

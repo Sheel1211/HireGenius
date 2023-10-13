@@ -52,6 +52,8 @@ export const SingleQuestionSlice = createSlice({
     setAnswers(state, action) {
       const { SingleQuestion, optionNumber, e } = action.payload;
 
+      console.log(action.payload);
+
       const answers = Array.from(new Set(SingleQuestion.answers));
       const optionValue = SingleQuestion.options[optionNumber - 1].option;
 

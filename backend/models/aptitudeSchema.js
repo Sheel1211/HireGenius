@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const aptitudeSchema = new mongoose.Schema(
   {
@@ -25,4 +25,4 @@ const aptitudeSchema = new mongoose.Schema(
 
 const aptitude = mongoose.model("Aptitude", aptitudeSchema);
 
-module.exports = aptitude;
+export default aptitude;

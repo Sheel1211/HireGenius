@@ -16,9 +16,10 @@ import {
   setOptions,
   setAnswers,
 } from "../../../../store/slices/SingleQuestion";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const ImageOption = ({ optionNumber }) => {
+  const SingleQuestion = useSelector((state) => state.SingleQuestion);
   const [singleImageOption, setSingleImageOption] = useState("");
   const [showImageOption, setShowImageOption] = useState("");
   const [showImageOptionDialog, setShowImageOptionDialog] = useState(false);
@@ -32,7 +33,7 @@ const ImageOption = ({ optionNumber }) => {
   };
 
   const handleAnswers = (optionNumber, e) => {
-    dispatch(setAnswers({ optionNumber, e }));
+    dispatch(setAnswers({ SingleQuestion, optionNumber, e }));
   };
 
   const handleOpenOptionDialog = () => {
@@ -65,6 +66,7 @@ const ImageOption = ({ optionNumber }) => {
           sx={{ display: "none" }}
           onChange={(e) => {
             setSingleImageOption(e.target.files[0]),
+              // req
               setShowImageOption(URL.createObjectURL(e.target.files[0]));
             handleOptions(
               e.target.files[0],

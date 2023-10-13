@@ -1,6 +1,10 @@
-const mongoose = require('mongoose')
-
+import mongoose from "mongoose";
+import validator from "validator"
 const clientSchema = new mongoose.Schema({
+  role:{
+    type:String,
+    default:"client"
+},
   name: {
     type: String,
     required: [true, "Enter your name"],
@@ -56,6 +60,14 @@ const clientSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  rejected: {
+    type: Boolean,
+    default: false,
+  },
+  authToken: {
+    type: String,
+    default: ""
+}
 });
 
 const client = mongoose.model("client", clientSchema);

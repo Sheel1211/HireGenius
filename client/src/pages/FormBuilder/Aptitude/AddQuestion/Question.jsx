@@ -46,8 +46,6 @@ const Question = () => {
     setOpenDialog(false);
   };
 
-  console.log(singleQuestion);
-
   return (
     <>
       <FormControl>

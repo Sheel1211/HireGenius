@@ -1,7 +1,7 @@
-const Aptitude = require("../models/aptitudeSchema");
-const { v4: uuidv4 } = require("uuid");
+import Aptitude from "../models/aptitudeSchema.js";
+import { v4 as  uuidv4 } from "uuid";
 
-const saveQuestions = async (req, res) => {
+export const saveQuestions = async (req, res) => {
   try {
     // Save all the question
     const { aptitudeId, questions, duration, negativeMarking } = req.body;
@@ -16,9 +16,10 @@ const saveQuestions = async (req, res) => {
     aptitude.duration = duration;
     aptitude.negativeMarking = negativeMarking;
     await aptitude.save();
-
+    
     // Generate Link logic
     const AptitudeLink = `http://localhost:5173/aptitude/${aptitudeId}`;
+    // console.log("link",AptitudeLink)
 
     res
       .status(200)
@@ -28,7 +29,7 @@ const saveQuestions = async (req, res) => {
   }
 };
 
-const createAptitude = async (req, res) => {
+export const createAptitude = async (req, res) => {
   try {
     const aptitudeId = uuidv4();
     const newAptitude = await Aptitude({ aptitudeId });
@@ -43,11 +44,10 @@ const createAptitude = async (req, res) => {
   }
 };
 
-const getAptitudeQuestions = async (req, res) => {
+export const getAptitudeQuestions = async (req, res) => {
   try {
     const { aptitudeId } = req.params;
     const aptitude = await Aptitude.findOne({ aptitudeId });
-
     if (!aptitude) {
       throw new Error("No Aptitude Record Found");
     }
@@ -75,11 +75,13 @@ const candidateLogin = async (req, res) => {
   }
 };
 
-const isValidAptitude = async (req, res, next) => {
+export const isValidAptitude = async (req, res, next) => {
   try {
     const { aptitudeId } = req.params;
+    // console.log("params",req.params);
     const validAptitude = await Aptitude.findOne({ aptitudeId });
     // console.log(req.params);
+    // console.log("params",req.params);
     // console.log(validAptitude);
     if (!validAptitude) {
       throw new Error("Not a valid aptitude link");
@@ -93,10 +95,4 @@ const isValidAptitude = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  saveQuestions,
-  createAptitude,
-  getAptitudeQuestions,
-  candidateLogin,
-  isValidAptitude,
-};
+
