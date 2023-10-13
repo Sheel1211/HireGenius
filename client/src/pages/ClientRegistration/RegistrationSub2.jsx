@@ -13,6 +13,7 @@ const RegistrationSub2 = ({
     const { name, files } = e.target;
     if (name === "validcertificate") {
       setValidCertificateFile(e.target.files[0]);
+      
     } else if (name === "logo") {
       setLogoFile(e.target.files[0]);
     }

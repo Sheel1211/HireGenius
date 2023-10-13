@@ -57,20 +57,7 @@ const ImageOption = ({ optionNumber }) => {
           justifyContent: "start",
         }}
       >
-        {/* <TextField
-          type="file"
-          id={`option ${optionNumber}`}
-          sx={{ display: "none" }}
-          onChange={(e) => {
-            setSingleImageOption(e.target.files[0]),
-              setShowImageOption(URL.createObjectURL(e.target.files[0]));
-            handleOptions(
-              e.target.files[0],
-              optionNumber,
-              URL.createObjectURL(e.target.files[0])
-            );
-          }}
-        /> */}
+        
 
 <TextField
           type="file"
@@ -116,6 +103,7 @@ const ImageOption = ({ optionNumber }) => {
             );
           }}
         />
+
         <FormLabel htmlFor={`option ${optionNumber}`}>
           <Tooltip title="Choose the question" placement="top-start" arrow>
             <IconButton component="span" size="large">

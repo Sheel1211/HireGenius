@@ -52,6 +52,7 @@ export const getAptitudeQuestions = async (req, res) => {
     if (!aptitude) {
       throw new Error("No Aptitude Record Found");
     }
+    
     const { questions, duration } = aptitude;
     res.status(200).json({
       success: true,
@@ -117,5 +118,3 @@ export const createImageLink = async(req,res)=>{
   }
   
 }
-
-

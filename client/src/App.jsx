@@ -9,10 +9,8 @@ import InterviewPage from "./pages/ClientDashboard/interviewPage";
 import AdminDashboard from "./pages/Admin/adminDashboard";
 import AdminLogin from "./pages/Admin/adminLogin";
 import FormBuilder from "./pages/FormBuilder/Main";
-import Playground from "./pages/compiler/Playground";
 import ClientProfile from "./pages/Admin/clientProfile";
 import Landing from "./pages/landing_page/Landing";
-import CompilerHome from "./pages/compiler/Home";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Header from "./pages/landing_page/header/Header";
 import Main from "./pages/FormBuilder/Main";
@@ -21,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Registartion from "./pages/ClientRegistration/Registration";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
+// import MeetHome from "./pages/Meet/home"
 import { useDispatch, useSelector } from "react-redux";
 import ClientLogin from "./pages/ClientRegistration/ClientLogin";
 import { getUserDetails } from "./store/slices/UserSlice";
@@ -38,18 +37,7 @@ const config = {
   withCredentials: true,
 };
 
-export const toastAlert = () => {
-  toast.warning("You are not client!", {
-    position: "top-center",
-    autoClose: 1000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: false,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-  });
-};
+
 
 const App = () => {
   const dispatch = useDispatch();
@@ -65,6 +53,7 @@ const App = () => {
           config
         );
         const user = response.data.user;
+        console.log("user in app.jsx",user);
         dispatch(getUserDetails(user));
         setIsLoading(false);
       } catch (error) {
@@ -87,15 +76,19 @@ const App = () => {
         <Route path="/" exact element={<Landing />} />
         <Route path="/create/compiler" element={<CompilerForm />} />
 
+        {/* <Route path="/meet" element={<MeetHome/>}/> */}
         {/* Candidate */}
+
         <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />
-        <Route path="/compiler" element={<CompilerHome />} />
-        <Route path="/compiler/playground" element={<Playground />} />
+        
+        {/* <Route path="/compiler" element={<CompilerHome />} />
+        <Route path="/compiler/playground" element={<Playground />} /> */}
 
         {/* Client */}
         <Route path="/client/registration" element={<Registartion />} />
         <Route path="/client/login" element={<ClientLogin />} />
         <Route path="/admin/login" element={<AdminLogin />} />
+        
         {userDetails &&
           userDetails.User &&
           userDetails.User.role === "client" && (

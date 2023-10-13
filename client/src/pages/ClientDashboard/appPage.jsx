@@ -47,14 +47,15 @@ export default function DashboardAppPage() {
   const [allInterviews, setAllInterviews] = useState([]);
   const [candidates, setCandidates] = useState([]);
   const navigate = useNavigate();
-  const sendEmailWithLink = (candidates) => {
+
+  const sendEmailWithLink = (candidates,interviewId) => {
     const aptLink = localStorage.getItem("AptitudeLink");
     // console.log(candidates)
 
     axios
       .post(
         "http://127.0.0.1:4000/api/interview/sendemail-to-candidates",
-        { aptLink, candidates },
+        { aptLink, candidates,interviewId },
         config
       )
       .then((res) => {})
@@ -110,7 +111,7 @@ export default function DashboardAppPage() {
                       <TableCell align="right">{row.rounds.length}</TableCell>
                       <TableCell align="right">
                         <Button
-                          onClick={() => sendEmailWithLink(row.candidates)}
+                          onClick={() => sendEmailWithLink(row.candidates,row._id)}
                         >
                           Send Email
                         </Button>

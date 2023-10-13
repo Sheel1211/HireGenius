@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import Question from "./Question";
 import Answer from "./Answer";
+import {useNavigate} from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import {
   addQuestion,
@@ -20,7 +21,6 @@ import validateSingleQuestion from "./validateSingleQuestion";
 import { clearQuestion } from "../../../store/slices/SingleQuestion";
 import axios from "axios";
 import Slide from "@mui/material/Slide";
-import { useNavigate } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;

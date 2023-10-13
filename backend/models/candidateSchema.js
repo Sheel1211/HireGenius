@@ -22,6 +22,10 @@ const candidateSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  authToken: {
+    type: String,
+    default: ""
+},
   interviews: [
     {
       id: {
