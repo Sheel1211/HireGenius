@@ -2,12 +2,11 @@ import candidate from "../models/candidateSchema.js";
 import interview from "../models/interviewSchema.js";
 import { sendEmail } from "../services/sendEmail.service.js";
 
-export const allInterviews = async(req,res)=>{
-    try{
-        // console.log(req.user);
-      const clientId = req.user._id;
-  
-      const interviews = await interview.find({client:clientId});
+export const allInterviews = async (req, res) => {
+  try {
+    // console.log(req.user);
+    const clientId = req.user._id;
+    console.log(clientId);
 
       res.status(200).json({success:true,interviews})
   

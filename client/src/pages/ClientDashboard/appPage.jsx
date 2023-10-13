@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { DataGrid } from "@mui/x-data-grid";
 import { faker } from "@faker-js/faker";
 // @mui
 import { useTheme } from "@mui/material/styles";
@@ -33,13 +34,34 @@ const config = {
   withCredentials: true,
 };
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
+const CandidateListTable = ({ candidates }) => {
+  // console.log(candidates);
+  return (
+    <>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="candidate table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Email</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {/* {console.log("candidates", candidates)} */}
+            {candidates.map((candidate, index) =>
+              candidate.map((c, key) => (
+                <TableRow key={key}>
+                  <TableCell>{c.name}</TableCell>
+                  <TableCell>{c.email}</TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
+};
 
 export default function DashboardAppPage() {
   const theme = useTheme();
@@ -47,11 +69,8 @@ export default function DashboardAppPage() {
   const [allInterviews, setAllInterviews] = useState([]);
   const [candidates, setCandidates] = useState([]);
   const navigate = useNavigate();
-
-  const sendEmailWithLink = (candidates,interviewId) => {
+  const sendEmailWithLink = (candidates) => {
     const aptLink = localStorage.getItem("AptitudeLink");
-    // console.log(candidates)
-
     axios
       .post(
         "http://127.0.0.1:4000/api/interview/sendemail-to-candidates",
@@ -62,6 +81,45 @@ export default function DashboardAppPage() {
       .catch((error) => {
         alert("error in app.jsx" + error.message);
       });
+  };
+
+  const [showCandidates, setShowCandidates] = useState(false);
+  const [selectedCandidates, setSelectedCandidates] = useState([]);
+  const [allCandidates, setAllCandidates] = useState([]);
+
+  const allData = (candidates) => {
+    const candidateIds = [];
+
+    candidates.map((data) => candidateIds.push(data.candidateId));
+    console.log("Here is array :" + candidateIds);
+    const baseUrl = "http://127.0.0.1:4000/api/candidate/getCandidate";
+    const requests = candidateIds.map((candidateId) => {
+      return axios.post(baseUrl, { candidateId }, config);
+    });
+
+    const candidateAllDetails = [];
+
+    Promise.all(requests)
+      .then((res) => {
+        res.forEach((re, index) => {
+          console.log(re, index);
+          candidateAllDetails.push(re.data.candidate);
+          console.log(
+            "all candidate details after request: ",
+            candidateAllDetails
+          );
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setAllCandidates(candidateAllDetails);
+  };
+
+  const handleViewCandidates = (candidates) => {
+    setSelectedCandidates(allCandidates);
+    setShowCandidates(!showCandidates);
   };
 
   useEffect(() => {
@@ -96,11 +154,11 @@ export default function DashboardAppPage() {
                   {allInterviews.map((row) => (
                     <TableRow
                       key={row._id}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                        cursor: "pointer",
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 },cursor: 'pointer', }}
+                      onClick={() => {
+                        sendEmailWithLink(row.candidates);
+                        navigate("/clientdashboard/schedule-interview");
                       }}
-                      
                     >
                       <TableCell component="th" scope="row">
                         {row.title}
@@ -109,25 +167,18 @@ export default function DashboardAppPage() {
                         {row.candidates.length}
                       </TableCell>
                       <TableCell align="right">{row.rounds.length}</TableCell>
-                      <TableCell align="right">
-                        <Button
-                          onClick={() => sendEmailWithLink(row.candidates,row._id)}
-                        >
-                          Send Email
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            navigate("/clientdashboard/schedule-interview");
-                          }}
-                        >
-                          Schedule Interview
-                        </Button>
-                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
+            {showCandidates && (
+              <div>
+                <h2>Candidates:</h2>
+                {/* {console.log("selected andis", selectedCandidates)} */}
+                <CandidateListTable candidates={selectedCandidates} />
+              </div>
+            )}
           </Grid>
         )}
       </Container>

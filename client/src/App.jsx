@@ -16,6 +16,7 @@ import Header from "./pages/landing_page/header/Header";
 import Main from "./pages/FormBuilder/Main";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Registration from "./pages/ClientRegistration/Registration";
 import Registartion from "./pages/ClientRegistration/Registration";
 import { Navigate } from "react-router-dom";
 import axios from "axios";

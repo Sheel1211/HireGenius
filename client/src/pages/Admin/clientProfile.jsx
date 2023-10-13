@@ -7,36 +7,37 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import InputLabel from "@mui/material/InputLabel";
-import Button from '@mui/joy/Button';
-import Divider from '@mui/joy/Divider';
-import DialogTitle from '@mui/joy/DialogTitle';
-import DialogContent from '@mui/joy/DialogContent';
-import DialogActions from '@mui/joy/DialogActions';
-import Modal from '@mui/joy/Modal';
-import ModalDialog from '@mui/joy/ModalDialog';
-import VerifiedIcon from '@mui/icons-material/Verified';
-import DeleteForever from '@mui/icons-material/DeleteForever';
-import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
+import Button from "@mui/joy/Button";
+import Divider from "@mui/joy/Divider";
+import DialogTitle from "@mui/joy/DialogTitle";
+import DialogContent from "@mui/joy/DialogContent";
+import DialogActions from "@mui/joy/DialogActions";
+import Modal from "@mui/joy/Modal";
+import ModalDialog from "@mui/joy/ModalDialog";
+import VerifiedIcon from "@mui/icons-material/Verified";
+import DeleteForever from "@mui/icons-material/DeleteForever";
+import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 const config = {
-  headers:{
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
   },
-  mode:'cors',
-  credentials:'include',
-  withCredentials:true
-}
+  mode: "cors",
+  credentials: "include",
+  withCredentials: true,
+};
 
 const clientProfile = () => {
   const location = useLocation();
+  console.log(location);
   const { selectedID } = location.state;
   const [client, setClientData] = useState({});
   const [open, setOpen] = useState(false);
-  const [emailMessage,setEmailMessage] = useState("");
+  const [emailMessage, setEmailMessage] = useState("");
 
   const getClientData = () => {
     axios
-      .get(`http://127.0.0.1:4000/api/client/client-data/${selectedID}`,config)
+      .get(`http://127.0.0.1:4000/api/client/client-data/${selectedID}`, config)
       .then((res) => {
         console.log(res.data.data);
         setClientData(res.data.data);
@@ -46,35 +47,47 @@ const clientProfile = () => {
       });
   };
 
-  const hanldeApprove=(message)=>{
-  
-    axios.post(`http://127.0.0.1:4000/api/admin/verify-client/${selectedID}`,{message},config).then((res)=>{ 
-      console.log(res.data);
-      if(res.data.success === true){
-        alert("Verified Successfully");
-      }else{
+  const hanldeApprove = (message) => {
+    axios
+      .post(
+        `http://127.0.0.1:4000/api/admin/verify-client/${selectedID}`,
+        { message },
+        config
+      )
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.success === true) {
+          alert("Verified Successfully");
+        } else {
+          alert("Something went wrong!");
+        }
+      })
+      .catch((error) => {
         alert("Something went wrong!");
-      }
-    }).catch((error)=>{
-      alert("Something went wrong!");
-    })
-    setOpen(false)
-  }
+      });
+    setOpen(false);
+  };
 
-  const hanldeReject=(message)=>{
-    
-    axios.post(`http://127.0.0.1:4000/api/admin/reject-client/${selectedID}`,{message},config).then((res)=>{ 
-      if(res.data.success === true){
-        alert("Rejected Successfully");
-      }else{
+  const hanldeReject = (message) => {
+    axios
+      .post(
+        `http://127.0.0.1:4000/api/admin/reject-client/${selectedID}`,
+        { message },
+        config
+      )
+      .then((res) => {
+        if (res.data.success === true) {
+          alert("Rejected Successfully");
+        } else {
+          alert("Something went wrong!");
+        }
+      })
+      .catch((error) => {
         alert("Something went wrong!");
-      }
-    }).catch((error)=>{
-      alert("Something went wrong!");
-    })
-    setOpen(false)
-    setOpen(false)
-  }
+      });
+    setOpen(false);
+    setOpen(false);
+  };
 
   useEffect(() => {
     getClientData();
@@ -241,7 +254,6 @@ const clientProfile = () => {
                   Verify
                 </Button>
 
-
                 {/* Modal Code */}
                 <React.Fragment>
                   <Modal open={open} onClose={() => setOpen(false)}>
@@ -253,32 +265,32 @@ const clientProfile = () => {
                       <Divider />
                       <DialogContent>
                         Are you sure you want to Approve this client?
-                    <TextField
-                  id="author"
-                  name="author"
-                 fullWidth
-                  size="small"
-                  placeholder="Write some message"
-                  onChange={(e)=>setEmailMessage(e.target.value)}
-                  autoComplete="off"
-                  variant="outlined"
-                />
+                        <TextField
+                          id="author"
+                          name="author"
+                          fullWidth
+                          size="small"
+                          placeholder="Write some message"
+                          onChange={(e) => setEmailMessage(e.target.value)}
+                          autoComplete="off"
+                          variant="outlined"
+                        />
                       </DialogContent>
                       <DialogActions>
                         <Button
                           variant="solid"
                           color="success"
-                          endDecorator={<VerifiedIcon/>}
-                          onClick={()=>hanldeApprove(emailMessage)}
+                          endDecorator={<VerifiedIcon />}
+                          onClick={() => hanldeApprove(emailMessage)}
                           //onClick={() => setOpen(false)}
                         >
-                        Approve
+                          Approve
                         </Button>
                         <Button
                           variant="solid"
                           color="danger"
-                          endDecorator={<DeleteForever/>}
-                          onClick={()=>hanldeReject(emailMessage)}
+                          endDecorator={<DeleteForever />}
+                          onClick={() => hanldeReject(emailMessage)}
                           //onClick={() => setOpen(false)}
                         >
                           Reject
