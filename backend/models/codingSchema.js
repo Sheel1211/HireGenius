@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const codingSchema = new mongoose.Schema({
   interviewId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "interview", // Assuming this is a reference to the interview
+    ref: "interview",
     required: true,
   },
   questions: [
@@ -14,9 +14,15 @@ const codingSchema = new mongoose.Schema({
       },
       testcases: [
         {
-          type: String,
+          input: String, // Test case input
+          output: String, // Expected output for the test case
         },
       ],
+      difficulty: {
+        type: String,
+        enum: ['easy', 'medium', 'hard'],
+        required: true,
+      },
     },
   ],
   duration: {
@@ -29,9 +35,6 @@ const codingSchema = new mongoose.Schema({
       ref: "candidate",
     },
   ],
-  instructions: {
-    type: String,
-  },
 });
 
 const coding = mongoose.model("coding", codingSchema);

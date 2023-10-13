@@ -20,6 +20,7 @@ import validateSingleQuestion from "./validateSingleQuestion";
 import { clearQuestion } from "../../../store/slices/SingleQuestion";
 import axios from "axios";
 import Slide from "@mui/material/Slide";
+import { useNavigate } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -56,6 +57,7 @@ const index = () => {
   const [time, setTime] = useState(60);
   const [link, setLink] = useState(null);
   const [linkmodal, setLinkModal] = useState(false);
+  const navigate = useNavigate();
 
   console.log(Aptitude);
 
@@ -102,8 +104,8 @@ const index = () => {
         console.log(res);
         //alert(res.data.AptitudeLink)
         setLink(res.data.AptitudeLink);
-        localStorage.setItem("AptitudeLink",res.data.AptitudeLink)
-        setLinkModal(true)
+        localStorage.setItem("AptitudeLink", res.data.AptitudeLink);
+        setLinkModal(true);
       })
       .catch((error) => {
         console.log(error);
@@ -111,6 +113,18 @@ const index = () => {
     setOpen(false);
   };
 
+  // TO copy link to clipboard
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(link)
+      .then(() => {
+        alert('Link copied to clipboard: ' + link);
+      })
+      .catch(error => {
+        console.error('Error copying link to clipboard: ', error);
+      });
+      setLinkModal(false)
+      navigate("/clientdashboard")
+  };
   return (
     <>
       {linkmodal && (
@@ -134,8 +148,8 @@ const index = () => {
             />
           </Box>
           <DialogActions>
-            <Button onClick={()=>setLinkModal(false)}>Close</Button>
-            <Button>Copy</Button>
+            <Button onClick={() => setLinkModal(false)}>Close</Button>
+            <Button onClick={handleCopyLink}>Copy</Button>
           </DialogActions>
         </Dialog>
       )}
