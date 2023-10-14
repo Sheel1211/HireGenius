@@ -7,11 +7,11 @@ import { useLocation } from "react-router-dom";
 
 const Main = () => {
   //   const [isPartitionOpen, setIsPartitionOpen] = useState(false);
-      const location  = useLocation();
-      const {dat} = location.state;
+  const location = useLocation();
+  const { dat } = location.state;
 
-      localStorage.setItem("aptitudeid",dat.aptitudeId);
-      
+  localStorage.setItem("aptitudeid", dat.aptitudeId);
+
   return (
     <>
       {/* {!isPartitionOpen && (

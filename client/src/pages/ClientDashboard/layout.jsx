@@ -59,7 +59,7 @@ const layout = () => {
     <StyledRoot>
       <Box>
         <Box sx={{ px: 2.5, py: 3, display: "inline-flex" }}>
-        <img src={account.photoURL} alt="photoURL"/>
+        <img src={account.photoURL} width="200px" alt="photoURL"/>
         </Box>
 
         <Box sx={{ mb: 5, mx: 2.5 }}>

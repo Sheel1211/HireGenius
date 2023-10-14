@@ -19,13 +19,18 @@ const Header = () => {
 
   const calculateGrades = () => {
     let right = 0;
-    let total = AptiDetails.questions.length;
+    let total = 0;
     const sections = AptiDetails.sections;
-    console.log(sections);
+    const negativeMarking = AptiDetails.negativeMarking;
     for (let section in sections) {
       const sectionArr = sections[section];
       sectionArr.forEach((value, index) => {
-        const { selectedOptions, answers: correctAnswers, options } = value;
+        const {
+          selectedOptions,
+          answers: correctAnswers,
+          options,
+          questionMarks,
+        } = value;
         const selectedAnswers = selectedOptions.map(
           (selectedOptionIdx) => options[selectedOptionIdx].option
         );
@@ -34,9 +39,18 @@ const Header = () => {
           selectedAnswers.includes(correctAnswer)
         );
 
-        if (isCorrect) {
-          right++;
+        if (selectedAnswers.length > 0) {
+          if (isCorrect) {
+            right += Number(questionMarks);
+          } else {
+            console.log("questionMarks", questionMarks);
+            let negative = (Number(questionMarks) * negativeMarking) / 100;
+            right -= negative;
+          }
         }
+
+        total += Number(questionMarks);
+        console.log("right", right);
       });
     }
 

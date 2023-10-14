@@ -21,7 +21,7 @@ import {
   setQuestionImage,
   setQuestionImageURL,
   setQuestionImageDesc,
-} from "../../../store/slices/SingleQuestion";
+} from "../../../../store/slices/SingleQuestion";
 import axios from "axios";
 
 const Question = () => {
@@ -33,6 +33,7 @@ const Question = () => {
     question,
     questionImageURL,
     questionImageDesc,
+    questionMarks,
   } = singleQuestion;
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -230,6 +231,18 @@ const Question = () => {
             </FormControl>
           </>
         )}
+        <FormLabel sx={{ marginTop: 2 }} focused={false}>
+          Enter the marks for the question
+        </FormLabel>
+        <TextField
+          id="outlined-negativemarking"
+          variant="outlined"
+          required
+          size="small"
+          type="number"
+          value={questionMarks}
+          onChange={(e) => dispatch(setQuestionMarks(e.target.value))}
+        />
       </FormControl>
     </>
   );

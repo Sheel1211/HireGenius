@@ -1,5 +1,5 @@
 import express from "express";
-import clientRoute from "./clientRoute.js"
+import clientRoute from "./clientRoute.js";
 import codingRoute from "./codingRoute.js";
 import adminRoute from "./adminRoute.js";
 import userRoute from "./userRoute.js";

@@ -36,7 +36,8 @@ const CandidateLogin = () => {
         console.log(res);
       })
       .catch((error) => {
-        toast.error("Something went wrong!", {
+        console.log(error);
+        error("Something went wrong!", {
           position: "top-center",
           autoClose: 1000,
           hideProgressBar: false,

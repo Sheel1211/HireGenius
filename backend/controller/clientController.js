@@ -9,6 +9,7 @@ export const clientRegistration = async (req, res) => {
   try {
     const { name, email, password, url, description, contactno, sector } =
       req.body;
+    
     if (
       !name ||
       !email ||
@@ -179,13 +180,11 @@ export const clientLogin = async (req, res) => {
       }
     }
   } catch (error) {
-    return res
-      .status(500)
-      .send({
-        sucess: false,
-        message: "Internal server error",
-        data: error.message,
-      });
+    return res.status(500).send({
+      sucess: false,
+      message: "Internal server error",
+      data: error.message,
+    });
   }
 };
 
@@ -211,13 +210,13 @@ export const addCandidatesWithUsernameAndPassword = async (req, res) => {
       const candi = await candidate.findOne({ email: item.email });
 
       console.log("Hello candidate " + candi);
-      candidateIds.push({"candidateId":candi._id});
+      candidateIds.push({ candidateId: candi._id });
       console.log("Here's array of candidates: " + candidateIds);
     })
   );
-  
+
   const addToInterview = new interview({
-    candidates: candidateIds, 
+    candidates: candidateIds,
     title,
     client: req.user._id,
   });

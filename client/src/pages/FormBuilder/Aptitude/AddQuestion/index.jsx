@@ -16,11 +16,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addQuestion,
   addMultipleQuestions,
-} from "../../../store/slices/AptitudeSlice";
+} from "../../../../store/slices/AptitudeSlice";
 import validateSingleQuestion from "./validateSingleQuestion";
-import { clearQuestion } from "../../../store/slices/SingleQuestion";
+import { clearQuestion } from "../../../../store/slices/SingleQuestion";
 import axios from "axios";
 import Slide from "@mui/material/Slide";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -55,11 +57,10 @@ const index = () => {
   const [isQuestionAdded, setIsQuestionAdded] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [time, setTime] = useState(60);
+  const [negativeMarking, setNegativeMarking] = useState(0);
   const [link, setLink] = useState(null);
   const [linkmodal, setLinkModal] = useState(false);
-  const navigate = useNavigate()
-
-  console.log(Aptitude);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isQuestionAdded) return;
@@ -88,14 +89,29 @@ const index = () => {
   const questions = useSelector((state) => state.Aptitude);
 
   const handleDuration = () => {
+    if (questions.length === 0) {
+      toast.warn("Please add some questions...", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
     setOpen(true);
   };
 
   const handleGenerateLink = () => {
+    const aptid = localStorage.getItem("aptitudeid")
     const data = {
-      aptitudeId: localStorage.getItem("aptitudeid"),
+      aptitudeId: aptid,
       questions,
       duration: time,
+      negativeMarking: negativeMarking,
     };
 
     axios
@@ -124,7 +140,6 @@ const index = () => {
       });
       setLinkModal(false)
       navigate("/clientdashboard")
-
   };
   return (
     <>
@@ -211,17 +226,32 @@ const index = () => {
         aria-describedby="alert-dialog-slide-description"
       >
         <Box sx={{ p: 4 }}>
-          <Typography variant="h5" sx={{ my: 2 }}>
-            Select Aptitude Duration in Minutes
-          </Typography>
-          <TextField
-            fullWidth
-            label="Time (in minutes)"
-            variant="outlined"
-            type="number"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-          />
+          <Box>
+            <Typography variant="h5" sx={{ my: 2 }}>
+              Select Aptitude Duration in Minutes
+            </Typography>
+            <TextField
+              fullWidth
+              label="Time (in minutes)"
+              variant="outlined"
+              type="number"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+            />
+          </Box>
+          <Box>
+            <Typography variant="h5" sx={{ my: 2 }}>
+              Negative marking (0% means no negative marking)
+            </Typography>
+            <TextField
+              fullWidth
+              label="Negative marking (in percentage)"
+              variant="outlined"
+              type="number"
+              value={negativeMarking}
+              onChange={(e) => setNegativeMarking(e.target.value)}
+            />
+          </Box>
         </Box>
         <DialogActions>
           <Button onClick={handleClose}>Disagree</Button>

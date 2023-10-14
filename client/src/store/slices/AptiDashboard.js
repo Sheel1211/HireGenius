@@ -19,6 +19,7 @@ const initialState = {
   selectedOptions: [],
   selectedPage: "0",
   duration: 0,
+  negativeMarking: 0,
 };
 
 export const AptiDashboardSlice = createSlice({
@@ -128,6 +129,35 @@ export const AptiDashboardSlice = createSlice({
     setDuration(state, action) {
       return { ...state, duration: action.payload };
     },
+    setNegativeMarking(state, action) {
+      return { ...state, negativeMarking: action.payload };
+    },
+    setColor(state, action) {
+      const { selectedQuestionIdx, currentSection } = action.payload;
+      const updatedSections = { ...state.sections };
+      const updatedQuestions = [...updatedSections[currentSection]];
+      const updatedQuestion = {
+        ...updatedQuestions[selectedQuestionIdx],
+        color: action.payload?.color ? action.payload.color : "secondary",
+      };
+
+      updatedQuestions[selectedQuestionIdx] = updatedQuestion;
+      updatedSections[currentSection] = updatedQuestions;
+      state.sections = updatedSections;
+    },
+    clearQuestion(state, action) {
+      const { selectedQuestionIdx, currentSection } = action.payload;
+      const updatedSections = { ...state.sections };
+      const updatedQuestions = [...updatedSections[currentSection]];
+      const updatedQuestion = {
+        ...updatedQuestions[selectedQuestionIdx],
+        selectedOptions: [],
+      };
+
+      updatedQuestions[selectedQuestionIdx] = updatedQuestion;
+      updatedSections[currentSection] = updatedQuestions;
+      state.sections = updatedSections;
+    },
   },
 });
 
@@ -144,5 +174,8 @@ export const {
   addSelectedOptions,
   setSelectedPage,
   setDuration,
+  setNegativeMarking,
+  setColor,
+  clearQuestion,
 } = AptiDashboardSlice.actions;
 export default AptiDashboardSlice.reducer;

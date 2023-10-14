@@ -5,17 +5,20 @@ import { uploadFile } from "../services/uploadFileS3.service.js";
 export const saveQuestions = async (req, res) => {
   try {
     // Save all the question
-    const { aptitudeId, questions, duration } = req.body;
-    // console.log("aptitudeId",aptitudeId,"duration",duration)
+    const { aptitudeId, questions, duration, negativeMarking } = req.body;
+
+    console.log(aptitudeId, questions, duration, negativeMarking)
 
     // console.log(rea.body);
 
+    // console.log("apt id" + aptitudeId);
     const aptitude = await Aptitude.findOne({ aptitudeId: aptitudeId });
 
     // console.log("Hi", aptitude);
     // console.log("first");
     aptitude.questions = questions;
     aptitude.duration = duration;
+    aptitude.negativeMarking = negativeMarking;
     await aptitude.save();
     
     // Generate Link logic
@@ -52,12 +55,12 @@ export const getAptitudeQuestions = async (req, res) => {
     if (!aptitude) {
       throw new Error("No Aptitude Record Found");
     }
-    
-    const { questions, duration } = aptitude;
+    const { questions, duration, negativeMarking } = aptitude;
     res.status(200).json({
       success: true,
       questions,
       duration,
+      negativeMarking,
       message: "Aptitude created",
     });
   } catch (error) {
