@@ -6,39 +6,67 @@ import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 
 const RegistartionSub1 = ({ clientData, setClientData }) => {
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+    url: "",
+    contactno: "",
+  });
+
   const handleInputChange = (e) => {
+    const { name, value } = e.target;
     setClientData({ ...clientData, [e.target.name]: e.target.value });
+
+    if (name === "name") {
+      setErrors({ ...errors, name: validateName(value) });
+    } else if (name === "email") {
+      setErrors({ ...errors, email: validateEmail(value) });
+    } else if (name === "password") {
+      setErrors({ ...errors, password: validatePassword(value) });
+    } else if (name === "url") {
+      setErrors({ ...errors, url: validateURL(value) });
+    } else if (name === "contactno") {
+      setErrors({ ...errors, contactno: validateMobileNumber(value) });
+    }
   };
 
-  const isEmailValid = (email) => {
-    // Regular expression for basic email validation
+  const validateName = (name) => {
+    if (name.length < 3 || name.length > 10) {
+      return "Name length must be between 3 and 10 characters";
+    }
+    return "";
+  };
+
+  const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    return emailRegex.test(email) ? "" : "Invalid email address";
   };
 
-  const isPasswordValid = (password) => {
-    // Regular expressions for password validation
+  const validatePassword = (password) => {
     const minLength = 8;
     const containsUppercase = /[A-Z]/.test(password);
     const containsLowercase = /[a-z]/.test(password);
     const containsNumber = /[0-9]/.test(password);
 
-    return (
-      password.length >= minLength &&
-      containsUppercase &&
-      containsLowercase &&
-      containsNumber
-    );
+    if (
+      password.length < minLength ||
+      !(containsUppercase && containsLowercase && containsNumber)
+    ) {
+      return "Password must be at least 8 characters and include at least one uppercase letter, one lowercase letter, and one number.";
+    }
+    return "";
   };
 
-  const isURLValid = (url) => {
-    // Regular expression for URL validation
+  const validateURL = (url) => {
     const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
-    return urlRegex.test(url);
+    return urlRegex.test(url) ? "" : "Please enter a valid URL";
   };
 
-  const isMobileNumberValid = (mobileNumber) => {
-    return mobileNumber.length === 10 && /^\d+$/.test(mobileNumber);
+  const validateMobileNumber = (mobileNumber) => {
+    return /^\d{10}$/.test(mobileNumber)
+      ? ""
+      : "Please enter a valid 10-digit mobile number";
   };
 
   return (
@@ -58,12 +86,8 @@ const RegistartionSub1 = ({ clientData, setClientData }) => {
             fullWidth
             variant="standard"
             onChange={handleInputChange}
-            error={clientData.name.length < 3 || clientData.name.length > 10}
-            helperText={
-              clientData.name.length < 3 || clientData.name.length > 10
-                ? "Name length must be between 3 and 10 characters"
-                : ""
-            }
+            error={!!errors.name}
+            helperText={errors.name}
           />
         </Grid>
         <Grid item xs={12}>
@@ -76,10 +100,8 @@ const RegistartionSub1 = ({ clientData, setClientData }) => {
             fullWidth
             variant="standard"
             onChange={handleInputChange}
-            error={!isEmailValid(clientData.email)}
-            helperText={
-              !isEmailValid(clientData.email) ? "Invalid email address" : ""
-            }
+            error={!!errors.email}
+            helperText={errors.email}
           />
         </Grid>
 
@@ -94,12 +116,8 @@ const RegistartionSub1 = ({ clientData, setClientData }) => {
             variant="standard"
             value={clientData.password}
             onChange={handleInputChange}
-            error={!isPasswordValid(clientData.password)}
-            helperText={
-              !isPasswordValid(clientData.password)
-                ? "Password must be at least 8 characters and include at least one uppercase letter, one lowercase letter, and one number."
-                : ""
-            }
+            error={!!errors.password}
+            helperText={errors.password}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -125,10 +143,8 @@ const RegistartionSub1 = ({ clientData, setClientData }) => {
             fullWidth
             variant="standard"
             onChange={handleInputChange}
-            error={!isURLValid(clientData.url)}
-            helperText={
-              !isURLValid(clientData.url) ? "Please enter a valid URL" : ""
-            }
+            error={!!errors.url}
+            helperText={errors.url}
           />
         </Grid>
         <Grid item xs={12}>
@@ -142,12 +158,8 @@ const RegistartionSub1 = ({ clientData, setClientData }) => {
             value={clientData.contactno}
             variant="standard"
             onChange={handleInputChange}
-            error={!isMobileNumberValid(clientData.contactno)}
-            helperText={
-              !isMobileNumberValid(clientData.contactno)
-                ? "Please enter a valid 10-digit mobile number"
-                : ""
-            }
+            error={!!errors.contactno}
+            helperText={errors.contactno}
           />
         </Grid>
         <Grid item xs={12}>
