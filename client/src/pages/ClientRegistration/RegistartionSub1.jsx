@@ -11,12 +11,20 @@ const RegistartionSub1 = ({ clientData, setClientData }) => {
   };
 
   const isEmailValid = (email) => {
+    if (!email) {
+      return true; // No error if the field is empty
+    }
+
     // Regular expression for basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
   const isPasswordValid = (password) => {
+    if (!password) {
+      return true; // No error if the field is empty
+    }
+
     // Regular expressions for password validation
     const minLength = 8;
     const containsUppercase = /[A-Z]/.test(password);
@@ -32,12 +40,20 @@ const RegistartionSub1 = ({ clientData, setClientData }) => {
   };
 
   const isURLValid = (url) => {
+    if (!url) {
+      return true; // No error if the field is empty
+    }
+
     // Regular expression for URL validation
     const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
     return urlRegex.test(url);
   };
 
   const isMobileNumberValid = (mobileNumber) => {
+    if (!mobileNumber) {
+      return true; // No error if the field is empty
+    }
+
     return mobileNumber.length === 10 && /^\d+$/.test(mobileNumber);
   };
 
@@ -163,6 +179,7 @@ const RegistartionSub1 = ({ clientData, setClientData }) => {
         </Grid>
 
         <Grid item xs={12}>
+          <Typography>Sector</Typography>
           <Select
             id="sector"
             name="sector"

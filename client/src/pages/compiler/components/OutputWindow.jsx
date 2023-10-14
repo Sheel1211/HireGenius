@@ -80,7 +80,7 @@ const OutputWindow = ({ outputDetails }) => {
           fontWeight: "bold",
           fontSize: "1.25rem",
           bgClip: "text",
-          color: "rgb(30, 136, 229)",
+          color: "#1E88E5",
           marginBottom: 2,
         }}
       >

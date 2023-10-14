@@ -9,6 +9,7 @@ export const clientRegistration = async (req, res) => {
   try {
     const { name, email, password, url, description, contactno, sector } =
       req.body;
+    
     if (
       !name ||
       !email ||

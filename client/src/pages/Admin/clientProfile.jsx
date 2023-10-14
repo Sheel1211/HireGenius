@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -35,6 +35,8 @@ const clientProfile = () => {
   const [open, setOpen] = useState(false);
   const [emailMessage, setEmailMessage] = useState("");
 
+  const navigate = useNavigate();
+
   const getClientData = () => {
     axios
       .get(`http://127.0.0.1:4000/api/client/client-data/${selectedID}`, config)
@@ -47,17 +49,18 @@ const clientProfile = () => {
       });
   };
 
-  const hanldeApprove = (message) => {
+  const hanldeApprove = (message,emailId) => {
     axios
       .post(
         `http://127.0.0.1:4000/api/admin/verify-client/${selectedID}`,
-        { message },
+        { message,emailId },
         config
       )
       .then((res) => {
         console.log(res.data);
         if (res.data.success === true) {
           alert("Verified Successfully");
+          
         } else {
           alert("Something went wrong!");
         }
@@ -66,14 +69,15 @@ const clientProfile = () => {
         alert("Something went wrong!");
       });
     setOpen(false);
+    navigate("/admindashboard");
   };
-
-  const hanldeReject = (message) => {
+  
+  const hanldeReject = (message,emailId) => {
     axios
-      .post(
-        `http://127.0.0.1:4000/api/admin/reject-client/${selectedID}`,
-        { message },
-        config
+    .post(
+      `http://127.0.0.1:4000/api/admin/reject-client/${selectedID}`,
+      { message,emailId },
+      config
       )
       .then((res) => {
         if (res.data.success === true) {
@@ -85,15 +89,16 @@ const clientProfile = () => {
       .catch((error) => {
         alert("Something went wrong!");
       });
-    setOpen(false);
-    setOpen(false);
-  };
-
-  useEffect(() => {
-    getClientData();
-  }, []);
-
-  if (!client) {
+      setOpen(false);
+      setOpen(false);
+      navigate("/admindashboard");
+    };
+    
+    useEffect(() => {
+      getClientData();
+    }, []);
+    
+    if (!client) {
     return <>Loading...</>;
   } else {
     return (
@@ -281,7 +286,7 @@ const clientProfile = () => {
                           variant="solid"
                           color="success"
                           endDecorator={<VerifiedIcon />}
-                          onClick={() => hanldeApprove(emailMessage)}
+                          onClick={() => hanldeApprove(emailMessage,client.email)}
                           //onClick={() => setOpen(false)}
                         >
                           Approve
@@ -290,7 +295,7 @@ const clientProfile = () => {
                           variant="solid"
                           color="danger"
                           endDecorator={<DeleteForever />}
-                          onClick={() => hanldeReject(emailMessage)}
+                          onClick={() => hanldeReject(emailMessage,client.email)}
                           //onClick={() => setOpen(false)}
                         >
                           Reject

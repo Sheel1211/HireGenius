@@ -18,6 +18,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { spaceBetween } from "./styles";
 import {
   addSelectedOptions,
+  clearQuestion,
+  setColor,
   setSelectedIndex,
   setSelectedSection,
 } from "../../../store/slices/AptiDashboard";
@@ -29,8 +31,8 @@ const ShowQuestion = () => {
   let selectedQuestionIdx = AptiDetails.selectedIndex;
 
   const handlePrevClick = (currentIndex) => {
+    const currentSection = AptiDetails.selectedSection;
     if (currentIndex === 0) {
-      const currentSection = AptiDetails.selectedSection;
       const sectionKeys = Object.keys(AptiDetails.sections);
       const currentSectionIndex = sectionKeys.indexOf(currentSection);
       if (currentSectionIndex !== 0) {
@@ -38,28 +40,70 @@ const ShowQuestion = () => {
         const len =
           AptiDetails.sections[sectionKeys[currentSectionIndex - 1]].length;
         dispatch(setSelectedIndex(len - 1));
+        dispatch(
+          setColor({
+            selectedQuestionIdx: len - 1,
+            currentSection: sectionKeys[currentSectionIndex - 1],
+          })
+        );
       }
     } else {
       dispatch(setSelectedIndex(currentIndex - 1));
+      dispatch(
+        setColor({
+          selectedQuestionIdx: currentIndex - 1,
+          currentSection: AptiDetails.selectedSection,
+        })
+      );
     }
   };
 
   const handleSaveAndNextClick = (currentIndex) => {
     const len = AptiDetails.sections[AptiDetails.selectedSection].length;
+    const currentSection = AptiDetails.selectedSection;
+    const sectionKeys = Object.keys(AptiDetails.sections);
+    const currentSectionIndex = sectionKeys.indexOf(currentSection);
     if (currentIndex === len - 1) {
-      const currentSection = AptiDetails.selectedSection;
-      const sectionKeys = Object.keys(AptiDetails.sections);
-      const currentSectionIndex = sectionKeys.indexOf(currentSection);
       if (currentSectionIndex !== sectionKeys.length - 1) {
         dispatch(setSelectedSection(sectionKeys[currentSectionIndex + 1]));
         dispatch(setSelectedIndex(0));
+        dispatch(
+          setColor({
+            selectedQuestionIdx: 0,
+            currentSection: sectionKeys[currentSectionIndex + 1],
+          })
+        );
       }
     } else {
       dispatch(setSelectedIndex(currentIndex + 1));
+      dispatch(
+        setColor({
+          selectedQuestionIdx: currentIndex + 1,
+          currentSection: AptiDetails.selectedSection,
+        })
+      );
     }
   };
 
+  const handleClear = (selectedQuestionIdx) => {
+    const currentSection = AptiDetails.selectedSection;
+    dispatch(
+      clearQuestion({
+        selectedQuestionIdx,
+        currentSection,
+      })
+    );
+    dispatch(setColor({ selectedQuestionIdx, currentSection }));
+  };
+
   const handleOptionSelect = (e, section, questionIndex, optionIndex) => {
+    dispatch(
+      setColor({
+        selectedQuestionIdx: questionIndex,
+        currentSection: section,
+        color: "success",
+      })
+    );
     dispatch(addSelectedOptions({ e, section, questionIndex, optionIndex }));
   };
 
@@ -132,35 +176,50 @@ const ShowQuestion = () => {
                   {questions[selectedQuestionIdx].options.map(
                     (option, index) => {
                       return (
-                        <FormControlLabel
-                          sx={{ userSelect: "none" }}
-                          onCopy={(e) => e.preventDefault()}
-                          key={index}
-                          value={option.option}
-                          control={
-                            <Radio
-                              size="small"
-                              checked={AptiDetails.sections[
-                                AptiDetails.selectedSection
-                              ][selectedQuestionIdx].selectedOptions.includes(
-                                index
-                              )}
-                              onChange={(e) =>
-                                handleOptionSelect(
-                                  e,
-                                  AptiDetails.selectedSection,
-                                  selectedQuestionIdx,
+                        <Box key={index}>
+                          <FormControlLabel
+                            sx={{ userSelect: "none" }}
+                            onCopy={(e) => e.preventDefault()}
+                            value={
+                              option?.optionURL
+                                ? option.optionURL
+                                : option.option
+                            }
+                            control={
+                              <Radio
+                                size="small"
+                                checked={AptiDetails.sections[
+                                  AptiDetails.selectedSection
+                                ][selectedQuestionIdx].selectedOptions.includes(
                                   index
-                                )
-                              }
-                            />
-                          }
-                          label={
-                            <Typography sx={{ fontSize: "1.2rem" }}>
-                              {option.option}
-                            </Typography>
-                          }
-                        />
+                                )}
+                                onChange={(e) =>
+                                  handleOptionSelect(
+                                    e,
+                                    AptiDetails.selectedSection,
+                                    selectedQuestionIdx,
+                                    index
+                                  )
+                                }
+                              />
+                            }
+                            label={option?.optionURL ? "" : option.option}
+                            name="radio"
+                          />
+                          <Box>
+                            {option.optionURL && (
+                              <img
+                                src={option.optionURL}
+                                alt="Big Image"
+                                style={{
+                                  height: "200px",
+                                  width: "100%",
+                                  objectFit: "contain",
+                                }}
+                              />
+                            )}
+                          </Box>
+                        </Box>
                       );
                     }
                   )}
@@ -230,7 +289,12 @@ const ShowQuestion = () => {
             >
               Previous
             </Button>
-            <Button variant="contained"> Clear </Button>
+            <Button
+              variant="contained"
+              onClick={() => handleClear(selectedQuestionIdx)}
+            >
+              Clear
+            </Button>
             <Button
               variant="contained"
               onClick={() => handleSaveAndNextClick(selectedQuestionIdx)}

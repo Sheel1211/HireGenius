@@ -151,7 +151,7 @@ export const getallApprovedClients = async (req, res) => {
 export const verifyClients = async (req, res) => {
   try {
     const { clientId } = req.params;
-    const { message } = req.body;
+    const { message,emailId } = req.body;
 
     const clientData = await client.findOneAndUpdate(
       { _id: clientId },
@@ -160,7 +160,7 @@ export const verifyClients = async (req, res) => {
       
     if (clientData) {
       const data = await sendEmail(
-        "barotpratham266@gmail.com",
+        emailId,
         "Hiregenius Application Status",
         `Application Status: Approved. ${message}`
       );
@@ -185,7 +185,7 @@ export const verifyClients = async (req, res) => {
 export const rejectClients = async (req, res) => {
   try {
     const { clientId } = req.params;
-    const { message } = req.body;
+    const { message,emailId } = req.body;
 
     const clientData = await client.findOneAndUpdate(
       { _id: clientId },
@@ -194,7 +194,7 @@ export const rejectClients = async (req, res) => {
 
     if (clientData) {
       const data = await sendEmail(
-        "barotpratham266@gmail.com",
+        emailId,
         "Hiregenius Application Status",
         `Application Status: Rejected. ${message}`
       );

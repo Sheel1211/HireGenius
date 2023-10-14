@@ -64,6 +64,7 @@ export default function CandidatePage() {
       Papa.parse(csv, {
         header: true,
         complete: (result) => {
+          if(result.data.length>0)result.data.pop();
           setRows(result.data);
         },
       });
@@ -76,7 +77,7 @@ export default function CandidatePage() {
     const title = prompt("Enter your interview title");
 
     if (!title) {
-      return alert("please eneter a title");
+      return alert("please enter a title");
     }
 
     axios

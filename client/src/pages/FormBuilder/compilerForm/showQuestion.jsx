@@ -1,14 +1,8 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { removeCodingQuestion } from '../../../store/slices/CodingSlice';
-import {
-  Container,
-  Typography,
-  Button,
-  IconButton,
-  Box,
-} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { removeCodingQuestion } from "../../../store/slices/CodingSlice";
+import { Container, Typography, Button, IconButton, Box, Divider, Chip } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const ShowQuestion = () => {
   const questions = useSelector((state) => state.Coding.codingQuestions);
@@ -19,24 +13,91 @@ const ShowQuestion = () => {
   };
 
   return (
-    <Container>
-      <Typography variant="h4">Saved Questions</Typography>
+    <Container sx={{ backgroundColor: "white" }}>
+      <Typography variant="h4">Questions</Typography>
       {questions &&
         questions.map((question, index) => (
           <Box key={index} sx={{ marginBottom: 2 }}>
-            <Typography variant="h6">Question {index + 1}</Typography>
-            <Typography>Problem Statement: {question.problemStatement}</Typography>
-            <Typography>Testcases - INPUT: {question.testcases.input}</Typography>
-            <Typography>Testcases - OUTPUT: {question.testcases.output}</Typography>
-            <Typography>Difficulty: {question.difficulty}</Typography>
-            <Typography>Duration: {question.duration}</Typography>
-            <IconButton
-              color="error"
-              aria-label="delete"
-              onClick={() => handleRemoveQuestion(index)}
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <Typography variant="h6" sx={{ color: "#1E88E5" }}>
+                Question {index + 1}
+              </Typography>
+              <IconButton
+                color="error"
+                aria-label="delete"
+                onClick={() => handleRemoveQuestion(index)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                paddingY: 1,
+              }}
             >
-              <DeleteIcon />
-            </IconButton>
+              <Typography variant="h6">Problem Statement</Typography>
+              <Typography>{question.problemStatement}</Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                paddingY: 1,
+              }}
+            >
+              <Typography variant="h6">Testcases</Typography>
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography variant="h6" sx={{ paddingX: "1vmax" }}>
+                  INPUT
+                </Typography>
+                <Typography variant="h6">{question.testcases.input}</Typography>
+              </Box>
+
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography variant="h6" sx={{ paddingX: "1vmax" }}>
+                  OUTPUT
+                </Typography>
+                <Typography variant="h6">{question.testcases.input}</Typography>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                paddingY: 1,
+              }}
+            >
+              <Typography variant="h6">Difficulty</Typography>
+              <Typography variant="h6" sx={{ paddingX: "1vmax" }}>
+              {question.difficulty === "easy" ? (
+              <Chip label="Easy" color="success" />
+            ) : question.difficulty === "medium" ? (
+              <Chip label="Medium" color="warning" />
+            ) : (
+              <Chip label="Hard" color="error" />
+            )}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                paddingY: 1,
+              }}
+            >
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography variant="h6">Duration</Typography>
+                <Typography variant="h6" sx={{ paddingX: "1vmax" }}>
+                  {question.duration}{" mins"}
+                </Typography>
+              </Box>
+            </Box>
+            <Divider />
           </Box>
         ))}
     </Container>

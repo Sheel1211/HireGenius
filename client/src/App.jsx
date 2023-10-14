@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from "react";
-import Signin from "./pages/auth/Signin";
-
 import "./index.css";
+import FormBuilder from "./pages/FormBuilder/Aptitude/Main";
 import ClientDashboard from "./pages/ClientDashboard/layout";
 import ClientDashboardAppPage from "./pages/ClientDashboard/appPage";
 import CandidatePage from "./pages/ClientDashboard/candidatePage";
 import InterviewPage from "./pages/ClientDashboard/interviewPage";
 import AdminDashboard from "./pages/Admin/adminDashboard";
 import AdminLogin from "./pages/Admin/adminLogin";
-import FormBuilder from "./pages/FormBuilder/Main";
+import Playground from "./pages/compiler/Playground";
 import ClientProfile from "./pages/Admin/clientProfile";
 import Landing from "./pages/landing_page/Landing";
+import CompilerHome from "./pages/compiler/Home";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Header from "./pages/landing_page/header/Header";
-import Main from "./pages/FormBuilder/Main";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Registration from "./pages/ClientRegistration/Registration";
-import Registartion from "./pages/ClientRegistration/Registration";
-import { Navigate } from "react-router-dom";
 import axios from "axios";
 // import MeetHome from "./pages/Meet/home"
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +22,9 @@ import ClientLogin from "./pages/ClientRegistration/ClientLogin";
 import { getUserDetails } from "./store/slices/UserSlice";
 import CandidateAptitude from "./pages/Candidate/Aptitude";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import Main from "./pages/FormBuilder/Aptitude/Main";
 import CompilerForm from "./pages/FormBuilder/compilerForm/CompilerForm";
+import Header from "./pages/landing_page/header/Header";
 
 const config = {
   headers: {
@@ -81,15 +79,13 @@ const App = () => {
         {/* Candidate */}
 
         <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />
-        
-        {/* <Route path="/compiler" element={<CompilerHome />} />
-        <Route path="/compiler/playground" element={<Playground />} /> */}
+        <Route path="/compiler" element={<CompilerHome />} />
+        <Route path="/compiler/playground" element={<Playground />} />
 
         {/* Client */}
-        <Route path="/client/registration" element={<Registartion />} />
+        <Route path="/client/registration" element={<Registration />} />
         <Route path="/client/login" element={<ClientLogin />} />
         <Route path="/admin/login" element={<AdminLogin />} />
-        
         {userDetails &&
           userDetails.User &&
           userDetails.User.role === "client" && (

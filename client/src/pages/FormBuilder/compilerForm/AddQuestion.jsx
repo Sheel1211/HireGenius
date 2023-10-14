@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Container,
@@ -9,14 +9,35 @@ import {
   TextField,
   Typography,
   Button,
+  Chip,
 } from "@mui/material";
 import Textarea from "@mui/joy/Textarea";
 import { useDispatch } from "react-redux";
 import { addCodingQuestion } from "../../../store/slices/CodingSlice";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const toastWarning = (message) => {
+  toast.warn(message, {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: false,
+    progress: undefined,
+    theme: "light",
+  });
+};
 
 const AddQuestion = () => {
   const dispatch = useDispatch();
+
   const [selectedDifficulty, setSelectedDifficulty] = useState("easy");
+  const [tc, setTc] = useState({
+    input: "",
+    output: "",
+  });
   const [question, setQuestion] = useState({
     problemStatement: "",
     testcases: {
@@ -34,8 +55,18 @@ const AddQuestion = () => {
   };
 
   const handleQuestionAdd = () => {
+    if (!question.problemStatement || !tc.input || !tc.output || !question.duration) {
+      toastWarning("Please fill all the fields");
+      return;
+    }
+
+    // Update the question object with the test cases
+    question.testcases = tc;
+
     setQuestionsList([...questionsList, question]);
     dispatch(addCodingQuestion(question));
+
+    // Reset the form
     setQuestion({
       problemStatement: "",
       testcases: {
@@ -45,13 +76,19 @@ const AddQuestion = () => {
       difficulty: selectedDifficulty,
       duration: "",
     });
+    setTc({
+      input: "",
+      output: "",
+    });
+
+    
   };
 
   const handleInputChange = (field, value) => {
-    setQuestion({
-      ...question,
+    setQuestion((prevQuestion) => ({
+      ...prevQuestion,
       [field]: value,
-    });
+    }));
   };
 
   return (
@@ -70,20 +107,20 @@ const AddQuestion = () => {
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", paddingY: 1 }}>
           <Typography variant="h6">Enter Testcases</Typography>
           <Typography variant="h6">INPUT</Typography>
-          <TextField  // Use TextField for input test cases
+          <TextField
             multiline
             minRows={2}
             sx={{ minWidth: "40vmax" }}
-            onChange={(event) => handleInputChange("testcases.input", event.target.value)}
-            value={question.testcases.input}
+            onChange={(event) => setTc({ ...tc, input: event.target.value })}
+            value={tc.input}
           />
           <Typography variant="h6">OUTPUT</Typography>
-          <TextField  // Use TextField for output test cases
+          <TextField
             multiline
             minRows={2}
             sx={{ minWidth: "40vmax" }}
-            onChange={(event) => handleInputChange("testcases.output", event.target.value)}
-            value={question.testcases.output}
+            onChange={(event) => setTc({ ...tc, output: event.target.value })}
+            value={tc.output}
           />
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", paddingY: 1 }}>
@@ -103,7 +140,7 @@ const AddQuestion = () => {
           </FormControl>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", paddingY: 1 }}>
-          <Typography variant="h6">Enter duration</Typography>
+          <Typography variant="h6">Enter duration(mins)</Typography>
           <TextField
             label="Duration"
             variant="outlined"
@@ -112,6 +149,7 @@ const AddQuestion = () => {
             value={question.duration}
           />
         </Box>
+
 
         <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-around", paddingY: 1 }}>
           <Button variant="contained" color="primary" onClick={handleQuestionAdd}>

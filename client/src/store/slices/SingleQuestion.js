@@ -10,6 +10,7 @@ const initialState = {
   answerType: "None",
   options: [],
   answers: [],
+  questionMarks: 1,
 };
 
 export const SingleQuestionSlice = createSlice({
@@ -35,6 +36,9 @@ export const SingleQuestionSlice = createSlice({
     setQuestionImageDesc(state, action) {
       state.questionImageDesc = action.payload;
     },
+    setQuestionMarks(state, action) {
+      state.questionMarks = action.payload;
+    },
     setAnswerType(state, action) {
       state.answerType = action.payload;
     },
@@ -48,6 +52,8 @@ export const SingleQuestionSlice = createSlice({
     },
     setAnswers(state, action) {
       const { SingleQuestion, optionNumber, e } = action.payload;
+
+      console.log(action.payload);
 
       const answers = Array.from(new Set(SingleQuestion.answers));
       const optionValue = SingleQuestion.options[optionNumber - 1].option;
@@ -75,6 +81,7 @@ export const SingleQuestionSlice = createSlice({
       state.answerType = "None";
       state.options = [];
       state.answers = [];
+      state.questionMarks = 1;
     },
   },
 });
@@ -90,5 +97,6 @@ export const {
   setOptions,
   setAnswers,
   clearQuestion,
+  setQuestionMarks,
 } = SingleQuestionSlice.actions;
 export default SingleQuestionSlice.reducer;

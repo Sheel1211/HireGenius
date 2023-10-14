@@ -6,7 +6,10 @@ import {
   TextField,
   Checkbox,
 } from "@mui/material";
-import { setOptions, setAnswers } from "../../../store/slices/SingleQuestion";
+import {
+  setOptions,
+  setAnswers,
+} from "../../../../store/slices/SingleQuestion";
 import { useDispatch, useSelector } from "react-redux";
 
 const TextOption = ({ optionNumber }) => {

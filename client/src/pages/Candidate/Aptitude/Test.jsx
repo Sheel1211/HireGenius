@@ -19,6 +19,8 @@ import {
   setSections,
   setSelectedPage,
   setDuration,
+  setNegativeMarking,
+  setColor,
 } from "../../../store/slices/AptiDashboard";
 import { QUANTITATIVE } from "../../../helpers/helper";
 import { spaceBetween } from "./styles";
@@ -33,25 +35,33 @@ const config = {
   withCredentials: true,
 };
 
-
 const Test = () => {
   const dispatch = useDispatch();
   const AptiDetails = useSelector((state) => state.AptiDashboard);
+  const questions = AptiDetails.sections[AptiDetails.selectedSection];
   const params = useParams();
   const { aptitudeId } = params;
+
+  console.log(AptiDetails);
 
   useEffect(() => {
     axios
       .get(`http://localhost:4000/api/aptitude/questions/${aptitudeId}`)
       .then((res) => {
-        console.log(res);
-        dispatch(setQuestions(res.data.questions));
-        const data = res.data.questions;
-        dispatch(setSections(data));
+        const coloredquestions = res.data.questions.map((question, index) => {
+          if (index === 0) {
+            return { ...question, color: "secondary" };
+          } else {
+            return { ...question, color: "primary" };
+          }
+        });
+        dispatch(setQuestions(coloredquestions));
+        dispatch(setSections(coloredquestions));
         dispatch(setSelectedSection(QUANTITATIVE));
         dispatch(setSelectedIndex(0));
         dispatch(setIsLoading(false));
         dispatch(setDuration(res.data.duration));
+        dispatch(setNegativeMarking(res.data.negativeMarking));
       })
       .catch((error) => {
         dispatch(setIsLoading(false));
@@ -78,15 +88,23 @@ const Test = () => {
   }
 
   // Logic to show the number of questions for selected section
+  // console.log(AptiDetails.sections);
   const len = AptiDetails.sections[AptiDetails.selectedSection].length;
   const numbers = Array.from({ length: len }, (_, index) => index + 1);
+
+  const handleSelectedQuestion = (number) => {
+    dispatch(setSelectedIndex(number - 1));
+    const currentSection = AptiDetails.selectedSection;
+    dispatch(setColor({ selectedQuestionIdx: number - 1, currentSection }));
+  };
 
   return (
     <Box sx={{ minHeight: "100vh", background: "#eeeeee" }}>
       <Header />
       <Box sx={{ mt: 2 }}>
-        {/* <NewTab /> */}
-        {/* <PreventKeys /> */}
+        <NewTab />
+        <PreventKeys />
+        
         <Grid container spacing={2} columns={20}>
           <Grid item xs={7}>
             <Card
@@ -110,10 +128,10 @@ const Test = () => {
                       <Button
                         variant="contained"
                         align="center"
-                        color="primary"
+                        color={questions[number - 1].color}
                         sx={{ p: 1 }}
                         onClick={() => {
-                          dispatch(setSelectedIndex(number - 1));
+                          handleSelectedQuestion(number);
                         }}
                       >
                         {number}

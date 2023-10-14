@@ -7,7 +7,6 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { Dashboard, List, Logout, Person } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Item } from "../../FormBuilder/Style";
 import { logoutUser } from "../../../store/slices/UserSlice";
 
 const UserOptions = ({ user }) => {
@@ -17,7 +16,7 @@ const UserOptions = ({ user }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const userdetails = useSelector((state)=>state.User);
+  const userdetails = useSelector((state) => state.User);
 
   const actions = [
     { icon: <Dashboard />, name: "Dashboard", func: viewDashboard },
@@ -42,8 +41,8 @@ const UserOptions = ({ user }) => {
   function logOutUser() {
     dispatch(logoutUser());
 
-    console.log(userdetails)
-    navigate(`/${userdetails.User.role}/login`)
+    console.log(userdetails);
+    navigate(`/${userdetails.User.role}/login`);
     handleClose();
   }
 
