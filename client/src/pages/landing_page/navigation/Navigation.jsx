@@ -1,34 +1,33 @@
 import Box from "@mui/material/Box";
-import { Link as ScrollLink } from "react-scroll";
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
   const navigations = [
     {
       label: "Home",
-      path: "/", // '/',
+      path: "/",
     },
     {
-      label: "Aptitude",
-      path: "/form", // '/popular-course',
+      label: "Registration",
+      path: "/client/registration", 
     },
     {
-      label: "Compiler",
-      path: "/compiler", // '/testimonial',
+      label: "Client",
+      path: "/client/login", 
     },
     {
-      label: "Group Discussion",
-      path: "/gd", // '/mentors',
+      label: "Admin",
+      path: "/admin/login", 
     },
   ];
 
   return (
     <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}>
+      
       {navigations.map(({ path: destination, label }) => (
+        <Link to={destination}  key={destination}>
         <Box
-          component={ScrollLink}
-          key={destination}
           activeClass="current"
-          to={destination}
           spy={true}
           smooth={true}
           duration={350}
@@ -70,9 +69,12 @@ const Navigation = () => {
             
             <img src="/images/headline-curve.svg" alt="Headline curve" />
           </Box>
-          {label}
+           {label} 
         </Box>
+        </Link>
       ))}
+      
+      
     </Box>
   );
 };

@@ -17,6 +17,7 @@ const Logo = () => {
   const handleClick = () => {
     navigate("/");
   };
+  
   return (
     <Box onClick={handleClick} sx={{cursor:"pointer"}}>
       <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>
