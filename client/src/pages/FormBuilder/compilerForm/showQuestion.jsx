@@ -90,12 +90,7 @@ const ShowQuestion = () => {
                 paddingY: 1,
               }}
             >
-              <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <Typography variant="h6">Duration</Typography>
-                <Typography variant="h6" sx={{ paddingX: "1vmax" }}>
-                  {question.duration}{" mins"}
-                </Typography>
-              </Box>
+              
             </Box>
             <Divider />
           </Box>

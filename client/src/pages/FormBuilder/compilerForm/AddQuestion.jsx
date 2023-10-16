@@ -10,12 +10,27 @@ import {
   Typography,
   Button,
   Chip,
+  Dialog,
+  DialogActions,
+  Slide,
 } from "@mui/material";
 import Textarea from "@mui/joy/Textarea";
 import { useDispatch } from "react-redux";
 import { addCodingQuestion } from "../../../store/slices/CodingSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const config = {
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+  mode: "cors",
+  credentials: "include",
+  withCredentials: true,
+};
 
 const toastWarning = (message) => {
   toast.warn(message, {
@@ -30,8 +45,14 @@ const toastWarning = (message) => {
   });
 };
 
-const AddQuestion = () => {
+const AddQuestion = (interviewId) => {
   const dispatch = useDispatch();
+  const navigate=useNavigate();
+  const [open, setOpen] = React.useState(false);
+  const [time, setTime] = useState(60);
+
+  const [link, setLink] = useState(null);
+  const [linkmodal, setLinkModal] = useState(false);
 
   const [selectedDifficulty, setSelectedDifficulty] = useState("easy");
   const [tc, setTc] = useState({
@@ -45,17 +66,16 @@ const AddQuestion = () => {
       output: "",
     },
     difficulty: selectedDifficulty,
-    duration: "",
   });
-  const [questionsList, setQuestionsList] = useState([]);
 
+  const [questionsList, setQuestionsList] = useState([]);
   const handleDifficultyChange = (event) => {
     setSelectedDifficulty(event.target.value);
     setQuestion({ ...question, difficulty: event.target.value });
   };
-
+  
   const handleQuestionAdd = () => {
-    if (!question.problemStatement || !tc.input || !tc.output || !question.duration) {
+    if (!question.problemStatement.trim() || !tc.input.trim() || !tc.output.trim()) {
       toastWarning("Please fill all the fields");
       return;
     }
@@ -74,14 +94,11 @@ const AddQuestion = () => {
         output: "",
       },
       difficulty: selectedDifficulty,
-      duration: "",
     });
     setTc({
       input: "",
       output: "",
     });
-
-    
   };
 
   const handleInputChange = (field, value) => {
@@ -91,20 +108,124 @@ const AddQuestion = () => {
     }));
   };
 
+  const handleDuration = () => {
+    if (questionsList.length === 0) {
+      toast.warn("Please add some questions...", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleGenerateLink = () => {
+    const codingid = localStorage.getItem("codingid");
+    const data = {
+      questions: questionsList,
+      duration: time,
+      interviewId
+    };
+
+    axios
+      .post("http://localhost:4000/api/coding/create", data, config)
+      .then((res) => {
+        console.log(res);
+        setLink(res.data.codingLink);
+        setLinkModal(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setOpen(false);
+  };
+
+  // TO copy link to clipboard
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(link)
+      .then(() => {
+        alert('Link copied to clipboard: ' + link);
+      })
+      .catch(error => {
+        console.error('Error copying link to clipboard: ', error);
+      });
+      setLinkModal(false)
+      navigate("/clientdashboard")
+  };
+
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="down" ref={ref} {...props} />;
+  });
+
+  
   return (
     <>
-      <Container sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
-        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", paddingY: 1 }}>
+    {linkmodal && (
+        <Dialog
+          maxWidth="md"
+          open={linkmodal}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <Box sx={{ p: 4 }}>
+            <Typography variant="h5" sx={{ my: 2 }}>
+              Copy Link
+            </Typography>
+            <TextField
+              fullWidth
+              label="Copy link"
+              variant="outlined"
+              value={link}
+            />
+          </Box>
+          <DialogActions>
+            <Button onClick={() => setLinkModal(false)}>Close</Button>
+            <Button onClick={handleCopyLink}>Copy</Button>
+          </DialogActions>
+        </Dialog>
+      )}
+      <Container
+        sx={{ display: "flex", flexDirection: "column", width: "100%" }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            paddingY: 1,
+          }}
+        >
           <Typography variant="h6">Enter Problem Statement</Typography>
           <Textarea
             minRows={2}
             minCols={1}
             sx={{ minWidth: "40vmax" }}
-            onChange={(event) => handleInputChange("problemStatement", event.target.value)}
+            onChange={(event) =>
+              handleInputChange("problemStatement", event.target.value)
+            }
             value={question.problemStatement}
           />
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", paddingY: 1 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            paddingY: 1,
+          }}
+        >
           <Typography variant="h6">Enter Testcases</Typography>
           <Typography variant="h6">INPUT</Typography>
           <TextField
@@ -123,7 +244,14 @@ const AddQuestion = () => {
             value={tc.output}
           />
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", paddingY: 1 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            paddingY: 1,
+          }}
+        >
           <Typography variant="h6">Select Difficulty</Typography>
           <FormControl component="fieldset">
             <RadioGroup
@@ -133,33 +261,71 @@ const AddQuestion = () => {
               value={selectedDifficulty}
               onChange={handleDifficultyChange}
             >
-              <FormControlLabel value="easy" control={<Radio />} label="Easy" />
-              <FormControlLabel value="medium" control={<Radio />} label="Medium" />
-              <FormControlLabel value="hard" control={<Radio />} label="Hard" />
+              <FormControlLabel
+                value="easy"
+                control={<Radio />}
+                label={<Chip label="Easy" color="success" />}
+              />
+              <FormControlLabel
+                value="medium"
+                control={<Radio />}
+                label={<Chip label="Medium" color="warning" />}
+              />
+              <FormControlLabel
+                value="hard"
+                control={<Radio />}
+                label={<Chip label="Hard" color="error" />}
+              />
             </RadioGroup>
           </FormControl>
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", paddingY: 1 }}>
-          <Typography variant="h6">Enter duration(mins)</Typography>
-          <TextField
-            label="Duration"
-            variant="outlined"
-            type="number"
-            onChange={(event) => handleInputChange("duration", event.target.value)}
-            value={question.duration}
-          />
-        </Box>
-
-
-        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-around", paddingY: 1 }}>
-          <Button variant="contained" color="primary" onClick={handleQuestionAdd}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-around",
+            paddingY: 1,
+          }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleQuestionAdd}
+          >
             Add Question
           </Button>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={handleDuration}>
             Generate Link
           </Button>
         </Box>
       </Container>
+      <Dialog
+        maxWidth="md"
+        open={open}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <Box sx={{ p: 4 }}>
+          <Box>
+            <Typography variant="h5" sx={{ my: 2 }}>
+              Select Coding Duration in Minutes
+            </Typography>
+            <TextField
+              fullWidth
+              label="Time (in minutes)"
+              variant="outlined"
+              type="number"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+            />
+          </Box>
+        </Box>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleGenerateLink}>Agree</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

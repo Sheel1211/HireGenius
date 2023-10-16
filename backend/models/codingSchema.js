@@ -4,37 +4,43 @@ const codingSchema = new mongoose.Schema({
   interviewId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "interview",
-    required: true,
   },
   questions: [
     {
-      question: {
+      problemStatement: {
         type: String,
-        required: true,
       },
       testcases: [
         {
-          input: String, // Test case input
-          output: String, // Expected output for the test case
-        },
+          input: String,
+          output: String,
+        }
       ],
       difficulty: {
         type: String,
-        enum: ['easy', 'medium', 'hard'],
-        required: true,
+        enum: ["easy", "medium", "hard"],
       },
     },
   ],
   duration: {
     type: Number,
     required: true,
+    default: 60,
   },
   candidates: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "candidate",
+      candidateId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "candidate",
+      },
+      isRejected: Boolean,
+      marks:{
+        type:Number,
+        default:0,
+      }
     },
   ],
+  testLink: String, 
 });
 
 const coding = mongoose.model("coding", codingSchema);

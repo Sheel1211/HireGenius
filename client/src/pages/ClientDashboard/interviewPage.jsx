@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 // import Grid from "@mui/system/Unstable_Grid";
 import { Grid, Container, Typography } from "@mui/material";
@@ -31,8 +31,13 @@ export default function interviewPage() {
       });
   };
 
+  const location = useLocation();
   const createCompiler = async () => {
-    navigate("/create/compiler");
+    console.log(location.state ,"545454")
+    const interviewId = location.state;
+    navigate("/create/compiler",{state:interviewId});
+
+    // navigate("/create/compiler");
   };
 
   return (

@@ -18,7 +18,12 @@ const interviewSchema = new mongoose.Schema({
     ),
   ],
 
-  rounds: [{ type: mongoose.Schema.Types.ObjectId }],
+  rounds: [
+    {
+      roundId: { type: mongoose.Schema.Types.ObjectId, required: true },
+      name: { type: String, required: true },
+    },
+  ],
   client: { type: mongoose.Schema.Types.ObjectId },
 });
  

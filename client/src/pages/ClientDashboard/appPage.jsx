@@ -122,6 +122,7 @@ const DashboardAppPage = () => {
                       "&:last-child td, &:last-child th": { border: 0 },
                       cursor: "pointer",
                     }}
+                    onClick={()=>navigate("/clientdashboard/rounds",{state:row._id})}
                   >
                     <TableCell component="th" scope="row">
                       {row.title}
@@ -136,7 +137,7 @@ const DashboardAppPage = () => {
                         Send Email
                       </Button>
                       <Button
-                        onClick={() => navigate("/clientdashboard/schedule-interview")}
+                        onClick={() => navigate("/clientdashboard/schedule-interview",{state:row._id})}
                       >
                         Schedule Interview
                       </Button>

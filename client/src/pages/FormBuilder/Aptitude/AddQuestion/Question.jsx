@@ -21,6 +21,7 @@ import {
   setQuestionImage,
   setQuestionImageURL,
   setQuestionImageDesc,
+  setQuestionMarks,
 } from "../../../../store/slices/SingleQuestion";
 import axios from "axios";
 

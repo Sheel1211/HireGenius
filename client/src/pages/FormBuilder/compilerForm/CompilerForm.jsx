@@ -1,10 +1,14 @@
 import { Box, Card, Grid, TextareaAutosize, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import AddQuestion from "./AddQuestion";
 import ShowQuestion from "./showQuestion";
 
 const CompilerForm = () => {
+  const location = useLocation();
+  // const { dat } = location.state;
+  const interviewId = location.state;
   return (
     <>
         <Box
@@ -32,7 +36,7 @@ const CompilerForm = () => {
                     overflowY: "auto",
                   }}
                 >
-                  <AddQuestion />
+                  <AddQuestion interviewId = {interviewId}/>
                 </Card>
               </Box>
             </Grid>

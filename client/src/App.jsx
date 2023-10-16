@@ -5,6 +5,7 @@ import ClientDashboard from "./pages/ClientDashboard/layout";
 import ClientDashboardAppPage from "./pages/ClientDashboard/appPage";
 import CandidatePage from "./pages/ClientDashboard/candidatePage";
 import InterviewPage from "./pages/ClientDashboard/interviewPage";
+import InterviewDetails from "./pages/ClientDashboard/interviewDetails";
 import AdminDashboard from "./pages/Admin/adminDashboard";
 import AdminLogin from "./pages/Admin/adminLogin";
 import Playground from "./pages/compiler/Playground";
@@ -79,6 +80,7 @@ const App = () => {
         {/* Candidate */}
 
         <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />
+        {/* <Route path="/coding/:codingId" element={<CandidateCoding />} /> */}
         <Route path="/compiler" element={<CompilerHome />} />
         <Route path="/compiler/playground" element={<Playground />} />
 
@@ -97,6 +99,7 @@ const App = () => {
                 <Route path="app" element={<ClientDashboardAppPage />} />
                 <Route path="candidate" element={<CandidatePage />} />
                 <Route path="schedule-interview" element={<InterviewPage />} />
+                <Route path="rounds" element={<InterviewDetails />} />
               </Route>
             </>
           )}

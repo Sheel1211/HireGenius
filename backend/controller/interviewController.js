@@ -13,6 +13,18 @@ export const allInterviews = async (req, res) => {
   }
 };
 
+export const allRoundsOfInterview = async(req,res)=>{
+  try{
+    const interviewId = req.params.interviewId;
+
+    const interviewRounds = await interview.findById(interviewId);
+
+    res.status(200).json({success:true,interview:interviewRounds})
+  }catch(e){
+    res.status(400).json({success:false,message:e.message})
+  }
+}
+
 export const sendEmailToAllCandidates = async (req, res) => {
   try {
     const { aptLink, candidates, interviewId } = req.body;
