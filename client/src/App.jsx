@@ -9,6 +9,7 @@ import InterviewDetails from "./pages/ClientDashboard/interviewDetails";
 import AdminDashboard from "./pages/Admin/adminDashboard";
 import AdminLogin from "./pages/Admin/adminLogin";
 import Playground from "./pages/compiler/Playground";
+import CandidatePlayground from "./pages/Candidate/compiler/Playground";
 import ClientProfile from "./pages/Admin/clientProfile";
 import Landing from "./pages/landing_page/Landing";
 import CompilerHome from "./pages/compiler/Home";
@@ -26,6 +27,7 @@ import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import Main from "./pages/FormBuilder/Aptitude/Main";
 import CompilerForm from "./pages/FormBuilder/compilerForm/CompilerForm";
 import Header from "./pages/landing_page/header/Header";
+import CandidateCoding from "./pages/Candidate/compiler/CandidateCoding";
 
 const config = {
   headers: {
@@ -80,7 +82,9 @@ const App = () => {
         {/* Candidate */}
 
         <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />
-        {/* <Route path="/coding/:codingId" element={<CandidateCoding />} /> */}
+        <Route path="/coding/:codingId" element={<CandidateCoding />} />
+        <Route path="/solve/coding/" element={<CandidatePlayground />} />
+        
         <Route path="/compiler" element={<CompilerHome />} />
         <Route path="/compiler/playground" element={<Playground />} />
 

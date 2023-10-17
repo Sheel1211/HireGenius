@@ -60,11 +60,13 @@ const AddQuestion = (interviewId) => {
     output: "",
   });
   const [question, setQuestion] = useState({
+    title:"",
     problemStatement: "",
     testcases: {
       input: "",
       output: "",
     },
+    marks:"",
     difficulty: selectedDifficulty,
   });
 
@@ -75,7 +77,7 @@ const AddQuestion = (interviewId) => {
   };
   
   const handleQuestionAdd = () => {
-    if (!question.problemStatement.trim() || !tc.input.trim() || !tc.output.trim()) {
+    if (!question.marks.trim() || !question.title.trim() || !question.problemStatement.trim() || !tc.input.trim() || !tc.output.trim()) {
       toastWarning("Please fill all the fields");
       return;
     }
@@ -88,11 +90,13 @@ const AddQuestion = (interviewId) => {
 
     // Reset the form
     setQuestion({
+      title:"",
       problemStatement: "",
       testcases: {
         input: "",
         output: "",
       },
+      marks:"",
       difficulty: selectedDifficulty,
     });
     setTc({
@@ -207,6 +211,25 @@ const AddQuestion = (interviewId) => {
             paddingY: 1,
           }}
         >
+          <Typography variant="h6">Enter Title</Typography>
+          <TextField
+            minRows={2}
+            minCols={1}
+            sx={{ minWidth: "40vmax" }}
+            onChange={(event) =>
+              handleInputChange("title", event.target.value)
+            }
+            value={question.title}
+          />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            paddingY: 1,
+          }}
+        >
           <Typography variant="h6">Enter Problem Statement</Typography>
           <Textarea
             minRows={2}
@@ -278,6 +301,25 @@ const AddQuestion = (interviewId) => {
               />
             </RadioGroup>
           </FormControl>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            paddingY: 1,
+          }}
+        >
+          <Typography variant="h6">Enter Marks</Typography>
+          <TextField
+            minRows={2}
+            sx={{ minWidth: "40vmax" }}
+            type="number"
+            onChange={(event) =>
+              handleInputChange("marks", event.target.value)
+            }
+            value={question.marks}
+          />
         </Box>
         <Box
           sx={{

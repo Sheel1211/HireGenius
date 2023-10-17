@@ -23,88 +23,24 @@ let REACT_APP_RAPID_API_HOST = "judge0-ce.p.rapidapi.com";
 let REACT_APP_RAPID_API_KEY =
   "a77dcef814mshdad0f602ecd8767p1b6a1djsnd2c8bfa00c1a";
 
-const javascriptDefault = `/**
-* Problem: Binary Search: Search a sorted array for a target value.
-*/
-
-// Time: O(log n)
-const binarySearch = (arr, target) => {
- return binarySearchHelper(arr, target, 0, arr.length - 1);
-};
-
-const binarySearchHelper = (arr, target, start, end) => {
- if (start > end) {
-   return false;
- }
- let mid = Math.floor((start + end) / 2);
- if (arr[mid] === target) {
-   return mid;
- }
- if (arr[mid] < target) {
-   return binarySearchHelper(arr, target, mid + 1, end);
- }
- if (arr[mid] > target) {
-   return binarySearchHelper(arr, target, start, mid - 1);
- }
-};
-
-const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const target = 5;
-console.log(binarySearch(arr, target));
-`;
-
-export const languageMap = {
-  cpp: {
-    id: 54,
-    defaultCode:
-      "#include <iostream>\n" +
-      "using namespace std;\n\n" +
-      "int main() {\n" +
-      '\tcout << "Hello World!";\n' +
-      "\treturn 0;\n" +
-      "}",
-  },
-  java: {
-    id: 62,
-    defaultCode: `public class Main {
-            public static void main(String[] args) {
-                System.out.println("Hello World!");
-            }
-    }`,
-  },
-  python: {
-    id: 71,
-    defaultCode: `print("Hello World!")`,
-  },
-  javascript: {
-    id: 63,
-    defaultCode: `console.log("Hello World!");`,
-  },
-  c: {
-    id: 50,
-    defaultCode:
-      "#include <stdio.h>\n" +
-      "int main() {\n" +
-      '\tprintf("Hello World!");\n' +
-      "\treturn 0;\n" +
-      "}",
-  },
-};
+const javascriptDefault = `console.log("Hello World");`;
 
 const EditorContainer = () => {
-  const [code, setCode] = useState(javascriptDefault);
+  //20 for starting with javascript
+  const [code, setCode] = useState(languageOptions[20].defaultCode);
   const [customInput, setCustomInput] = useState("");
   const [outputDetails, setOutputDetails] = useState(null);
   const [processing, setProcessing] = useState(null);
   const [theme, setTheme] = useState("cobalt");
-  const [language, setLanguage] = useState(languageOptions[0]);
+  const [language, setLanguage] = useState(languageOptions[20]);
 
   const enterPress = useKeyPress("Enter");
   const ctrlPress = useKeyPress("Control");
-
   const onSelectChange = (sl) => {
-    console.log("selected Option...", sl);
+    // console.log("selected Option...", sl);
     setLanguage(sl);
+    setCode(sl.defaultCode);
+    // console.log("code after "+code);
   };
 
   useEffect(() => {
@@ -320,8 +256,14 @@ const EditorContainer = () => {
             />
           </Box>
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "column",paddingX: 4,
-          paddingY: 2,}}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            paddingX: 4,
+            paddingY: 2,
+          }}
+        >
           <Button
             onClick={handleCompile}
             disabled={!code}

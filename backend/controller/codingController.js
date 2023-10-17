@@ -88,3 +88,23 @@ export const createQuestion = async (req, res) => {
   }
 };
 
+
+export const getQuestions = async(req,res)=>{
+  try{
+    const codingId = req.params.codingId;
+    console.log(codingId)
+
+    const codingRound = await coding.findById(codingId);
+
+    res.status(200).json({
+      success:true,
+      codingRound
+    })
+  }
+  catch(e){
+    res.status(400).json({
+      success: false,
+      error: e.message,
+    });
+  }
+}

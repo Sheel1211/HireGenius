@@ -38,6 +38,17 @@ const ShowQuestion = () => {
                 paddingY: 1,
               }}
             >
+              <Typography variant="h6">Title</Typography>
+              <Typography>{question.title}</Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                paddingY: 1,
+              }}
+            >
               <Typography variant="h6">Problem Statement</Typography>
               <Typography>{question.problemStatement}</Typography>
             </Box>
@@ -81,6 +92,17 @@ const ShowQuestion = () => {
               <Chip label="Hard" color="error" />
             )}
               </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                paddingY: 1,
+              }}
+            >
+              <Typography variant="h6">Marks</Typography>
+              <Typography>{question.marks}</Typography>
             </Box>
             <Box
               sx={{

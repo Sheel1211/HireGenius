@@ -7,6 +7,9 @@ const codingSchema = new mongoose.Schema({
   },
   questions: [
     {
+      title: {
+        type: String,
+      },
       problemStatement: {
         type: String,
       },
@@ -19,6 +22,9 @@ const codingSchema = new mongoose.Schema({
       difficulty: {
         type: String,
         enum: ["easy", "medium", "hard"],
+      },
+      marks: {
+        type: Number,
       },
     },
   ],
