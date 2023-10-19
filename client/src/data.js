@@ -78,5 +78,5 @@ export const dummyAptitudeData = [
     questionType: "Quantitative",
     answerType: "Radio",
     marks: 1,
-  }
+  },
 ];

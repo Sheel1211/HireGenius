@@ -95,6 +95,7 @@ const ShowQuestions = () => {
       </Box>
       {questions &&
         questions.map((question, index) => {
+          console.log(question);
           return (
             <Box
               key={index}
@@ -152,46 +153,9 @@ const ShowQuestions = () => {
                     </Typography>
                   </>
                 )}
-
                 <IconButton onClick={() => handleDeleteQuestion(index)}>
                   <DeleteIcon />
                 </IconButton>
-
-                {/* <IconButton
-                  id="demo-customized-button"
-                  aria-controls={open ? "demo-customized-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                  variant="contained"
-                  onClick={handleClick}
-                >
-                  <MoreVertIcon />
-                </IconButton>
-                <StyledMenu
-                  id={index}
-                  MenuListProps={{
-                    "aria-labelledby": "demo-customized-button",
-                  }}
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleClose} disableRipple>
-                    <EditIcon />
-                    Edit
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      console.log(question);
-                      console.log(index);
-                      handleDeleteQuestion(index);
-                    }}
-                    disableRipple
-                  >
-                    <DeleteIcon />
-                    Delete
-                  </MenuItem>
-                </StyledMenu> */}
               </Box>
 
               {question.answerType === "Radio" && (

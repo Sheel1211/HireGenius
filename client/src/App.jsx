@@ -39,8 +39,6 @@ const config = {
   withCredentials: true,
 };
 
-
-
 const App = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
@@ -55,7 +53,7 @@ const App = () => {
           config
         );
         const user = response.data.user;
-        console.log("user in app.jsx",user);
+        console.log("user in app.jsx", user);
         dispatch(getUserDetails(user));
         setIsLoading(false);
       } catch (error) {
@@ -73,7 +71,7 @@ const App = () => {
   return (
     <Router>
       <ToastContainer />
-      <Header />
+      {/* <Header /> */}
       <Routes>
         <Route path="/" exact element={<Landing />} />
         <Route path="/create/compiler" element={<CompilerForm />} />

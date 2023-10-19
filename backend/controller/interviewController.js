@@ -1,6 +1,7 @@
 import candidate from "../models/candidateSchema.js";
 import { sendEmail } from "../services/sendEmail.service.js";
-import interview from "../models/interviewSchema.js"
+import interview from "../models/interviewSchema.js";
+
 export const allInterviews = async (req, res) => {
   try {
     // console.log(req.user);

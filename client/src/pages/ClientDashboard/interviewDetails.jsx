@@ -55,16 +55,15 @@ const interviewDetails = () => {
   const [interview, setInterview] = useState();
   const [selectedCandidates, setSelectedCandidates] = useState([]);
   const [showCandidates, setShowCandidates] = useState(false);
-  const [loading,setLoading]=useState(true);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const user = useSelector((state) => state.User);
   const location = useLocation();
 
   const interviewId = location.state;
-  
+
   // Fetch all rounds and set them to the state
   const fetchRounds = () => {
-      console.log("interviewId " + interviewId)
     axios
       .get(
         `http://127.0.0.1:4000/api/interview/all-rounds/${interviewId}`,
@@ -129,7 +128,7 @@ const interviewDetails = () => {
         </>
       )}
     </Container>
-);
+  );
 };
 
 export default interviewDetails;

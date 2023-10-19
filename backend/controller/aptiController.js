@@ -1,13 +1,14 @@
 import Aptitude from "../models/aptitudeSchema.js";
-import { v4 as  uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { uploadFile } from "../services/uploadFileS3.service.js";
+import interview from "../models/interviewSchema.js";
 
 export const saveQuestions = async (req, res) => {
   try {
     // Save all the question
     const { aptitudeId, questions, duration, negativeMarking } = req.body;
 
-    console.log(aptitudeId, questions, duration, negativeMarking)
+    console.log(aptitudeId, questions, duration, negativeMarking);
 
     // console.log(rea.body);
 
@@ -20,7 +21,7 @@ export const saveQuestions = async (req, res) => {
     aptitude.duration = duration;
     aptitude.negativeMarking = negativeMarking;
     await aptitude.save();
-    
+
     // Generate Link logic
     const AptitudeLink = `http://localhost:5173/aptitude/${aptitudeId}`;
     // console.log("link",AptitudeLink)
@@ -35,9 +36,17 @@ export const saveQuestions = async (req, res) => {
 
 export const createAptitude = async (req, res) => {
   try {
+    console.log(req.body);
+    const { title, interviewId } = req.body;
     const aptitudeId = uuidv4();
-    const newAptitude = await Aptitude({ aptitudeId });
-    await newAptitude.save();
+    const newAptitude = await Aptitude({ aptitudeId, title });
+    // await newAptitude.save();
+
+    const oldInterview = await interview.findOne({ _id: interviewId });
+    oldInterview.rounds.push({ roundId: interviewId, name: title });
+    // await oldInterview.save();
+    // console.log(oldInterview);
+
     res.status(200).json({
       success: true,
       aptitude: newAptitude,
@@ -68,17 +77,6 @@ export const getAptitudeQuestions = async (req, res) => {
   }
 };
 
-const candidateLogin = async (req, res) => {
-  try {
-    res.status(200).json({
-      success: true,
-      message: "Login successfully",
-    });
-  } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
-
 export const isValidAptitude = async (req, res, next) => {
   try {
     const { aptitudeId } = req.params;
@@ -99,25 +97,28 @@ export const isValidAptitude = async (req, res, next) => {
   }
 };
 
-export const createImageLink = async(req,res)=>{
+export const createImageLink = async (req, res) => {
   const image = req.files.img;
   // console.log(image);
 
-  try{
+  try {
     const uploadImage = await uploadFile(image, `${image.name}_${image.size}`);
     // console.log("upload image : ",uploadImage)
-    if(uploadImage){
-    const uploadImageLocation = uploadImage.Location;
+    if (uploadImage) {
+      const uploadImageLocation = uploadImage.Location;
       // console.log("upload image : ",uploadImageLocation)
 
-      return res.status(200).send({ success: true, message:uploadImageLocation});
-    
-    }else{
-      return res.status(400).send({ success: false, message:"file not uploaded"});
+      return res
+        .status(200)
+        .send({ success: true, message: uploadImageLocation });
+    } else {
+      return res
+        .status(400)
+        .send({ success: false, message: "file not uploaded" });
     }
-  }catch{
-    return res.status(400).send({ success: false, message:"something went wrong!"});
-
+  } catch {
+    return res
+      .status(400)
+      .send({ success: false, message: "something went wrong!" });
   }
-  
-}
+};

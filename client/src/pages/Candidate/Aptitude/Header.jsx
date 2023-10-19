@@ -15,8 +15,10 @@ const Header = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const AptiDetails = useSelector((state) => state.AptiDashboard);
+  const UserDetails = useSelector((state) => state.User);
   const initialTime = AptiDetails.duration * 60;
 
+  console.log("user-details", UserDetails);
   const calculateGrades = () => {
     let right = 0;
     let total = 0;
@@ -122,7 +124,6 @@ const Header = () => {
                     initialTime={initialTime}
                     onTimeExpired={onTimeExpired}
                   />
-            
                 </Typography>
               </Box>
               <Box sx={center}>

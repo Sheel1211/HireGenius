@@ -6,7 +6,7 @@ import ShowQuestions from "./ShowQuestions";
 import { useLocation } from "react-router-dom";
 
 const Main = () => {
-  //   const [isPartitionOpen, setIsPartitionOpen] = useState(false);
+  // const [isPartitionOpen, setIsPartitionOpen] = useState(false);
   const location = useLocation();
   const { dat } = location.state;
 

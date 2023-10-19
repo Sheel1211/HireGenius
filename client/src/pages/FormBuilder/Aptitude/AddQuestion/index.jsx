@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import Question from "./Question";
 import Answer from "./Answer";
-import {useNavigate} from 'react-router-dom';
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addQuestion,
@@ -51,6 +51,7 @@ const index = () => {
   //   };
   // }, []);
 
+  const location = useLocation();
   const dispatch = useDispatch();
   const singleQuestion = useSelector((state) => state.SingleQuestion);
   const Aptitude = useSelector((state) => state.Aptitude);
@@ -106,7 +107,7 @@ const index = () => {
   };
 
   const handleGenerateLink = () => {
-    const aptid = localStorage.getItem("aptitudeid")
+    const aptid = localStorage.getItem("aptitudeid");
     const data = {
       aptitudeId: aptid,
       questions,
@@ -118,7 +119,7 @@ const index = () => {
       .patch("http://localhost:4000/api/saveQuestions", data, config)
       .then((res) => {
         console.log(res);
-        //alert(res.data.AptitudeLink)
+        alert(res.data.AptitudeLink);
         setLink(res.data.AptitudeLink);
         localStorage.setItem("AptitudeLink", res.data.AptitudeLink);
         setLinkModal(true);
@@ -131,15 +132,16 @@ const index = () => {
 
   // TO copy link to clipboard
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(link)
+    navigator.clipboard
+      .writeText(link)
       .then(() => {
-        alert('Link copied to clipboard: ' + link);
+        alert("Link copied to clipboard: " + link);
       })
-      .catch(error => {
-        console.error('Error copying link to clipboard: ', error);
+      .catch((error) => {
+        console.error("Error copying link to clipboard: ", error);
       });
-      setLinkModal(false)
-      navigate("/clientdashboard")
+    setLinkModal(false);
+    navigate("/clientdashboard");
   };
   return (
     <>

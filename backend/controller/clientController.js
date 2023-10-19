@@ -9,7 +9,7 @@ export const clientRegistration = async (req, res) => {
   try {
     const { name, email, password, url, description, contactno, sector } =
       req.body;
-    
+
     if (
       !name ||
       !email ||
@@ -27,7 +27,6 @@ export const clientRegistration = async (req, res) => {
       if (clientExist) {
         return res.status(422).send({ message: "Client Already registered" });
       } else {
-      
         const certificate = await uploadFile(
           req.files.validcertificate,
           `${name}_Certi`
