@@ -5,26 +5,15 @@ import interview from "../models/interviewSchema.js";
 
 export const saveQuestions = async (req, res) => {
   try {
-    // Save all the question
     const { aptitudeId, questions, duration, negativeMarking } = req.body;
-
-    console.log(aptitudeId, questions, duration, negativeMarking);
-
-    // console.log(rea.body);
-
-    // console.log("apt id" + aptitudeId);
     const aptitude = await Aptitude.findOne({ aptitudeId: aptitudeId });
 
-    // console.log("Hi", aptitude);
-    // console.log("first");
     aptitude.questions = questions;
     aptitude.duration = duration;
     aptitude.negativeMarking = negativeMarking;
     await aptitude.save();
 
-    // Generate Link logic
     const AptitudeLink = `http://localhost:5173/aptitude/${aptitudeId}`;
-    // console.log("link",AptitudeLink)
 
     res
       .status(200)
@@ -36,16 +25,14 @@ export const saveQuestions = async (req, res) => {
 
 export const createAptitude = async (req, res) => {
   try {
-    console.log(req.body);
     const { title, interviewId } = req.body;
     const aptitudeId = uuidv4();
     const newAptitude = await Aptitude({ aptitudeId, title });
-    // await newAptitude.save();
+    await newAptitude.save();
 
     const oldInterview = await interview.findOne({ _id: interviewId });
     oldInterview.rounds.push({ roundId: interviewId, name: title });
-    // await oldInterview.save();
-    // console.log(oldInterview);
+    await oldInterview.save();
 
     res.status(200).json({
       success: true,

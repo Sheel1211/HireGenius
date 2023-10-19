@@ -51,7 +51,6 @@ const companyMenu = [
 ];
 
 const NavigationItem = ({ label, path }) => {
-  console.log(path);
   return (
     <Link to={path}>
       <MuiLink

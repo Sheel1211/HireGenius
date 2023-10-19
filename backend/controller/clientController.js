@@ -166,8 +166,8 @@ export const clientLogin = async (req, res) => {
         return res
           .status(200)
           .cookie("token", authToken, {
-            expires: new Date(Date.now() + 10 * 60 * 1000),
-            httpOnly: true,
+            expires: new Date(Date.now() + 900000), // Set an expiration time
+            httpOnly: true, // Set the httpOnly flag
             sameSite: "none",
           })
           .send({
@@ -193,8 +193,7 @@ export const addCandidatesWithUsernameAndPassword = async (req, res) => {
 
   await Promise.all(
     rows.map(async (item, index) => {
-      if (item.id == "") return;
-      console.log(index, " => ", item);
+      if (item.id === "") return;
       const password = generateUniquePassword();
 
       const candidateDetails = new candidate({

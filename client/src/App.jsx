@@ -30,13 +30,13 @@ import Header from "./pages/landing_page/header/Header";
 import CandidateCoding from "./pages/Candidate/compiler/CandidateCoding";
 
 const config = {
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-  mode: "cors",
-  credentials: "include",
-  withCredentials: true,
+  // headers: {
+  //   Accept: "application/json",
+  //   "Content-Type": "application/json",
+  // },
+  // mode: "cors",
+  // credentials: "include",
+  // withCredentials: true,
 };
 
 const App = () => {
@@ -58,6 +58,7 @@ const App = () => {
         setIsLoading(false);
       } catch (error) {
         // Handle errors, e.g., unauthorized access
+        console.log(error);
         setIsLoading(false);
       }
     }
@@ -71,7 +72,7 @@ const App = () => {
   return (
     <Router>
       <ToastContainer />
-      {/* <Header /> */}
+      <Header />
       <Routes>
         <Route path="/" exact element={<Landing />} />
         <Route path="/create/compiler" element={<CompilerForm />} />
@@ -82,7 +83,7 @@ const App = () => {
         <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />
         <Route path="/coding/:codingId" element={<CandidateCoding />} />
         <Route path="/solve/coding/" element={<CandidatePlayground />} />
-        
+
         <Route path="/compiler" element={<CompilerHome />} />
         <Route path="/compiler/playground" element={<Playground />} />
 
