@@ -21,7 +21,29 @@ const aptitudeSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    candidates: [{ type: mongoose.Schema.Types.ObjectId, ref: "candidate" }],
+    candidates: [
+      {
+        candidateId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "candidate",
+        },
+        isRejected: {
+          type: Boolean,
+          default: false,
+        },
+        gain: {
+          type: Number,
+          default: 0,
+        },
+        total: {
+          type: Number,
+          default: 0,
+        },
+      },
+    ],
+    testLink: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

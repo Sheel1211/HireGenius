@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Grid } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Grid,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -59,32 +71,30 @@ const DashboardAppPage = () => {
     fetchInterviews();
   }, []);
 
-  
   const allData = (candidates) => {
     const candidateIds = candidates.map((data) => data.candidateId);
-    
-    
+
     const baseUrl = "http://127.0.0.1:4000/api/candidate/getCandidate";
     const requests = candidateIds.map((candidateId) => {
       return axios.post(baseUrl, { candidateId }, config);
     });
 
-    
     Promise.all(requests)
       .then((responses) => {
-        const candidateAllDetails = responses.map((response) => response.data.candidate);
+        const candidateAllDetails = responses.map(
+          (response) => response.data.candidate
+        );
         setSelectedCandidates(candidateAllDetails);
-        setShowCandidates(!showCandidates); 
+        setShowCandidates(!showCandidates);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const sendEmailWithLink = (candidates,interviewId) => {
-    
+  const sendEmailWithLink = (candidates, interviewId) => {
     const aptLink = localStorage.getItem("AptitudeLink");
-    console.log(candidates)
+    console.log(candidates);
     axios
       .post(
         "http://127.0.0.1:4000/api/interview/sendemail-to-candidates",
@@ -122,9 +132,14 @@ const DashboardAppPage = () => {
                       "&:last-child td, &:last-child th": { border: 0 },
                       cursor: "pointer",
                     }}
-                    
                   >
-                    <TableCell component="th" scope="row" onClick={()=>navigate("/clientdashboard/rounds",{state:row._id})}>
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      onClick={() =>
+                        navigate("/clientdashboard/rounds", { state: row._id })
+                      }
+                    >
                       {row.title}
                     </TableCell>
                     <TableCell align="right">{row.candidates.length}</TableCell>
@@ -133,11 +148,19 @@ const DashboardAppPage = () => {
                       <Button onClick={() => allData(row.candidates)}>
                         View candidates
                       </Button>
-                      <Button onClick={() => sendEmailWithLink(row.candidates,row._id)}>
+                      <Button
+                        onClick={() =>
+                          sendEmailWithLink(row.candidates, row._id)
+                        }
+                      >
                         Send Email
                       </Button>
                       <Button
-                        onClick={() => navigate("/clientdashboard/schedule-interview",{state:row._id})}
+                        onClick={() =>
+                          navigate("/clientdashboard/schedule-interview", {
+                            state: row._id,
+                          })
+                        }
                       >
                         Schedule Interview
                       </Button>

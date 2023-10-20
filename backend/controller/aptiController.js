@@ -11,13 +11,13 @@ export const saveQuestions = async (req, res) => {
     aptitude.questions = questions;
     aptitude.duration = duration;
     aptitude.negativeMarking = negativeMarking;
-    await aptitude.save();
-
     const AptitudeLink = `http://localhost:5173/aptitude/${aptitudeId}`;
+    aptitude.testLink = AptitudeLink;
+    await aptitude.save();
 
     res
       .status(200)
-      .json({ success: true, message: "Question added", AptitudeLink });
+      .json({ success: true, message: "Link generated...", AptitudeLink });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
@@ -107,5 +107,21 @@ export const createImageLink = async (req, res) => {
     return res
       .status(400)
       .send({ success: false, message: "something went wrong!" });
+  }
+};
+
+export const submitTest = async (req, res) => {
+  try {
+    const { aptitudeId, ...data } = req.body;
+    const aptitude = await Aptitude.findOne({ aptitudeId });
+    aptitude.candidates.push(data);
+    await aptitude.save();
+
+    res.status(200).json({
+      success: true,
+      message: "test submitted",
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
   }
 };

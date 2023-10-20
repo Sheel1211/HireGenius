@@ -163,10 +163,11 @@ export const clientLogin = async (req, res) => {
         );
         approveClientData.authToken = authToken;
         await approveClientData.save();
+
         return res
           .status(200)
           .cookie("token", authToken, {
-            expires: new Date(Date.now() + 900000), // Set an expiration time
+            expires: new Date(Date.now() + 9000000000), // Set an expiration time
             httpOnly: true, // Set the httpOnly flag
             sameSite: "none",
           })

@@ -12,7 +12,7 @@ const isauthenticated = async (req, res, next) => {
     if (!token) {
       return res.status(400).json({
         success: false,
-        message: "Login to Access this resource",
+        message: "token not found",
       });
     }
 

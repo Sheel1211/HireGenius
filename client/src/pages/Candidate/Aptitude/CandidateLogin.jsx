@@ -32,7 +32,8 @@ const CandidateLogin = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/aptitude/check/${params.aptitudeId}`).then((res)=>{
+      .get(`http://localhost:4000/api/aptitude/check/${params.aptitudeId}`)
+      .then((res) => {
         console.log(res);
       })
       .catch((error) => {
@@ -53,46 +54,41 @@ const CandidateLogin = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    
-    const username= data.get("username");
-    const password= data.get("password");
-    
-    
+
+    const username = data.get("username");
+    const password = data.get("password");
+
     // Logic to check verified candidate
     const urlSearchParams = new URLSearchParams(window.location.search);
     const interviewId = urlSearchParams.get("interviewId");
 
     // console.log("interview id : ",interviewId)
-    console.log(username, password,interviewId)
+    console.log(username, password, interviewId);
     axios
-    .post(
-      "http://127.0.0.1:4000/api/candidate/login",
-      { username, password,interviewId},
-      { headers: { "Content-Type": "application/json" } }
-    )
-    .then((res) => {
-      if (res.status === 200) {
-        console.log("res.data", res.data);
-        Cookies.set("token", res.data.user.authToken, { expires: 7 });
-        console.log(res.data.user)
-        dispatch(UserLogin(res.data.user));
-        alert("Login successfully.")
-        
-         localStorage.setItem(`${params.aptitudeId}`, "1");
+      .post(
+        "http://127.0.0.1:4000/api/candidate/login",
+        { username, password, interviewId },
+        { headers: { "Content-Type": "application/json" } }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("res.data", res.data);
+          Cookies.set("token", res.data.user.authToken, { expires: 7 });
+          console.log(res.data.user);
+          dispatch(UserLogin(res.data.user));
+          alert("Login successfully.");
+
+          localStorage.setItem(`${params.aptitudeId}`, "1");
           dispatch(setSelectedPage("1"));
+        } else if (res.status === 202) {
+          alert("You are not candidate");
+        } else if (res.status === 204) alert("No candidate for given data");
+      })
 
-      } else if (res.status === 202) {
-        alert("You are not candidate");
-      } else if (res.status === 204) alert("No candidate for given data");
-    })
-
-    .catch((err) => {
-      console.log(err)
-      alert("Something went wrong!");
-    });
-
-
-   
+      .catch((err) => {
+        console.log(err);
+        alert("Something went wrong!");
+      });
   };
 
   return (

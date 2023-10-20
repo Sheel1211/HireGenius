@@ -59,7 +59,7 @@ const ClientLogin = () => {
           console.log("res.data", res.data);
           Cookies.set("token", res.data.user.authToken, { expires: 7 });
           dispatch(UserLogin(res.data.user));
-          console.log("Hello world")
+          console.log("Hello world");
           navigate("/clientdashboard");
         } else if (res.status === 202) {
           alert("You are not Approved as client");

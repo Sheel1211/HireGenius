@@ -10,15 +10,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSelectedPage } from "../../../store/slices/AptiDashboard";
 import { useParams } from "react-router-dom";
 import CountdownTimer from "./CountdownTimer";
+import axios from "axios";
 
 const Header = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const AptiDetails = useSelector((state) => state.AptiDashboard);
   const UserDetails = useSelector((state) => state.User);
+  // console.log(UserDetails.User);
   const initialTime = AptiDetails.duration * 60;
 
-  console.log("user-details", UserDetails);
   const calculateGrades = () => {
     let right = 0;
     let total = 0;
@@ -51,18 +52,40 @@ const Header = () => {
           }
         }
 
+        console.log(questionMarks);
         total += Number(questionMarks);
-        console.log("right", right);
       });
     }
 
     console.log(right, total);
+
+    return { right, total };
   };
 
   const handleSubmitTest = () => {
-    localStorage.setItem(`${params.aptitudeId}`, "4");
-    dispatch(setSelectedPage("4"));
-    calculateGrades();
+    // localStorage.setItem(`${params.aptitudeId}`, "4");
+    // dispatch(setSelectedPage("4"));
+    const { right, total } = calculateGrades();
+
+    // console.log(UserDetails);
+    const data = {
+      aptitudeId: params.aptitudeId,
+      candidateId: UserDetails.User._id,
+      isRejected: false,
+      gain: right,
+      total,
+    };
+
+    // console.log(data);
+    // make post request to store score of the candidate in aptitude schema
+    axios
+      .patch("http://127.0.0.1:4000/api/submit", data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const onTimeExpired = () => {
