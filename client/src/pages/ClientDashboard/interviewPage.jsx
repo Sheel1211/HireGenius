@@ -35,6 +35,10 @@ export default function interviewPage() {
     navigate("/create/compiler");
   };
 
+  const createGD = async()=>{
+    navigate("/schedule-meet")
+  }
+  
   return (
     <Box sx={{ width: "100%", paddingLeft: "50px" }}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -84,7 +88,7 @@ export default function interviewPage() {
             Coding Round
           </Typography>
         </Grid>
-        <Grid xs={4}>
+        <Grid xs={4} onClick={createGD}>
           <Link to="#">
             <Box
               component="img"
