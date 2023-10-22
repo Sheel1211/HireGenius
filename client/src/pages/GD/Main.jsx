@@ -1,5 +1,5 @@
 // import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -19,25 +19,27 @@ import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 
-import React, { FC } from "react";
+
+import React from "react";
 import axios from 'axios';
 import Container from "@mui/material/Container";
 import Table from '@mui/joy/Table';
 import { MobileTimePicker } from "@mui/x-date-pickers";
+import { useLocation } from "react-router-dom";
 
 const Main = () => {
-  //http://127.0.0.1:4000/api/gd/meet/${roomId}
+  
  const [link,generateLink] = useState("")
-  const [candidates,setcandidates] = useState([
-  {email:"barotpratham30@gmail.com",password:"sSXd3dIhrN",username:"barotpratham30"},
-  {email:"rudrapatel010701@gmail.com",password:"WMIS27sBZ4",username:"rudrapatel010701"},
-  {email:"jaypatel0523@gmail.com",password:"woJEcKPjHB",username:"jaypatel0523"},
-  {email:"pandyasheel416@gmail.com",password:"n2W3gSPdKx",username:"pandyasheel416"}
-  ])
+
+  const [candidates,setcandidates] = useState([])
+
+
+  const location = useLocation();
+  const {interviewData} = location.state;
+
+  const [interview,setInterview] = useState(interviewData);
+
 
   const [meetData,setMeetData]=useState({
     topic:"",
@@ -46,6 +48,41 @@ const Main = () => {
     time:"",
     duration:"",
   })
+
+  useEffect(()=>{
+    allData(interview.candidates)
+  },[])
+
+  function convertData(inputData) {
+    
+    const convertedData = inputData.map((item) => ({
+      _id:item[0]._id,
+      email: item[0].email,
+      password: item[0].password,
+      username: item[0].username,
+    }));
+    setcandidates(convertedData)
+  }
+
+const allData = (candidates) => {
+    const candidateIds = candidates.map((data) => data.candidateId);
+    
+    const baseUrl = "http://127.0.0.1:4000/api/candidate/getCandidate";
+    const requests = candidateIds.map((candidateId) => {
+      return axios.post(baseUrl, { candidateId });
+    });
+
+    
+    Promise.all(requests)
+      .then((responses) => {
+        const candidateAllDetails = responses.map((response) => response.data.candidate);
+        convertData(candidateAllDetails);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+  };
 
 
   function uuidv4() {
@@ -61,7 +98,6 @@ const Main = () => {
       const roomId =uuidv4() 
       generateLink(`http://localhost:4000/api/gd/meet/${roomId}`);
     }else{
-
      alert("Already generated!")
     }
   } 
@@ -69,7 +105,7 @@ const Main = () => {
   const handleScheduleMeet = ()=>{
     console.log("Meet Data : ",meetData,link,candidates)
 
-    axios.post("http://127.0.0.1:4000/api/gd/schedule/meet",{topic:meetData.topic,mentorEmail:meetData.mentorEmail,date:meetData.date,time:meetData.time,duration:meetData.duration,link:link,candidates:candidates}).then((res)=>{
+    axios.post("http://127.0.0.1:4000/api/gd/schedule/meet",{topic:meetData.topic,mentorEmail:meetData.mentorEmail,date:meetData.date,time:meetData.time,duration:meetData.duration,link:link,candidates:candidates,interviewID:interview._id}).then((res)=>{
 
     if(res.status===200){
       console.log("response : ",res)

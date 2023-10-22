@@ -32,10 +32,18 @@ const gdSchema = new mongoose.Schema({
   },
   candidates: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "candidate",
+      candidateId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "candidate",
+      },
+      isRejected: Boolean,
+      marks:{
+        type:Number,
+        default:0,
+      }
     },
   ],
+
 });
 
 const gd = mongoose.model("gd", gdSchema);

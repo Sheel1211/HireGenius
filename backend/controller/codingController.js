@@ -75,6 +75,7 @@ export const createQuestion = async (req, res) => {
       .catch((err) => {
         console.error(err);
       });
+      
     res.status(200).json({
       success: true,
       message: "Question created successfully",

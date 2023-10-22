@@ -1,7 +1,9 @@
+import mongoose from "mongoose";
 import candidate from "../models/candidateSchema.js";
 import gd from "../models/gdSchema.js";
 import { generateUniquePassword } from "../services/generateUniquePassword.js";
 import { sendEmail } from "../services/sendEmail.service.js";
+import interview from "../models/interviewSchema.js";
 
 export const landingRoom = async (req, res) => {
   const {roomId} = req.params;
@@ -13,8 +15,16 @@ export const landingRoom = async (req, res) => {
 
 export const scheduleMeet  = async(req,res)=>{
 
-  const {topic,mentorEmail,date,time,duration,link,candidates} = req.body;
-  // console.log(date,time);
+  const {topic,mentorEmail,date,time,duration,link,candidates,interviewID} = req.body;
+  // console.log(interviewID,candidates);
+  const interviewIdArray = candidates.map(item => {
+    return {
+      candidateId: new mongoose.Types.ObjectId(item._id),
+      isRejected: false,
+      marks: 0
+    };
+  });
+    console.log(interviewIdArray)
 
 const newdate = new Date(date);
 
@@ -79,21 +89,48 @@ const newLink = `${link}?date=${formattedDate}&duration=${duration}`;
           date:formattedDate,
           link:newLink,
           mentor: mentorData._id,
-          // candidates,
-          // interviewId: interviewObjectId,
+          candidates:interviewIdArray,
+          interviewId: interviewID,
         });
     
         await newGD.save();
+        
+        
+        const newRoundData = {
+          roundId: newGD._id,
+          name: "gd",
+        };
     
-       
+        // interview
+        //   .findById(interviewID)
+        //   .exec()
+        //   .then((foundInterview) => {
+        //     if (!foundInterview) {
+        //       console.error("Interview not found.");
+        //     } else {
+        //       foundInterview.rounds.push(newRoundData);
+        //       foundInterview
+        //         .save()
+        //         .then((updatedInterview) => {
+        //           console.log("Round added successfully:", updatedInterview);
+        //         })
+        //         .catch((err) => {
+        //           console.error(err);
+        //         });
+        //     }
+        //   })
+        //   .catch((err) => {
+        //     console.error(err);
+        //   });
 
 
-        // const sendEmailToMentor = await sendEmail(mentorData.email,"Mentor Credentials for Meet",`<h2>Username:${mentorData.username}</h2>
-        // <h2>Password:${mentorData.password}</h2>
-        // <h2>Link:   ${newLink}</h2> 
-        // <h3>Topic:  ${topic}</h3>
-        // <h3>Date :  ${formattedDate}</h3>
-        // <h3>Time :  ${formattedTime}</h3>`)
+        const sendEmailToMentor = await sendEmail(mentorData.email,"Mentor Credentials for Meet",`<h2>Username:${mentorData.username}</h2>
+        <h2>Password:${mentorData.password}</h2>
+        <h2>Link:   ${newLink}</h2> 
+        <h3>Topic:  ${topic}</h3>
+        <h3>Date :  ${formattedDate}</h3>
+        <h3>Time :  ${formattedTime}</h3>`)
+
     
         if (!sendEmailToMentor) {
           console.log("email not send to mentor");
@@ -105,28 +142,28 @@ const newLink = `${link}?date=${formattedDate}&duration=${duration}`;
    
 
 
-    // await Promise.all(
-    //   candidates.map(async (item, index) => {
+    await Promise.all(
+      candidates.map(async (item, index) => {
      
-    //     const emailToCandi = await sendEmail(
-    //       item.email,
-    //       "Login Credentials for Meet",
-    //       `<h2>Username:${item.username}</h2>
-    //       <h2>Password:${item.password}</h2>
-    //       <h3>Link :  ${newLink}</h3>
-    //       <h3>Topic:  ${topic}</h3>
-    //       <h3>Date :  ${formattedDate}</h3>
-    //       <h3>Time :  ${formattedTime}</h3>`
-    //     );
+        const emailToCandi = await sendEmail(
+          item.email,
+          "Login Credentials for Meet",
+          `<h2>Username:${item.username}</h2>
+          <h2>Password:${item.password}</h2>
+          <h3>Link :  ${newLink}</h3>
+          <h3>Topic:  ${topic}</h3>
+          <h3>Date :  ${formattedDate}</h3>
+          <h3>Time :  ${formattedTime}</h3>`
+        );
 
-    //     if (!emailToCandi) {
-    //       console.log("email not sended");
-    //     } else {
-    //       console.log("email sended to : ",item.email);
-    //     }
+        if (!emailToCandi) {
+          console.log("email not sended");
+        } else {
+          console.log("email sended to : ",item.email);
+        }
 
-    //   })
-    // );
+      })
+    );
 
     res.status(200).json({ success: true, message: "Email sended to all the Candidates & Mentor."});
   } catch (err) {

@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 // import Grid from "@mui/system/Unstable_Grid";
 import { Grid, Container, Typography } from "@mui/material";
+import { useState } from "react";
 const config = {
   headers: {
     Accept: "application/json",
@@ -15,6 +16,13 @@ const config = {
 
 export default function interviewPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const {row} = location.state;
+  const [interviewData,setInterviewData] = useState(row)
+ 
+  console.log("details of interview :",interviewData);
+
+
   const createAptitude = async () => {
     axios
       .post("http://127.0.0.1:4000/api/createAptitude", config)
@@ -36,7 +44,9 @@ export default function interviewPage() {
   };
 
   const createGD = async()=>{
-    navigate("/schedule-meet")
+    navigate("/schedule-meet",{
+      state:{interviewData},
+    })
   }
   
   return (
