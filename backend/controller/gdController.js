@@ -56,7 +56,7 @@ const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
 const formattedTime = `${formattedHours}:${formattedMinutes} ${amOrPm}`;
 
 
-const newLink = `${link}?date=${formattedDate}&duration=${duration}`;
+// const newLink = `${link}?date=${formattedDate}&duration=${duration}`;
 
   try {
 
@@ -87,7 +87,7 @@ const newLink = `${link}?date=${formattedDate}&duration=${duration}`;
           duration,
           time:formattedTime,
           date:formattedDate,
-          link:newLink,
+          link:link,
           mentor: mentorData._id,
           candidates:interviewIdArray,
           interviewId: interviewID,
@@ -126,7 +126,7 @@ const newLink = `${link}?date=${formattedDate}&duration=${duration}`;
 
         const sendEmailToMentor = await sendEmail(mentorData.email,"Mentor Credentials for Meet",`<h2>Username:${mentorData.username}</h2>
         <h2>Password:${mentorData.password}</h2>
-        <h2>Link:   ${newLink}</h2> 
+        <h2>Link:   ${link}</h2> 
         <h3>Topic:  ${topic}</h3>
         <h3>Date :  ${formattedDate}</h3>
         <h3>Time :  ${formattedTime}</h3>`)
@@ -150,7 +150,7 @@ const newLink = `${link}?date=${formattedDate}&duration=${duration}`;
           "Login Credentials for Meet",
           `<h2>Username:${item.username}</h2>
           <h2>Password:${item.password}</h2>
-          <h3>Link :  ${newLink}</h3>
+          <h3>Link :  ${link}</h3>
           <h3>Topic:  ${topic}</h3>
           <h3>Date :  ${formattedDate}</h3>
           <h3>Time :  ${formattedTime}</h3>`

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>HireGenius-Login</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+* {
+  text-decoration: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans", sans-serif;
+}
+
+.mr-1 {
+  margin-right: 10px;
+}
+
+.mr-2 {
+  margin-right: 30px;
+}
+
+.mr-3 {
+  margin-right: 30px;
+}
+
+.mr-4 {
+  margin-right: 40px;
+}
+
+.unselectable {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+body {
+  background-color: #ffffff;
+}
+
+navbar .logo {
+  font-size: 38px;
+  color: #393e46;
+  font-weight: bold;
+  padding: 0 12%;
+  margin-left: 25%;
+  margin-top: 40px;
+}
+
+.main {
+  display: flex;
+  padding: 0 22%;
+  margin-top: 20vh;
+  width: 100%;
+}
+.main .create-join {
+  width: 85%;
+  margin-right: 50px;
+}
+.main .create-join .text .head {
+  font-size: 36px;
+  font-weight: bold;
+  color: #393e46;
+}
+.main .create-join .text .subtext {
+  font-size: 24px;
+  color: #6f6f6f;
+  margin-top: 10px;
+}
+.main .create-join .createroom-butt {
+  width: 100%;
+  margin-top: 60px;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: #1976d2;
+  color: white;
+  text-align: center;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  border: 2px solid #1976d2;
+  transition: 0.3s;
+}
+.main .create-join .createroom-butt:hover {
+  background-color: white;
+  border: 2px solid #1976d2;
+  color: #1976d2;
+  cursor: pointer;
+}
+.main .create-join .createroom-butt:focus {
+  outline: none;
+}
+.main .create-join .createroom-clicked {
+  width: 100%;
+  margin-top: 60px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  background-color: white;
+  border: 2px solid #1976d2;
+  color: #1976d2;
+}
+.main .create-join .createroom-clicked:focus {
+  outline: none;
+}
+.main .create-join .roomcode {
+  width: 100%;
+  margin-top: 30px;
+  font-size: 24px;
+  color: #393e46;
+  text-align: center;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 3px solid #232931;
+  border-top: 2px solid white;
+  font-weight: bold;
+}
+.main .create-join .roomcode:focus {
+  background-color: white;
+  border: 0;
+  border-bottom: 3px solid #232931;
+  border-top: 2px solid white;
+  outline: none;
+  border-radius: 0;
+}
+.main .create-join .roomcode-error {
+  border-bottom: 3px solid #d31c1c;
+}
+.main .create-join .joinroom {
+  margin-top: 20px;
+  width: 100%;
+  text-align: right;
+  font-size: 24px;
+  font-weight: bold;
+  color: #232931;
+}
+.main .create-join .joinroom:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+@media (max-width: 1200px) {
+  .main {
+    flex-direction: column;
+  }
+  .main .create-join {
+    width: 100%;
+    margin-right: 0;
+  }
+  .main .video-cont {
+    margin-top: 100px;
+    margin-bottom: 100px;
+  }
+}
+
+
+
+
+/*# sourceMappingURL=style.css.map */
+
+    </style>
+  
+</head>
+
+<body>
+    <navbar>
+        <div class="logo">Hire<span style="color: #1e88e5;">Genius</span></div>
+        
+      </navbar>
+
+        <div class="main">
+            
+            <div class="create-join">
+                <div class="text"><div class="head">Login For Video Meeting.</div>
+                </div>
+                <input type="text" name="room" spellcheck="false" placeholder="Enter Username" id="username" class="roomcode"><br>
+                <input type="text" name="room" spellcheck="false" placeholder="Enter Password" id="password" class="roomcode"><br>
+                <button id="createroom" class="createroom-butt unselectable">Login</button><br>
+          
+            </div>
+            
+
+        </div>
+
+
+    <script>
+const createButton = document.querySelector("#createroom");
+const codeCont = document.querySelector('#roomcode');
+const joinBut = document.querySelector('#joinroom');
+
+// Get the URL of the current page
+const currentUrl = window.location.href;
+
+var GetParameters = function (url) {
+    var splitParametersFromUrl = url.split('?');
+    var spliteParameters = splitParametersFromUrl[1].split('&');
+
+    var param = function (name, value) {
+        this.Name = name,
+            this.Value = value
+    }
+    var resualt = new Array();
+    for (var i = 0; i < spliteParameters.length; i++) {
+        var item = spliteParameters[i].split('=');
+        var itemParam = new param(item[0], item[1]);
+        resualt.push(itemParam);
+    }
+
+    return resualt;
+}
+
+var resualt = GetParameters(currentUrl);
+
+console.log(resualt);
+
+const currentDate = new Date();
+
+const currentDateFormat = currentDate.toISOString().split('T')[0];
+
+const meetDate = resualt[0].Value;
+const meetDuration = resualt[1].Value
+
+if(currentDateFormat === meetDate){
+  console.log("date matched")
+}else{
+  console.log("not matched")
+  alert("Date Not Matched")
+  location.href = `http://localhost:4000/`;
+}
+
+function uuidv4() {
+    return 'xxyxyxxyx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+const createroomtext = 'Login...';
+
+
+createButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    createButton.disabled = true;
+    createButton.innerHTML = 'Login...';
+    createButton.classList = 'createroom-clicked';
+
+    var roomId = '<%= roomId %>';
+
+    console.log("ye sin function")
+    // Get the username and password from the input fields
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  // Create an object with the data to send to the backend
+  const data = {
+    username: username,
+    password: password,
+    interviewId:roomId,
+  };
+  
+  console.log(data);
+  
+  fetch('http://127.0.0.1:4000/api/candidate/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(responseData => {
+
+    console.log(responseData);
+    
+    if(responseData.success){
+        alert(responseData.message);
+        location.href = `/index.ejs?room=${roomId}&duration=${meetDuration}`;
+    }
+
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+
+
+});
+
+    </script>
+</body>
+
+</html>

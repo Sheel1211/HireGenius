@@ -20,102 +20,126 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-
 import React from "react";
-import axios from 'axios';
+import axios from "axios";
 import Container from "@mui/material/Container";
-import Table from '@mui/joy/Table';
+import Table from "@mui/joy/Table";
 import { MobileTimePicker } from "@mui/x-date-pickers";
 import { useLocation } from "react-router-dom";
 
 const Main = () => {
-  
- const [link,generateLink] = useState("")
+  const [link, generateLink] = useState("");
 
-  const [candidates,setcandidates] = useState([])
-
+  const [candidates, setcandidates] = useState([]);
 
   const location = useLocation();
-  const {interviewData} = location.state;
+  const { interviewData } = location.state;
 
-  const [interview,setInterview] = useState(interviewData);
+  const [interview, setInterview] = useState(interviewData);
 
+  const [meetData, setMeetData] = useState({
+    topic: "",
+    mentorEmail: "",
+    date: "",
+    time: "",
+    duration: "",
+  });
 
-  const [meetData,setMeetData]=useState({
-    topic:"",
-    mentorEmail:"",
-    date:"",
-    time:"",
-    duration:"",
-  })
-
-  useEffect(()=>{
-    allData(interview.candidates)
-  },[])
+  useEffect(() => {
+    allData(interview.candidates);
+  }, []);
 
   function convertData(inputData) {
-    
     const convertedData = inputData.map((item) => ({
-      _id:item[0]._id,
+      _id: item[0]._id,
       email: item[0].email,
       password: item[0].password,
       username: item[0].username,
     }));
-    setcandidates(convertedData)
+    setcandidates(convertedData);
   }
 
-const allData = (candidates) => {
+  const allData = (candidates) => {
     const candidateIds = candidates.map((data) => data.candidateId);
-    
+
     const baseUrl = "http://127.0.0.1:4000/api/candidate/getCandidate";
     const requests = candidateIds.map((candidateId) => {
       return axios.post(baseUrl, { candidateId });
     });
 
-    
     Promise.all(requests)
       .then((responses) => {
-        const candidateAllDetails = responses.map((response) => response.data.candidate);
+        const candidateAllDetails = responses.map(
+          (response) => response.data.candidate
+        );
         convertData(candidateAllDetails);
       })
       .catch((err) => {
         console.log(err);
       });
-
   };
 
+  // function uuidv4() {
+  //   return 'xxyxyxxyx'.replace(/[xy]/g, function (c) {
+  //       var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+  //       return v.toString(16);
+  //   });
+  // }
 
-  function uuidv4() {
-    return 'xxyxyxxyx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-  }
-
-
-  const handleGenerateLink =()=>{
-    if(!link || link==="" ||link===null || link===undefined){
-      const roomId =uuidv4() 
-      generateLink(`http://localhost:4000/api/gd/meet/${roomId}`);
-    }else{
-     alert("Already generated!")
+  const handleGenerateLink = () => {
+    if (
+      !meetData.topic ||
+      !meetData.mentorEmail ||
+      !meetData.date ||
+      !meetData.time ||
+      !meetData.duration
+    ) {
+      alert("First feel the form!");
+      return;
     }
-  } 
+    const newdate = new Date(meetData.date);
 
-  const handleScheduleMeet = ()=>{
-    console.log("Meet Data : ",meetData,link,candidates)
+    // Extract date
+    const year = newdate.getFullYear();
+    const month = newdate.getMonth() + 1; // Months are zero-based
+    const day = newdate.getDate();
 
-    axios.post("http://127.0.0.1:4000/api/gd/schedule/meet",{topic:meetData.topic,mentorEmail:meetData.mentorEmail,date:meetData.date,time:meetData.time,duration:meetData.duration,link:link,candidates:candidates,interviewID:interview._id}).then((res)=>{
+    const formattedDate = `${year}-${month}-${day}`;
 
-    if(res.status===200){
-      console.log("response : ",res)
-      alert(res.data.message)
+    if (!link || link === "" || link === null || link === undefined) {
+      generateLink(
+        `http://localhost:4000/api/gd/meet/${interview._id}?date=${formattedDate}&duration=${meetData.duration}`
+      );
+    } else {
+      alert("Already generated!");
     }
-    }).catch((error)=>{
-      console.log(error)
-      alert("something went wrong!")
-    })
-  }
+  };
+
+  const handleScheduleMeet = () => {
+    console.log("Meet Data : ", meetData, link, candidates);
+
+    axios
+      .post("http://127.0.0.1:4000/api/gd/schedule/meet", {
+        topic: meetData.topic,
+        mentorEmail: meetData.mentorEmail,
+        date: meetData.date,
+        time: meetData.time,
+        duration: meetData.duration,
+        link: link,
+        candidates: candidates,
+        interviewID: interview._id,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("response : ", res);
+          alert(res.data.message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("something went wrong!");
+      });
+  };
   return (
     <React.Fragment>
       <Box
@@ -231,7 +255,6 @@ const allData = (candidates) => {
             Krunch Media
           </Typography> */}
           <Grid container spacing={3}>
-            
             <Grid item xs={12} sm={2}>
               <InputLabel
                 sx={{
@@ -254,10 +277,12 @@ const allData = (candidates) => {
                 autoComplete="off"
                 variant="outlined"
                 value={meetData.topic}
-                onChange={(e)=>{setMeetData({...meetData,topic:e.target.value})}}
+                onChange={(e) => {
+                  setMeetData({ ...meetData, topic: e.target.value });
+                }}
               />
             </Grid>
-          
+
             <Grid item xs={12} sm={2}>
               <InputLabel
                 sx={{
@@ -281,7 +306,9 @@ const allData = (candidates) => {
                 autoComplete="off"
                 variant="outlined"
                 value={meetData.mentorEmail}
-                onChange={(e)=>{setMeetData({...meetData,mentorEmail:e.target.value})}}
+                onChange={(e) => {
+                  setMeetData({ ...meetData, mentorEmail: e.target.value });
+                }}
               />
             </Grid>
 
@@ -308,14 +335,13 @@ const allData = (candidates) => {
                   ]}
                 >
                   <DemoItem>
-                    <DatePicker   
-                    //value={meetData.date}
-                    defaultValue={dayjs("10/02/2023")}
-                    onChange={(newDate) => {
-                      setMeetData({ ...meetData, date: newDate });
-                    }}
-                  />
-          
+                    <DatePicker
+                      //value={meetData.date}
+                      defaultValue={dayjs("10/02/2023")}
+                      onChange={(newDate) => {
+                        setMeetData({ ...meetData, date: newDate });
+                      }}
+                    />
                   </DemoItem>
                 </DemoContainer>
               </LocalizationProvider>
@@ -334,28 +360,26 @@ const allData = (candidates) => {
             </Grid>
 
             <Grid item xs={12} sm={10}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer
-        components={[
-          'TimePicker',
-          'MobileTimePicker',
-          'DesktopTimePicker',
-          'StaticTimePicker',
-        ]}
-      >
-        
-        <DemoItem>
-          <MobileTimePicker defaultValue={dayjs('2023-12-30T15:30')}
-          onChange={(newTime) => {
-            setMeetData({ ...meetData, time: newTime });
-          }}
-          />
-        </DemoItem>
-      
-      </DemoContainer>
-    </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer
+                  components={[
+                    "TimePicker",
+                    "MobileTimePicker",
+                    "DesktopTimePicker",
+                    "StaticTimePicker",
+                  ]}
+                >
+                  <DemoItem>
+                    <MobileTimePicker
+                      defaultValue={dayjs("2023-12-30T15:30")}
+                      onChange={(newTime) => {
+                        setMeetData({ ...meetData, time: newTime });
+                      }}
+                    />
+                  </DemoItem>
+                </DemoContainer>
+              </LocalizationProvider>
             </Grid>
-
 
             {/*  */}
             <Grid item xs={12} sm={2}>
@@ -381,13 +405,15 @@ const allData = (candidates) => {
                 autoComplete="off"
                 variant="outlined"
                 value={meetData.duration}
-                onChange={(e)=>{setMeetData({...meetData,duration:e.target.value})}}
+                onChange={(e) => {
+                  setMeetData({ ...meetData, duration: e.target.value });
+                }}
               />
             </Grid>
 
             <Grid item xs={12} sm={2}>
-            <Button variant="contained" onClick={handleGenerateLink}>
-                Generate 
+              <Button variant="contained" onClick={handleGenerateLink}>
+                Generate
               </Button>
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -403,65 +429,66 @@ const allData = (candidates) => {
                 variant="outlined"
                 disabled
               />
-            </Grid>    
-
+            </Grid>
           </Grid>
         </Box>
         <Grid item xs={12} sm={2}>
-              <InputLabel
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  fontWeight: 900,
-                }}
-              >
-                All Candidates
-              </InputLabel>
-            </Grid>
-<Box sx={{m:6}}>
-        <Table aria-label="basic table" borderAxis="xBetween" 
-  color="neutral"
-  size="md"
-  stickyFooter
-  stickyHeader
-  variant="plain">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Email</th>
-          <th>Username</th>
-          <th>Password</th>
-        </tr>
-      </thead>
-      <tbody>
-        {candidates.map((value,index)=>{
-          return(<tr key={index}>
-            <td>{index}</td>
-            <td>{value.email}</td>
-            <td>{value.username}</td>
-            <td>{value.password}</td>
-          </tr>)
-        })}
-      </tbody>
-    </Table>
-    </Box>
-    <Grid item xs={12} sm={2}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  fontWeight: 900,
-                  p:2
-                }}
-              >
-               <Button variant="contained"  onClick={handleScheduleMeet}>
-                Send Email to All
-              </Button>
-              </Box>
-              
-            </Grid>
-  
-
+          <InputLabel
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              fontWeight: 900,
+            }}
+          >
+            All Candidates
+          </InputLabel>
+        </Grid>
+        <Box sx={{ m: 6 }}>
+          <Table
+            aria-label="basic table"
+            borderAxis="xBetween"
+            color="neutral"
+            size="md"
+            stickyFooter
+            stickyHeader
+            variant="plain"
+          >
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Password</th>
+              </tr>
+            </thead>
+            <tbody>
+              {candidates.map((value, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{index}</td>
+                    <td>{value.email}</td>
+                    <td>{value.username}</td>
+                    <td>{value.password}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Box>
+        <Grid item xs={12} sm={2}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              fontWeight: 900,
+              p: 2,
+            }}
+          >
+            <Button variant="contained" onClick={handleScheduleMeet}>
+              Send Email to All
+            </Button>
+          </Box>
+        </Grid>
       </Paper>
     </React.Fragment>
   );

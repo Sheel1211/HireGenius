@@ -814,6 +814,53 @@ navbar .logo {
   opacity: 0.8;
 }
 
+
+/* Style for the modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+/* Style for the login button */
+#loginButton {
+  background-color: #1e88e5;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#loginButton:hover {
+  background-color: #005cbf;
+  cursor: pointer;
+}
+
+
+
 /*# sourceMappingURL=style.css.map */
 
     </style>
@@ -825,6 +872,18 @@ navbar .logo {
         <div class="logo">Hire<span style="color: #1e88e5;">Genius</span></div>
         
       </navbar>
+
+      <!-- Login Modal -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2>Login</h2>
+    <input type="text" id="usernameInput" placeholder="Username">
+    <input type="password" id="passwordInput" placeholder="Password">
+    <button id="loginButton">Login</button>
+  </div>
+</div>
+
 
         <div class="main">
             
@@ -857,6 +916,13 @@ const joinBut = document.querySelector('#joinroom');
 const mic = document.querySelector('#mic');
 const cam = document.querySelector('#webcam');
 
+
+const loginModal = document.getElementById("loginModal");
+const closeModalButton = document.getElementById("closeModal");
+const loginButton = document.getElementById("loginButton");
+
+
+var roomId = '<%= roomId %>';
 // Get the URL of the current page
 const currentUrl = window.location.href;
 
@@ -888,6 +954,7 @@ const currentDateFormat = currentDate.toISOString().split('T')[0];
 
 const meetDate = resualt[0].Value;
 const meetDuration = resualt[1].Value
+
 if(currentDateFormat === meetDate){
   console.log("date matched")
 }else{
@@ -895,6 +962,68 @@ if(currentDateFormat === meetDate){
   alert("Date Not Matched")
   location.href = `http://localhost:4000/`;
 }
+
+// Function to open the login modal
+function openLoginModal() {
+  loginModal.style.display = "block";
+}
+
+// Function to close the login modal
+function closeLoginModal() {
+  loginModal.style.display = "none";
+}
+
+// Event listener for opening the login modal
+window.addEventListener("load", openLoginModal);
+
+// Event listener for closing the login modal
+closeModalButton.addEventListener("click", closeLoginModal);
+
+// Event listener for the login button
+loginButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  console.log("yse close modal")
+  const username = document.getElementById("usernameInput").value;
+  const password = document.getElementById("passwordInput").value;
+
+  const data = {
+    username: username,
+    password: password,
+    interviewId:roomId,
+  };
+
+  // Perform your login request to the backend here
+  // Check if the login is successful
+
+  fetch('http://127.0.0.1:4000/api/candidate/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(responseData => {
+
+    console.log(responseData.user);
+    
+    if(responseData.success){
+        alert(responseData.message);
+        localStorage.setItem('USERGD', JSON.stringify(responseData.user));
+        closeLoginModal();
+        return;
+    }
+
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+
+  
+});
+
+
+
 let micAllowed = 1;
 let camAllowed = 1;
 
@@ -916,6 +1045,18 @@ const createroomtext = 'Joining Room...';
 
 createButton.addEventListener('click', (e) => {
     e.preventDefault();
+    const storedData = localStorage.getItem('USERGD');
+      if (storedData) {
+          const userData = JSON.parse(storedData);
+          console.log(userData.name);  
+          console.log(userData.role);  
+          console.log(userData.username); 
+          console.log(userData.email); 
+        } else {
+          alert("you are not logged in!")
+          return;          
+      }
+
     createButton.disabled = true;
     createButton.innerHTML = 'Creating Room';
     createButton.classList = 'createroom-clicked';
@@ -934,15 +1075,15 @@ createButton.addEventListener('click', (e) => {
     location.href = `/room.html?room=${roomId}&duration=${meetDuration}`;
 });
 
-joinBut.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (codeCont.value.trim() == "") {
-        codeCont.classList.add('roomcode-error');
-        return;
-    }
-    const code = codeCont.value;
-    location.href = `/room.html?room=${roomId}&duration=${meetDuration}`;
-})
+// joinBut.addEventListener('click', (e) => {
+//     e.preventDefault();
+//     if (codeCont.value.trim() == "") {
+//         codeCont.classList.add('roomcode-error');
+//         return;
+//     }
+//     const code = codeCont.value;
+//     location.href = `/room.html?room=${roomId}&duration=${meetDuration}`;
+// })
 
 codeCont.addEventListener('change', (e) => {
     e.preventDefault();
