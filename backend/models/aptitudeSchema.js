@@ -44,6 +44,10 @@ const aptitudeSchema = new mongoose.Schema(
     testLink: {
       type: String,
     },
+    expiry: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );

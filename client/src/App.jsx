@@ -91,6 +91,7 @@ const App = () => {
         <Route path="/client/registration" element={<Registration />} />
         <Route path="/client/login" element={<ClientLogin />} />
         <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/create/aptitude" element={<FormBuilder />} />
         {userDetails &&
           userDetails.User &&
           userDetails.User.role === "client" && (

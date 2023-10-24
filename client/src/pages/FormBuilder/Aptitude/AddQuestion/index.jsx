@@ -9,6 +9,10 @@ import {
   DialogActions,
   TextField,
 } from "@mui/material";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Question from "./Question";
 import Answer from "./Answer";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -23,6 +27,7 @@ import axios from "axios";
 import Slide from "@mui/material/Slide";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import dayjs from "dayjs";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -61,6 +66,7 @@ const index = () => {
   const [negativeMarking, setNegativeMarking] = useState(0);
   const [link, setLink] = useState(null);
   const [linkmodal, setLinkModal] = useState(false);
+  const [expiryDate, setExpiryDate] = useState(dayjs());
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -113,6 +119,7 @@ const index = () => {
       questions,
       duration: time,
       negativeMarking: negativeMarking,
+      expiryDate,
     };
 
     axios
@@ -253,6 +260,20 @@ const index = () => {
               value={negativeMarking}
               onChange={(e) => setNegativeMarking(e.target.value)}
             />
+          </Box>
+          <Box>
+            <Typography variant="h5" sx={{ my: 2 }}>
+              Set expiry date
+            </Typography>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DatePicker", "DatePicker"]}>
+                <DatePicker
+                  label="Expiry Date"
+                  value={expiryDate}
+                  onChange={(date) => setExpiryDate(date)}
+                />
+              </DemoContainer>
+            </LocalizationProvider>
           </Box>
         </Box>
         <DialogActions>

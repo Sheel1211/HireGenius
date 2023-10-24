@@ -10,7 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UserLogin } from "../../../store/slices/UserSlice.js";
 import { setSelectedPage } from "../../../store/slices/AptiDashboard";
 import Cookies from "js-cookie";
@@ -38,7 +38,7 @@ const CandidateLogin = () => {
       })
       .catch((error) => {
         console.log(error);
-        error("Something went wrong!", {
+        toast.error("Something went wrong!", {
           position: "top-center",
           autoClose: 1000,
           hideProgressBar: false,
@@ -64,30 +64,51 @@ const CandidateLogin = () => {
 
     // console.log("interview id : ",interviewId)
     console.log(username, password, interviewId);
+
     axios
-      .post(
-        "http://127.0.0.1:4000/api/candidate/login",
-        { username, password, interviewId },
-        { headers: { "Content-Type": "application/json" } }
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          console.log("res.data", res.data);
-          Cookies.set("token", res.data.user.authToken, { expires: 7 });
-          console.log(res.data.user);
-          dispatch(UserLogin(res.data.user));
-          alert("Login successfully.");
-
-          localStorage.setItem(`${params.aptitudeId}`, "1");
-          dispatch(setSelectedPage("1"));
-        } else if (res.status === 202) {
-          alert("You are not candidate");
-        } else if (res.status === 204) alert("No candidate for given data");
+      .post("http://127.0.0.1:4000/api/isSubmitted", {
+        aptitudeId: params.aptitudeId,
+        username,
+        password,
       })
+      .then((res) => {
+        axios
+          .post(
+            "http://127.0.0.1:4000/api/candidate/login",
+            { username, password, interviewId },
+            { headers: { "Content-Type": "application/json" } }
+          )
+          .then((res) => {
+            if (res.status === 200) {
+              console.log("res.data", res.data);
+              Cookies.set("token", res.data.user.authToken, { expires: 7 });
+              console.log(res.data.user);
+              dispatch(UserLogin(res.data.user));
+              alert("Login successfully.");
 
-      .catch((err) => {
-        console.log(err);
-        alert("Something went wrong!");
+              localStorage.setItem(`${params.aptitudeId}`, "1");
+              dispatch(setSelectedPage("1"));
+            } else if (res.status === 202) {
+              alert("You are not candidate");
+            } else if (res.status === 204) alert("No candidate for given data");
+          })
+
+          .catch((err) => {
+            console.log(err);
+            alert("Something went wrong!");
+          });
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message, {
+          position: "top-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       });
   };
 

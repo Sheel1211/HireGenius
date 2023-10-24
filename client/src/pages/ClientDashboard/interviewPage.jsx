@@ -1,18 +1,8 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  TextField,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import axios from "axios";
 // import Grid from "@mui/system/Unstable_Grid";
-import { Grid, Container, Typography } from "@mui/material";
-import { useState } from "react";
+import { Grid, Typography } from "@mui/material";
 
 const config = {
   headers: {
@@ -28,16 +18,6 @@ export default function interviewPage() {
   const navigate = useNavigate();
   const location = useLocation();
   console.log(location.state);
-  const [aptitudeTitle, setAptitudeTitle] = useState("");
-  const [isCreateAptiOpen, setIsCreateAptiOpen] = useState(false);
-
-  const handleCreateAptitude = () => {
-    setIsCreateAptiOpen(true);
-  };
-
-  const handleCloseAptitude = () => {
-    setIsCreateAptiOpen(false);
-  };
 
   const createAptitude = async () => {
     const interviewId = location.state;
@@ -57,7 +37,6 @@ export default function interviewPage() {
       .catch((e) => {
         console.log(e);
       });
-    setIsCreateAptiOpen(false);
   };
 
   const createCompiler = async () => {
@@ -70,31 +49,6 @@ export default function interviewPage() {
 
   return (
     <Box sx={{ width: "100%", paddingLeft: "50px" }}>
-      <Dialog
-        open={isCreateAptiOpen}
-        onClose={handleCloseAptitude}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title" sx={{ textAlign: "center" }}>
-          Enter the title of the Aptitude Round
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            id="apti-title"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={aptitudeTitle}
-            onChange={(e) => setAptitudeTitle(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseAptitude}>DisAgree</Button>
-          <Button onClick={createAptitude}>Agree</Button>
-        </DialogActions>
-      </Dialog>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid xs={4} onClick={handleCreateAptitude}>
           <Link to="#">
