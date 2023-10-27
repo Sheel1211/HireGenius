@@ -5,6 +5,9 @@ const codingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "interview",
   },
+  title:{
+    type: String,
+  },
   questions: [
     {
       title: {
@@ -14,6 +17,12 @@ const codingSchema = new mongoose.Schema({
         type: String,
       },
       testcases: [
+        {
+          input: String,
+          output: String,
+        }
+      ],
+      hiddenTestcases :[
         {
           input: String,
           output: String,

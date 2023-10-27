@@ -1,4 +1,5 @@
-import { Chip, Divider, Typography } from "@mui/material";
+import React from "react";
+import { Chip, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Divider } from "@mui/material";
 import { Box } from "@mui/system";
 
 const Question = ({ question }) => {
@@ -21,8 +22,8 @@ const Question = ({ question }) => {
         ) : question.difficulty === "medium" ? (
           <Chip label="Medium" color="warning" />
         ) : (
-          <Chip label="Hard" color="error" />
-        )}
+          <Chip label="Hard" color="error" />)
+        }
       </Box>
       <Divider />
 
@@ -33,14 +34,29 @@ const Question = ({ question }) => {
       <Divider />
 
       <Typography variant="h4" sx={{ padding: "1vmax" }}>
-        TestCases:
+        Test Cases:
       </Typography>
-      <Typography variant="h4" sx={{ padding: "1vmax" }}>
-        {/* {question.testcases.input} */}
-      </Typography>
-      <Typography variant="h4" sx={{ padding: "1vmax" }}>
-        {/* {question.testcases.output} */}
-      </Typography>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Test Case</TableCell>
+              <TableCell>Input</TableCell>
+              <TableCell>Output</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {question.testcases.map((testcase, index) => (
+              <TableRow key={index}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{testcase.input}</TableCell>
+                <TableCell>{testcase.output}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 };

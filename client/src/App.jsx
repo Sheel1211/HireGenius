@@ -28,6 +28,8 @@ import Main from "./pages/FormBuilder/Aptitude/Main";
 import CompilerForm from "./pages/FormBuilder/compilerForm/CompilerForm";
 import Header from "./pages/landing_page/header/Header";
 import CandidateCoding from "./pages/Candidate/compiler/CandidateCoding";
+import { Cookie } from "@mui/icons-material";
+import Cookies from "js-cookie";
 
 const config = {
   headers: {
@@ -63,7 +65,12 @@ const App = () => {
         setIsLoading(false);
       }
     }
+    const token = Cookies.get("token");
+  if (token) {
     fetchData();
+  } else {
+    setIsLoading(false);
+  }
   }, [dispatch]);
 
   if (isLoading) {
@@ -76,7 +83,7 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" exact element={<Landing />} />
-        <Route path="/create/compiler" element={<CompilerForm />} />
+        <Route path="/create/coding" element={<CompilerForm />} />
 
         {/* <Route path="/meet" element={<MeetHome/>}/> */}
         {/* Candidate */}

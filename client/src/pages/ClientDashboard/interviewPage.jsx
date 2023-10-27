@@ -33,11 +33,10 @@ export default function interviewPage() {
 
   const location = useLocation();
   const createCompiler = async () => {
-    console.log(location.state ,"545454")
     const interviewId = location.state;
-    navigate("/create/compiler",{state:interviewId});
+    navigate("/create/coding",{state:interviewId});
 
-    // navigate("/create/compiler");
+    // navigate("/create/coding");
   };
 
   return (

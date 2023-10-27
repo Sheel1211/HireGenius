@@ -15,8 +15,9 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { setCurrentQuestion } from "../../../store/slices/CodingDashboard";
 
 const config = {
   headers: {
@@ -37,10 +38,14 @@ const CandidateCoding = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSolveChallenge = (row)=>{
-    navigate("/solve/coding",{state : row});
-  }
+  const handleSolveChallenge = (row) => {
+    dispatch(setCurrentQuestion(row));
+    navigate("/solve/coding", { state: row });
+  };
 
+  const correctlyAnsweredQuestions = useSelector(
+    (state) => state.CodingDashboard.correctlyAnsweredQuestions
+  );
 
   useEffect(() => {
     setLoading(true);
@@ -64,8 +69,7 @@ const CandidateCoding = () => {
         <CircularProgress variant="determinate" value={75} />
       ) : (
         <>
-          <Typography variant="h4" sx={{ mb: 5 }}>
-          </Typography>
+          <Typography variant="h4" sx={{ mb: 5 }}></Typography>
           {questions && (
             <Grid container spacing={3}>
               <TableContainer component={Paper}>
@@ -86,6 +90,14 @@ const CandidateCoding = () => {
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
                           cursor: "pointer",
+                          backgroundColor: correctlyAnsweredQuestions && correctlyAnsweredQuestions.includes(
+                            row._id
+                          )
+                            ? "rgba(76, 175, 80, 0.1)"
+                            : "inherit",
+                          color: correctlyAnsweredQuestions && correctlyAnsweredQuestions.includes(row._id)
+                            ? "white"
+                            : "inherit",
                         }}
                       >
                         <TableCell component="th" scope="row">
@@ -108,7 +120,9 @@ const CandidateCoding = () => {
                           {row.marks}
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          <Button onClick={()=>handleSolveChallenge(row)}>Solve Challenge</Button>
+                          <Button onClick={() => handleSolveChallenge(row)}>
+                            Solve Challenge
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
