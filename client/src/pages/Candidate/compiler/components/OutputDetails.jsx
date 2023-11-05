@@ -1,12 +1,23 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 const OutputDetails = ({ outputDetails }) => {
   return (
-    <div className="metrics-container mt-4 flex flex-col space-y-3">
-      <Typography variant="body2" className="text-sm">
+    <Container
+      sx={{
+        display: "flex",
+        marginTop: 4,
+        flexDirection: "column",
+        paddingY: 3,
+      }}
+    >
+      <Typography
+        variant="body2"
+        className="text-sm"
+        sx={{ display: "flex", flexDirection: "row",marginTop:1 }}
+      >
         Status:
         <Box
           className="font-semibold px-2 py-1 rounded-md bg-gray-100"
@@ -22,7 +33,8 @@ const OutputDetails = ({ outputDetails }) => {
           {outputDetails?.status?.description}
         </Box>
       </Typography>
-      <Typography variant="body2" className="text-sm">
+
+      <Typography variant="body2" className="text-sm" sx={{ display: "flex", flexDirection: "row",marginTop:1 }}>
         Memory:
         <Box
           className="font-semibold px-2 py-1 rounded-md bg-gray-100"
@@ -32,13 +44,15 @@ const OutputDetails = ({ outputDetails }) => {
             bgcolor: "#E5E7EB",
             paddingX: 2,
             paddingY: 1,
-            borderRadius: "md",
+            marginX:2,
+            borderRadius:"0.5vmax"
           }}
         >
           {outputDetails?.memory}
         </Box>
       </Typography>
-      <Typography variant="body2" className="text-sm">
+
+      <Typography variant="body2" className="text-sm" sx={{ display: "flex", flexDirection: "row",marginTop:1 }}>
         Time:
         <Box
           className="font-semibold px-2 py-1 rounded-md bg-gray-100"
@@ -54,7 +68,7 @@ const OutputDetails = ({ outputDetails }) => {
           {outputDetails?.time}
         </Box>
       </Typography>
-    </div>
+    </Container>
   );
 };
 

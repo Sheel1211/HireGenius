@@ -5,9 +5,6 @@ const aptitudeSchema = new mongoose.Schema(
     aptitudeId: {
       type: String,
     },
-    title: {
-      type: String,
-    },
     questions: [{}],
     duration: {
       type: Number,

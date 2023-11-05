@@ -156,11 +156,12 @@ const DashboardAppPage = () => {
                         Send Email
                       </Button>
                       <Button
-                        onClick={() =>
+                        onClick={() => {
+                          console.log(row);
                           navigate("/clientdashboard/schedule-interview", {
                             state: row._id,
-                          })
-                        }
+                          });
+                        }}
                       >
                         Schedule Interview
                       </Button>

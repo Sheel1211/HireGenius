@@ -4,35 +4,35 @@ import interview from "../models/interviewSchema.js";
 
 export const createQuestion = async (req, res) => {
   try {
-    const { questions, duration, interviewId } = req.body;
+    const { questions, duration, interviewId,title } = req.body;
     console.log(req.body);
 
     // Extract the interviewId from the object in req.body
-    const interviewIdValue = interviewId.interviewId;
-
+    const interviewIdValue = interviewId;
     // Convert interviewIdValue to ObjectId
     const interviewObjectId = new mongoose.Types.ObjectId(interviewIdValue);
-
+    
     const interviewData = await interview.findById(interviewObjectId);
 
-    // console.log("interviewData " + interviewData)
-    const candidates = interviewData.candidates.filter(
+    console.log("interviewData " + interviewData)
+    const candidates = interviewData ? interviewData.candidates.filter(
       (candidate) => !candidate.isRejected
-    );
+    ) : [];
 
     // console.log("candidates : "+ candidates);
 
-    const data = {
-      questions,
-      duration,
-      interviewId: interviewObjectId,
-      candidates,
-    };
+    // const data = {
+    //   questions,
+    //   duration,
+    //   interviewId: interviewObjectId,
+    //   candidates,
+    // };
 
-    console.log("data", data);
+    // console.log("data", data);
     const codingQuestion = new coding({
       questions,
       duration,
+      title,
       interviewId: interviewObjectId,
       candidates,
     });

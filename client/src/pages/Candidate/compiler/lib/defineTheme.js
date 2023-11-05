@@ -1,5 +1,7 @@
 import { loader } from "@monaco-editor/react";
+// import { Monaco } from "@monaco-editor/react";
 
+// const monaco = Monaco;
 const monacoThemes = {
   active4d: "Active4D",
   "all-hallows-eve": "All Hallows Eve",

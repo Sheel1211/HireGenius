@@ -20,7 +20,7 @@ import { addCodingQuestion } from "../../../store/slices/CodingSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const config = {
   headers: {
@@ -45,61 +45,74 @@ const toastWarning = (message) => {
   });
 };
 
-const AddQuestion = (interviewId) => {
+const AddQuestion = ({ interviewId }) => {
   const dispatch = useDispatch();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [time, setTime] = useState(60);
+  const [title, setTitle] = useState("");
 
   const [link, setLink] = useState(null);
   const [linkmodal, setLinkModal] = useState(false);
+
+  const location = useLocation();
 
   const [selectedDifficulty, setSelectedDifficulty] = useState("easy");
   const [tc, setTc] = useState({
     input: "",
     output: "",
   });
+
+  const [hiddenTc, setHiddenTc] = useState({
+    input: "",
+    output: "",
+  });
+
   const [question, setQuestion] = useState({
-    title:"",
+    title: "",
     problemStatement: "",
-    testcases: {
-      input: "",
-      output: "",
-    },
-    marks:"",
+    testcases: [],
+    hiddenTestcases: [],
+    marks: "",
     difficulty: selectedDifficulty,
   });
 
   const [questionsList, setQuestionsList] = useState([]);
+
   const handleDifficultyChange = (event) => {
     setSelectedDifficulty(event.target.value);
     setQuestion({ ...question, difficulty: event.target.value });
   };
-  
+
   const handleQuestionAdd = () => {
-    if (!question.marks.trim() || !question.title.trim() || !question.problemStatement.trim() || !tc.input.trim() || !tc.output.trim()) {
+    if (
+      !question.marks.trim() ||
+      !question.title.trim() ||
+      !question.problemStatement.trim() ||
+      question.testcases.length === 0 ||
+      question.hiddenTestcases.length === 0
+    ) {
       toastWarning("Please fill all the fields");
       return;
     }
-
-    // Update the question object with the test cases
-    question.testcases = tc;
 
     setQuestionsList([...questionsList, question]);
     dispatch(addCodingQuestion(question));
 
     // Reset the form
     setQuestion({
-      title:"",
+      title: "",
       problemStatement: "",
-      testcases: {
-        input: "",
-        output: "",
-      },
-      marks:"",
+      testcases: [],
+      hiddenTestcases: [],
+      marks: "",
       difficulty: selectedDifficulty,
     });
     setTc({
+      input: "",
+      output: "",
+    });
+    setHiddenTc({
       input: "",
       output: "",
     });
@@ -134,11 +147,12 @@ const AddQuestion = (interviewId) => {
   };
 
   const handleGenerateLink = () => {
-    const codingid = localStorage.getItem("codingid");
+    const interviewId = location.state;
     const data = {
       questions: questionsList,
       duration: time,
-      interviewId
+      title: title,
+      interviewId,
     };
 
     axios
@@ -149,32 +163,69 @@ const AddQuestion = (interviewId) => {
         setLinkModal(true);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
     setOpen(false);
   };
 
-  // TO copy link to clipboard
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(link)
+    navigator.clipboard
+      .writeText(link)
       .then(() => {
-        alert('Link copied to clipboard: ' + link);
+        alert("Link copied to clipboard: " + link);
       })
-      .catch(error => {
-        console.error('Error copying link to clipboard: ', error);
+      .catch((error) => {
+        console.error("Error copying link to clipboard: ", error);
       });
-      setLinkModal(false)
-      navigate("/clientdashboard")
+    setLinkModal(false);
+    navigate("/clientdashboard");
+  };
+
+  const addNewTestCase = () => {
+    if (tc.input.trim() && tc.output.trim()) {
+      setQuestion((prevQuestion) => ({
+        ...prevQuestion,
+        testcases: [
+          ...prevQuestion.testcases,
+          { input: tc.input, output: tc.output },
+        ],
+      }));
+      setTc({
+        input: "",
+        output: "",
+      });
+    } else {
+      toastWarning("Please fill both input and output for the test case.");
+    }
+  };
+
+  const addNewHiddenTestCase = () => {
+    if (hiddenTc.input.trim() && hiddenTc.output.trim()) {
+      setQuestion((prevQuestion) => ({
+        ...prevQuestion,
+        hiddenTestcases: [
+          ...prevQuestion.hiddenTestcases,
+          { input: hiddenTc.input, output: hiddenTc.output },
+        ],
+      }));
+      setHiddenTc({
+        input: "",
+        output: "",
+      });
+    } else {
+      toastWarning(
+        "Please fill both input and output for the hidden test case."
+      );
+    }
   };
 
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
   });
 
-  
   return (
     <>
-    {linkmodal && (
+      {linkmodal && (
         <Dialog
           maxWidth="md"
           open={linkmodal}
@@ -214,11 +265,8 @@ const AddQuestion = (interviewId) => {
           <Typography variant="h6">Enter Title</Typography>
           <TextField
             minRows={2}
-            minCols={1}
             sx={{ minWidth: "40vmax" }}
-            onChange={(event) =>
-              handleInputChange("title", event.target.value)
-            }
+            onChange={(event) => handleInputChange("title", event.target.value)}
             value={question.title}
           />
         </Box>
@@ -233,7 +281,6 @@ const AddQuestion = (interviewId) => {
           <Typography variant="h6">Enter Problem Statement</Typography>
           <Textarea
             minRows={2}
-            minCols={1}
             sx={{ minWidth: "40vmax" }}
             onChange={(event) =>
               handleInputChange("problemStatement", event.target.value)
@@ -250,7 +297,27 @@ const AddQuestion = (interviewId) => {
           }}
         >
           <Typography variant="h6">Enter Testcases</Typography>
-          <Typography variant="h6">INPUT</Typography>
+          {question.testcases.map((testcase, index) => (
+            <div key={index}>
+              <Typography variant="h6">Input</Typography>
+              <TextField
+                multiline
+                minRows={2}
+                sx={{ minWidth: "40vmax" }}
+                value={testcase.input}
+                readOnly
+              />
+              <Typography variant="h6">Output</Typography>
+              <TextField
+                multiline
+                minRows={2}
+                sx={{ minWidth: "40vmax" }}
+                value={testcase.output}
+                readOnly
+              />
+            </div>
+          ))}
+          <Typography variant="h6">Input</Typography>
           <TextField
             multiline
             minRows={2}
@@ -258,7 +325,7 @@ const AddQuestion = (interviewId) => {
             onChange={(event) => setTc({ ...tc, input: event.target.value })}
             value={tc.input}
           />
-          <Typography variant="h6">OUTPUT</Typography>
+          <Typography variant="h6">Output</Typography>
           <TextField
             multiline
             minRows={2}
@@ -266,6 +333,66 @@ const AddQuestion = (interviewId) => {
             onChange={(event) => setTc({ ...tc, output: event.target.value })}
             value={tc.output}
           />
+          <Button variant="contained" color="primary" onClick={addNewTestCase}>
+            + Add Test Case
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            paddingY: 1,
+          }}
+        >
+          <Typography variant="h6">Enter Hidden Testcases</Typography>
+          {question.hiddenTestcases.map((testcase, index) => (
+            <div key={index}>
+              <Typography variant="h6">Input</Typography>
+              <TextField
+                multiline
+                minRows={2}
+                sx={{ minWidth: "40vmax" }}
+                value={testcase.input}
+                readOnly
+              />
+              <Typography variant="h6">Output</Typography>
+              <TextField
+                multiline
+                minRows={2}
+                sx={{ minWidth: "40vmax" }}
+                value={testcase.output}
+                readOnly
+              />
+            </div>
+          ))}
+          <Typography variant="h6">Input</Typography>
+          <TextField
+            multiline
+            minRows={2}
+            sx={{ minWidth: "40vmax" }}
+            onChange={(event) =>
+              setHiddenTc({ ...hiddenTc, input: event.target.value })
+            }
+            value={hiddenTc.input}
+          />
+          <Typography variant="h6">Output</Typography>
+          <TextField
+            multiline
+            minRows={2}
+            sx={{ minWidth: "40vmax" }}
+            onChange={(event) =>
+              setHiddenTc({ ...hiddenTc, output: event.target.value })
+            }
+            value={hiddenTc.output}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={addNewHiddenTestCase}
+          >
+            + Add Hidden Test Case
+          </Button>
         </Box>
         <Box
           sx={{
@@ -315,9 +442,7 @@ const AddQuestion = (interviewId) => {
             minRows={2}
             sx={{ minWidth: "40vmax" }}
             type="number"
-            onChange={(event) =>
-              handleInputChange("marks", event.target.value)
-            }
+            onChange={(event) => handleInputChange("marks", event.target.value)}
             value={question.marks}
           />
         </Box>
@@ -360,6 +485,17 @@ const AddQuestion = (interviewId) => {
               type="number"
               value={time}
               onChange={(e) => setTime(e.target.value)}
+            />
+            <Typography variant="h5" sx={{ my: 2 }}>
+              Enter title for coding round
+            </Typography>
+            <TextField
+              fullWidth
+              label="Title"
+              variant="outlined"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </Box>
         </Box>

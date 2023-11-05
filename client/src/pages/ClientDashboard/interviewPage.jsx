@@ -21,14 +21,18 @@ export default function interviewPage() {
 
   const createAptitude = async () => {
     const interviewId = location.state;
+    if (!interviewId) {
+      console.log("first");
+      return;
+    }
     axios
       .post("http://127.0.0.1:4000/api/createAptitude", {
         ...config,
-        title: aptitudeTitle,
         interviewId,
       })
       .then((res) => {
         const dat = res.data.aptitude;
+        console.log(res);
 
         navigate("/create/aptitude", {
           state: { dat },
@@ -40,17 +44,16 @@ export default function interviewPage() {
   };
 
   const createCompiler = async () => {
-    console.log(location.state, "545454");
     const interviewId = location.state;
-    navigate("/create/compiler", { state: interviewId });
+    navigate("/create/coding", { state: interviewId });
 
-    // navigate("/create/compiler");
+    // navigate("/create/coding");
   };
 
   return (
     <Box sx={{ width: "100%", paddingLeft: "50px" }}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid xs={4} onClick={handleCreateAptitude}>
+        <Grid xs={4} onClick={createAptitude}>
           <Link to="#">
             <Box
               component="img"

@@ -194,7 +194,6 @@ export const addCandidatesWithUsernameAndPassword = async (req, res) => {
 
   await Promise.all(
     rows.map(async (item, index) => {
-      if (item.id === "") return;
       const password = generateUniquePassword();
 
       const candidateDetails = new candidate({
