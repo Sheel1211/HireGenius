@@ -18,6 +18,8 @@ import Logo from "../../../components/logo";
 import Scrollbar from "../../../components/scrollbar";
 import { useNavigate } from "react-router-dom";
 const steps = ["Fill Form", "Upload Files", "Review"];
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RenderForm = () => {
   const navigate = useNavigate();
@@ -82,13 +84,10 @@ const RenderForm = () => {
 
   const handleSubmit = () => {
     // e.preventDefault();
-    console.log("clientData", clientData);
 
     const certi = validCertificateFile;
     const logo = logoFile;
 
-    console.log("certi", certi);
-    console.log("logo", logo);
     if (
       !clientData.name ||
       !clientData.email ||
@@ -98,11 +97,41 @@ const RenderForm = () => {
       !clientData.contactno ||
       !clientData.sector
     ) {
-      alert("All fields are required!");
+      const message = "All fields are required!";
+      toast.warn(message, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
     } else if (clientData.password !== clientData.cpassword) {
-      alert("Passwords are not match");
+      const message = "Passwords are not match";
+      toast.warn(message, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
     } else if (!certi || !logo) {
-      alert("files are not Uploaded");
+      const message = "files are not Uploaded";
+      toast.warn(message, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
     } else {
       axios
         .post(
@@ -124,17 +153,22 @@ const RenderForm = () => {
             },
           }
         )
-        .then((res) => {
-          console.log("response", res.data);
-        })
         .catch((error) => {
-          console.log("error", error);
+          const message = error.response.data.message;
+          toast.warn(message, {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: false,
+            progress: undefined,
+            theme: "light",
+          });
         });
       handleNext();
     }
   };
-
-  console.log(activeStep);
 
   return (
     <>
