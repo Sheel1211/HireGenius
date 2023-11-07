@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { dummyAptitudeData } from "../../data";
+import { dummyAptitudeData } from "../../utils/dummy-aptitude-data";
 
 // const initialState = dummyAptitudeData;
 const initialState = [];

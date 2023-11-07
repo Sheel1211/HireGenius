@@ -19,18 +19,45 @@ import { bgGradient } from "../../theme/css";
 import Logo from "../../components/logo";
 import Iconify from "../../components/iconify";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { UserLogin } from "../../store/slices/UserSlice";
 // ----------------------------------------------------------------------
 
 export default function LoginView() {
   const theme = useTheme();
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClick = () => {
-    router.push("/dashboard");
+  const handleClick = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const email = data.get("email");
+    const password = data.get("password");
+
+    axios
+      .post(
+        "http://127.0.0.1:4000/api/client/login",
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          // Cookies.set("token", res.data.user.authToken, { expires: 7 });
+          dispatch(UserLogin(res.data.user));
+          router.push("/dashboard");
+        } else if (res.status === 202) {
+          alert("You are not Approved as client");
+        } else if (res.status === 204) alert("No client for given data");
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Something went wrong!");
+      });
   };
 
   const handleGetStarted = () => {
@@ -84,7 +111,7 @@ export default function LoginView() {
         type="submit"
         variant="contained"
         color="inherit"
-        onClick={handleClick}
+        // onClick={handleClick}
       >
         Login
       </LoadingButton>
@@ -168,7 +195,7 @@ export default function LoginView() {
             </Typography>
           </Divider>
 
-          {renderForm}
+          <form onSubmit={handleClick}>{renderForm}</form>
         </Card>
       </Stack>
     </Box>

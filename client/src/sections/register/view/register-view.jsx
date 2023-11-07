@@ -166,21 +166,23 @@ const RenderForm = () => {
             </>
           )}
 
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-            {steps.map((label, index) => (
-              <Step key={label}>
-                <StepLabel
-                  StepIconProps={{
-                    style: {
-                      color: activeStep === index ? "black" : "grey",
-                    },
-                  }}
-                >
-                  {label}
-                </StepLabel>
-              </Step>
-            ))}
-          </Stepper>
+          {activeStep !== steps.length && (
+            <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+              {steps.map((label, index) => (
+                <Step key={label}>
+                  <StepLabel
+                    StepIconProps={{
+                      style: {
+                        color: activeStep === index ? "black" : "grey",
+                      },
+                    }}
+                  >
+                    {label}
+                  </StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+          )}
 
           {activeStep === steps.length ? (
             <>

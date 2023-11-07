@@ -1,10 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  QUANTITATIVE,
-  REASONING,
-  TECHNICAL,
-  VERBAL,
-} from "../../helpers/helper";
+import { QUANTITATIVE, REASONING, TECHNICAL, VERBAL } from "../../utils/helper";
 
 const initialState = {
   questions: [],
