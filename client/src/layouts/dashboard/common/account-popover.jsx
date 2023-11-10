@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Box } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
@@ -9,7 +9,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 
-import { account } from "../../../_mock/account";
+// import { account } from "../../../_mock/account";
+import { useSelector } from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +42,14 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
+  const user = useSelector((state) => state.User);
+
+  const account = {
+    displayName: user?.User?.name || "Jay",
+    email: user?.User?.email || "jaypatel0523@gmail.com",
+    photoURL: user?.User?.logo?.url || "Temp",
+  };
+
   return (
     <>
       <IconButton
@@ -56,8 +65,8 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={account.photoURL}
           alt={account.displayName}
+          src={account.photoURL}
           sx={{
             width: 36,
             height: 36,

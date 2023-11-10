@@ -164,6 +164,8 @@ export const clientLogin = async (req, res) => {
         approveClientData.authToken = authToken;
         await approveClientData.save();
 
+        console.log("first");
+
         return res
           .status(200)
           .cookie("token", authToken, {

@@ -35,6 +35,7 @@ export default function LoginView() {
 
   const handleClick = (event) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
     const password = data.get("password");
@@ -47,9 +48,10 @@ export default function LoginView() {
       )
       .then((res) => {
         if (res.status === 200) {
-          // Cookies.set("token", res.data.user.authToken, { expires: 7 });
+          console.log(res);
+          Cookies.set("token", res.data.user.authToken, { expires: 7 });
           dispatch(UserLogin(res.data.user));
-          router.push("/dashboard");
+          router.push("/");
         } else if (res.status === 202) {
           alert("You are not Approved as client");
         } else if (res.status === 204) alert("No client for given data");

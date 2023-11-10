@@ -4,10 +4,8 @@ import admin from "../models/adminSchema.js";
 import candidate from "../models/candidateSchema.js";
 
 const isauthenticated = async (req, res, next) => {
-  console.log("cookies", req.cookies);
   try {
-    const { token } = req.cookies;
-    // console.log("token",token);
+    const { token } = req.params;
 
     if (!token) {
       return res.status(400).json({

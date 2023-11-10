@@ -15,13 +15,14 @@ import { RouterLink } from "../../routes/components";
 
 import { useResponsive } from "../../hooks/use-responsive";
 
-import { account } from "../../_mock/account";
+// import { account } from "../../_mock/account";
 
 import Logo from "../../components/logo";
 import Scrollbar from "../../components/scrollbar";
 
 import { NAV } from "./config-layout";
 import navConfig from "./config-navigation";
+import { useSelector } from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +37,14 @@ export default function Nav({ openNav, onCloseNav }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  const user = useSelector((state) => state.User);
+
+  const account = {
+    displayName: user?.User?.name || "Jay",
+    email: user?.User?.email || "jaypatel0523@gmail.com",
+    photoURL: user?.User?.logo?.url || "Temp",
+  };
 
   const renderAccount = (
     <Box
