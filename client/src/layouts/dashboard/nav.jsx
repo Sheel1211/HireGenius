@@ -70,7 +70,9 @@ export default function Nav({ openNav, onCloseNav }) {
 
   const renderAccount = (
     <>
-      <Avatar src={account.photoURL} alt="photoURL" />
+      {account.displayName && (
+        <Avatar>{account?.displayName[0].toUpperCase()}</Avatar>
+      )}
 
       <Box sx={{ ml: 2 }}>
         <Typography variant="subtitle2">{account.displayName}</Typography>
