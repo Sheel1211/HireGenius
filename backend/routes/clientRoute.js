@@ -17,4 +17,9 @@ router
   .route("/add/candidates")
   .post(isauthenticated, addCandidatesWithUsernameAndPassword);
 
+// for those whose cookie is not working
+router
+  .route("/add/candidates/:token")
+  .post(isauthenticated, addCandidatesWithUsernameAndPassword);
+
 export default router;

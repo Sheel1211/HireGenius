@@ -5,7 +5,8 @@ import candidate from "../models/candidateSchema.js";
 
 const isauthenticated = async (req, res, next) => {
   try {
-    const { token } = req.params;
+    const token =
+      (req.cookies && req.cookies.token) || (req.params && req.params.token);
 
     if (!token) {
       return res.status(400).json({
@@ -16,7 +17,6 @@ const isauthenticated = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_KEY);
 
-    // console.log("decoded", decoded);
     const adminData = await admin.findById({ _id: decoded.id });
 
     if (!adminData || adminData === undefined || adminData === null) {
@@ -50,7 +50,6 @@ const isauthenticated = async (req, res, next) => {
     // console.log("user: ",req.user);
     next();
   } catch (e) {
-    // console.log("errorrrrr")
     res.status(400).json({
       success: false,
     });

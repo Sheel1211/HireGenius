@@ -3,8 +3,11 @@ import { Outlet, Navigate, useRoutes } from "react-router-dom";
 
 import DashboardLayout from "../layouts/dashboard";
 import RegisterPage from "../pages/register";
+import InterviewDetails from "../sections/interviews/interview-details/interview-details-view";
+import CreateInterviewPage from "../sections/create-interview/view/create-interview-view";
 
 export const IndexPage = lazy(() => import("../pages/app"));
+export const TempPage = lazy(() => import("../pages/temp"));
 export const BlogPage = lazy(() => import("../pages/blog"));
 export const UserPage = lazy(() => import("../pages/user"));
 export const LoginPage = lazy(() => import("../pages/login"));
@@ -25,9 +28,12 @@ export default function Router() {
       ),
       children: [
         { path: "/", element: <IndexPage /> },
+        { path: "/:interview", element: <InterviewDetails /> },
+        { path: "/create-interview", element: <CreateInterviewPage /> },
         { path: "user", element: <UserPage /> },
         { path: "products", element: <ProductsPage /> },
         { path: "blog", element: <BlogPage /> },
+        { path: "temp", element: <TempPage /> },
       ],
     },
     {

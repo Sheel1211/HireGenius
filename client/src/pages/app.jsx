@@ -1,9 +1,12 @@
-import { AppView } from "../sections/overview/view";
+// import { AppView } from "../sections/overview/view";
+import AppView from "../sections/interviews/view";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { getUserDetails } from "../store/slices/UserSlice";
+import { CircularProgress, Container } from "@mui/material";
+import Loader from "../utils/loader";
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +22,6 @@ const config = {
 
 export default function AppPage() {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(true);
 
   const userDetails = useSelector((state) => state.User);
   console.log("details", userDetails);
@@ -33,11 +35,9 @@ export default function AppPage() {
         const user = response.data.user;
         console.log("user in app.jsx", user);
         dispatch(getUserDetails(user));
-        setIsLoading(false);
       } catch (error) {
         // Handle errors, e.g., unauthorized access
         console.log(error);
-        setIsLoading(false);
       }
     }
     const token = Cookies.get("token");
@@ -47,10 +47,6 @@ export default function AppPage() {
       setIsLoading(false);
     }
   }, [dispatch]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   return <AppView />;
 }

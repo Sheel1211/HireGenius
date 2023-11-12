@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import Iconify from "../../../components/iconify";
 
 import AppTasks from "../app-tasks";
+import Interviews from "../../interviews/interview-view";
 import AppNewsUpdate from "../app-news-update";
 import AppOrderTimeline from "../app-order-timeline";
 import AppCurrentVisits from "../app-current-visits";
@@ -21,10 +22,6 @@ import AppConversionRates from "../app-conversion-rates";
 export default function AppView() {
   return (
     <Container maxWidth="xl">
-      {/* <Typography variant="h4" sx={{ mb: 5 }}>
-        Hi, Welcome back 👋
-      </Typography> */}
-
       <Grid container spacing={3}>
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
@@ -238,7 +235,6 @@ export default function AppView() {
             ]}
           />
         </Grid>
-
         <Grid xs={12} md={6} lg={8}>
           <AppTasks
             title="Tasks"

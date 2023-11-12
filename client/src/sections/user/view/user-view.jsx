@@ -92,6 +92,8 @@ export default function UserPage() {
     filterName,
   });
 
+  console.log(dataFiltered);
+
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
@@ -109,7 +111,7 @@ export default function UserPage() {
           color="inherit"
           startIcon={<Iconify icon="eva:plus-fill" />}
         >
-          New User
+          Create Interview
         </Button>
       </Stack>
 

@@ -16,6 +16,11 @@ const navConfig = [
     icon: icon("ic_analytics"),
   },
   {
+    title: "create interview",
+    path: "/create-interview",
+    icon: icon("ic_user"),
+  },
+  {
     title: "user",
     path: "/user",
     icon: icon("ic_user"),

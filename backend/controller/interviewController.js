@@ -4,27 +4,28 @@ import interview from "../models/interviewSchema.js";
 
 export const allInterviews = async (req, res) => {
   try {
-    // console.log(req.user);
     const clientId = req.user._id;
     console.log(clientId);
-    const interviews = await interview.find({ client: clientId });
+    const interviews = await interview
+      .find({ client: clientId })
+      .sort("createdAt");
     res.status(200).json({ success: true, interviews });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
 };
 
-export const allRoundsOfInterview = async(req,res)=>{
-  try{
+export const allRoundsOfInterview = async (req, res) => {
+  try {
     const interviewId = req.params.interviewId;
 
     const interviewRounds = await interview.findById(interviewId);
 
-    res.status(200).json({success:true,interview:interviewRounds})
-  }catch(e){
-    res.status(400).json({success:false,message:e.message})
+    res.status(200).json({ success: true, interview: interviewRounds });
+  } catch (e) {
+    res.status(400).json({ success: false, message: e.message });
   }
-}
+};
 
 export const sendEmailToAllCandidates = async (req, res) => {
   try {

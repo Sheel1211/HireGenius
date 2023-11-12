@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Box } from "@mui/material";
+import { Box, Skeleton } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import Popover from "@mui/material/Popover";
@@ -45,37 +45,53 @@ export default function AccountPopover() {
   const user = useSelector((state) => state.User);
 
   const account = {
-    displayName: user?.User?.name || "Jay",
-    email: user?.User?.email || "jaypatel0523@gmail.com",
-    photoURL: user?.User?.logo?.url || "Temp",
+    displayName: user?.User?.name,
+    email: user?.User?.email,
+    photoURL: user?.User?.logo?.url,
   };
+
+  const [isOpen, setIsOpen] = useState(true);
+
+  useEffect(() => {
+    if (!user.User) {
+      return;
+    }
+    setIsOpen(false);
+  }, [user]);
 
   return (
     <>
-      <IconButton
-        onClick={handleOpen}
-        sx={{
-          width: 40,
-          height: 40,
-          background: (theme) => alpha(theme.palette.grey[500], 0.08),
-          ...(open && {
-            background: (theme) =>
-              `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 100%)`,
-          }),
-        }}
-      >
-        <Avatar
-          alt={account.displayName}
-          src={account.photoURL}
+      {!isOpen ? (
+        <IconButton
+          onClick={handleOpen}
           sx={{
-            width: 36,
-            height: 36,
-            border: (theme) => `solid 2px ${theme.palette.background.default}`,
+            width: 40,
+            height: 40,
+            background: (theme) => alpha(theme.palette.grey[500], 0.08),
+            ...(open && {
+              background: (theme) =>
+                `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 100%)`,
+            }),
           }}
         >
-          {account.displayName.charAt(0).toUpperCase()}
-        </Avatar>
-      </IconButton>
+          <Avatar
+            alt={account.displayName}
+            src={account.photoURL}
+            sx={{
+              width: 36,
+              height: 36,
+              border: (theme) =>
+                `solid 2px ${theme.palette.background.default}`,
+            }}
+          >
+            {account.displayName.charAt(0).toUpperCase()}
+          </Avatar>
+        </IconButton>
+      ) : (
+        <>
+          <Skeleton variant="circular" width={40} height={40} />
+        </>
+      )}
 
       <Popover
         open={!!open}

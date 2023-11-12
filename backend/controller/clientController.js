@@ -199,15 +199,15 @@ export const addCandidatesWithUsernameAndPassword = async (req, res) => {
       const password = generateUniquePassword();
 
       const candidateDetails = new candidate({
-        name: item.name,
-        email: item.email,
+        name: item.Name,
+        email: item.Email,
         password,
-        username: item.email.split("@")[0],
+        username: item.Email.split("@")[0],
       });
 
       await candidateDetails.save();
 
-      const candi = await candidate.findOne({ email: item.email });
+      const candi = await candidate.findOne({ email: item.Email });
 
       console.log("Hello candidate " + candi);
       candidateIds.push({ candidateId: candi._id });

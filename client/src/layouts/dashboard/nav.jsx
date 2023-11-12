@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-import { Box } from "@mui/material";
+import { Box, Skeleton } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
@@ -41,24 +41,35 @@ export default function Nav({ openNav, onCloseNav }) {
   const user = useSelector((state) => state.User);
 
   const account = {
-    displayName: user?.User?.name || "Jay",
-    email: user?.User?.email || "jaypatel0523@gmail.com",
-    photoURL: user?.User?.logo?.url || "Temp",
+    displayName: user?.User?.name,
+    email: user?.User?.email,
+    photoURL: user?.User?.logo?.url,
   };
 
+  // account loading skeleton
+  const [isOpen, setIsOpen] = useState(true);
+
+  useEffect(() => {
+    if (!user.User) {
+      return;
+    }
+    setIsOpen(false);
+  }, [user]);
+
+  const renderAccountSkeleton = (
+    <Stack direction="row" sx={{ alignItems: "center" }}>
+      <Skeleton
+        variant="circular"
+        width={40}
+        height={40}
+        sx={{ marginRight: 2 }}
+      />
+      <Skeleton variant="text" width={140} height={40} />
+    </Stack>
+  );
+
   const renderAccount = (
-    <Box
-      sx={{
-        my: 3,
-        mx: 2.5,
-        py: 2,
-        px: 2.5,
-        display: "flex",
-        borderRadius: 1.5,
-        alignItems: "center",
-        bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
-      }}
-    >
+    <>
       <Avatar src={account.photoURL} alt="photoURL" />
 
       <Box sx={{ ml: 2 }}>
@@ -68,7 +79,7 @@ export default function Nav({ openNav, onCloseNav }) {
           {account.role}
         </Typography>
       </Box>
-    </Box>
+    </>
   );
 
   const renderMenu = (
@@ -125,7 +136,21 @@ export default function Nav({ openNav, onCloseNav }) {
     >
       <Logo sx={{ mt: 3, ml: 4 }} />
 
-      {renderAccount}
+      <Stack
+        direction="row"
+        sx={{
+          my: 3,
+          mx: 2.5,
+          py: 2,
+          px: 2.5,
+          display: "flex",
+          borderRadius: 1.5,
+          alignItems: "center",
+          bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
+        }}
+      >
+        {isOpen ? renderAccountSkeleton : renderAccount}
+      </Stack>
 
       {renderMenu}
 
