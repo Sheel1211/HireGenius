@@ -29,6 +29,13 @@ const InterviewSkeleton = () => {
                 sx={{ width: "100%" }}
               />
             </TableCell>
+            <TableCell>
+              <Skeleton
+                variant="rectangular"
+                height={40}
+                sx={{ width: "100%" }}
+              />
+            </TableCell>
           </TableRow>
         </TableBody>
       ))}

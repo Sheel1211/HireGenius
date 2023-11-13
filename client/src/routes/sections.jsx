@@ -5,6 +5,7 @@ import DashboardLayout from "../layouts/dashboard";
 import RegisterPage from "../pages/register";
 import InterviewDetails from "../sections/interviews/interview-details/interview-details-view";
 import CreateInterviewPage from "../sections/create-interview/view/create-interview-view";
+import Profile from "../pages/profile";
 
 export const IndexPage = lazy(() => import("../pages/app"));
 export const TempPage = lazy(() => import("../pages/temp"));
@@ -30,6 +31,7 @@ export default function Router() {
         { path: "/", element: <IndexPage /> },
         { path: "/:interview", element: <InterviewDetails /> },
         { path: "/create-interview", element: <CreateInterviewPage /> },
+        { path: "/profile", element: <Profile /> },
         { path: "user", element: <UserPage /> },
         { path: "products", element: <ProductsPage /> },
         { path: "blog", element: <BlogPage /> },

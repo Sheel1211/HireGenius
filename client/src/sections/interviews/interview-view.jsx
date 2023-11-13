@@ -22,7 +22,7 @@ import config from "../../utils/config";
 import Cookies from "js-cookie";
 import Loader from "../../utils/loader";
 import { interviewSkeleton } from "../../utils/interview-skeleton";
-import InterviewSkeleton from "./skeleton";
+import InterviewSkeleton from "./interviews-skeleton";
 
 const Interviews = () => {
   const [allInterviews, setAllInterviews] = useState([]);

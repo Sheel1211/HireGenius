@@ -18,7 +18,8 @@ import axios from "axios";
 import config from "../../../utils/config";
 import InterviewDetailsTableHead from "./table-head";
 import InterviewDetailsTableBody from "./table-body";
-import InterviewSkeleton from "../skeleton";
+import InterviewSkeleton from "../interviews-skeleton";
+import InterviewDetailSkeleton from "./interview-details-skeleton";
 
 const InterviewDetails = () => {
   const [allRounds, setAllRounds] = useState([]);
@@ -96,7 +97,7 @@ const InterviewDetails = () => {
                   ]}
                 />
                 {isLoading ? (
-                  <InterviewSkeleton />
+                  <InterviewDetailSkeleton />
                 ) : (
                   <>
                     {allRounds &&
