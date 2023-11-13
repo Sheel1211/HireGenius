@@ -2,10 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Scrollbar from "../../../components/scrollbar";
 import {
+  Avatar,
   Box,
   Button,
   Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
   Container,
+  Dialog,
+  DialogTitle,
+  IconButton,
   Stack,
   Table,
   TableContainer,
@@ -20,6 +27,8 @@ import InterviewDetailsTableHead from "./table-head";
 import InterviewDetailsTableBody from "./table-body";
 import InterviewSkeleton from "../interviews-skeleton";
 import InterviewDetailSkeleton from "./interview-details-skeleton";
+import SvgColor from "../../../components/svg-color";
+import RoundImage from "./round-image";
 
 const InterviewDetails = () => {
   const [allRounds, setAllRounds] = useState([]);
@@ -28,6 +37,8 @@ const InterviewDetails = () => {
   const location = useLocation();
   const interview = location.state;
   const navigate = useNavigate();
+
+  // fetch all interview rounds
 
   const fetchRounds = () => {
     axios
@@ -49,6 +60,13 @@ const InterviewDetails = () => {
   useEffect(() => {
     fetchRounds();
   }, []);
+
+  // create round
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
 
   return (
     <>
@@ -80,7 +98,12 @@ const InterviewDetails = () => {
             >
               View Candidates
             </Button>
-            <Button variant="contained" color="inherit" startIcon={<AddIcon />}>
+            <Button
+              variant="contained"
+              color="inherit"
+              onClick={() => setIsDialogOpen(true)}
+              startIcon={<AddIcon />}
+            >
               Create Round
             </Button>
           </Stack>
@@ -115,6 +138,21 @@ const InterviewDetails = () => {
           </Scrollbar>
         </Card>
       </Container>
+      <Dialog
+        fullWidth
+        maxWidth="sm"
+        onClose={handleDialogClose}
+        open={isDialogOpen}
+      >
+        <DialogTitle textAlign="center">Create an interview round </DialogTitle>
+        <Card>
+          <Stack direction="row" gap={4} sx={{ justifyContent: "center" }}>
+            <RoundImage path={"/assets/round/aptitude.svg"} round="Aptitude" />
+            <RoundImage path={"/assets/round/coding.svg"} round="Coding" />
+            <RoundImage path={"/assets/round/meet.svg"} round="Meet" />
+          </Stack>
+        </Card>
+      </Dialog>
     </>
   );
 };
