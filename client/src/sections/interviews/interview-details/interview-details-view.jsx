@@ -15,7 +15,10 @@ import {
   IconButton,
   Stack,
   Table,
+  TableBody,
+  TableCell,
   TableContainer,
+  TableRow,
   Typography,
 } from "@mui/material";
 import Iconify from "../../../components/iconify";
@@ -29,6 +32,7 @@ import InterviewSkeleton from "../interviews-skeleton";
 import InterviewDetailSkeleton from "./interview-details-skeleton";
 import SvgColor from "../../../components/svg-color";
 import RoundImage from "./round-image";
+import NotFoundPage from "../../../pages/page-not-found";
 
 const InterviewDetails = () => {
   const [allRounds, setAllRounds] = useState([]);
@@ -108,35 +112,43 @@ const InterviewDetails = () => {
             </Button>
           </Stack>
         </Stack>
-        <Card>
-          <Scrollbar>
-            <TableContainer sx={{ overflow: "unset" }}>
-              <Table sx={{ minWidth: 800 }}>
-                <InterviewDetailsTableHead
-                  headLabel={[
-                    { label: "No", align: "left" },
-                    { label: "Title", align: "left" },
-                    { label: "Options", align: "center" },
-                  ]}
-                />
-                {isLoading ? (
-                  <InterviewDetailSkeleton />
-                ) : (
-                  <>
-                    {allRounds &&
-                      allRounds.map((round, index) => (
-                        <InterviewDetailsTableBody
-                          key={index}
-                          round={round}
-                          index={index}
-                        />
-                      ))}
-                  </>
-                )}
-              </Table>
-            </TableContainer>
-          </Scrollbar>
-        </Card>
+        <Scrollbar>
+          <TableContainer sx={{ overflow: "unset" }}>
+            <Table sx={{ minWidth: 800 }}>
+              <InterviewDetailsTableHead
+                headLabel={[
+                  { label: "No", align: "left" },
+                  { label: "Title", align: "left" },
+                  { label: "Options", align: "center" },
+                ]}
+              />
+              {isLoading ? (
+                <InterviewDetailSkeleton />
+              ) : (
+                <>
+                  {allRounds &&
+                    allRounds.map((round, index) => (
+                      <InterviewDetailsTableBody
+                        key={index}
+                        round={round}
+                        index={index}
+                      />
+                    ))}
+                </>
+              )}
+            </Table>
+          </TableContainer>
+          {!isLoading && allRounds && allRounds.length === 0 && (
+            <Stack
+              height={200}
+              alignItems="center"
+              justifyContent="center"
+              sx={{ border: "1px solid #ddd" }}
+            >
+              No Records Found
+            </Stack>
+          )}
+        </Scrollbar>
       </Container>
       <Dialog
         fullWidth

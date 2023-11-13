@@ -11,7 +11,11 @@ const InterviewTableHead = ({ headLabel }) => {
             <TableCell
               key={index}
               align={headCell.align}
-              sx={{ width: headCell.width, minWidth: headCell.minWidth }}
+              sx={{
+                width: headCell.width,
+                minWidth: headCell.minWidth,
+                border: "1px solid #ddd",
+              }}
             >
               {headCell.label}
             </TableCell>

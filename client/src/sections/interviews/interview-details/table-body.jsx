@@ -15,6 +15,7 @@ const InterviewDetailsTableBody = ({ round, index }) => {
             scope="row"
             sx={{
               fontWeight: "bold",
+              border: "1px solid #ddd",
             }}
           >
             {index + 1}
@@ -24,11 +25,12 @@ const InterviewDetailsTableBody = ({ round, index }) => {
             sx={{
               fontWeight: "bold",
               cursor: "pointer",
+              border: "1px solid #ddd",
             }}
           >
             {round.name}
           </TableCell>
-          <TableCell align="center">
+          <TableCell align="center" sx={{ border: "1px solid #ddd" }}>
             <Button variant="contained" color="inherit">
               Send Mail
             </Button>

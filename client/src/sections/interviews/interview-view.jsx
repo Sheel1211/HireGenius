@@ -8,6 +8,7 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TablePagination,
   TableRow,
   Typography,
 } from "@mui/material";
@@ -57,6 +58,19 @@ const Interviews = () => {
   //   setFilterName(event.target.value);
   // };
 
+  // table
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
   return (
     <>
       <Container>
@@ -68,39 +82,58 @@ const Interviews = () => {
         >
           <Typography variant="h4">Interviews</Typography>
         </Stack>
-        <Card>
-          {/* <InterviewTableToolbar
+        {/* <InterviewTableToolbar
             filterName={filterName}
             onFilterName={handleFilterByName}
           /> */}
-          <Scrollbar>
-            <TableContainer sx={{ overflow: "unset" }}>
-              <Table sx={{ minWidth: 800 }}>
-                <InterviewTableHead
-                  headLabel={[
-                    { label: "Title", align: "left" },
-                    { label: "No of candidates", align: "center" },
-                    { label: "DOC", align: "center" },
-                    { label: "Status", align: "center" },
-                  ]}
-                ></InterviewTableHead>
-                {isLoading ? (
-                  <InterviewSkeleton />
-                ) : (
-                  <>
-                    {allInterviews &&
-                      allInterviews.map((interview, index) => (
+        <Scrollbar>
+          <TableContainer sx={{ overflow: "unset" }}>
+            <Table
+              sx={{
+                minWidth: 800,
+                border: 0,
+              }}
+            >
+              <InterviewTableHead
+                headLabel={[
+                  { label: "Title", align: "left" },
+                  { label: "No of candidates", align: "center" },
+                  { label: "DOC", align: "center" },
+                  { label: "Status", align: "center" },
+                ]}
+              ></InterviewTableHead>
+              {isLoading ? (
+                <InterviewSkeleton />
+              ) : (
+                <>
+                  {allInterviews &&
+                    allInterviews
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((interview, index) => (
                         <InterviewTableBody
                           interview={interview}
                           key={index}
                         ></InterviewTableBody>
                       ))}
-                  </>
-                )}
-              </Table>
-            </TableContainer>
-          </Scrollbar>
-        </Card>
+                </>
+              )}
+            </Table>
+          </TableContainer>
+          {allInterviews && allInterviews.length > 5 && (
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 20]}
+              component="div"
+              count={allInterviews.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          )}
+        </Scrollbar>
       </Container>
     </>
   );

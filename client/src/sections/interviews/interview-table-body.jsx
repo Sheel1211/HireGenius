@@ -16,10 +16,7 @@ const InterviewTableBody = ({ interview }) => {
   return (
     <>
       <TableBody>
-        <TableRow
-          hover
-          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-        >
+        <TableRow hover>
           <TableCell
             align="left"
             component="th"
@@ -27,14 +24,19 @@ const InterviewTableBody = ({ interview }) => {
             sx={{
               fontWeight: "bold",
               cursor: "pointer",
+              border: "1px solid #ddd",
             }}
             onClick={getInterviewDetails}
           >
             {interview.title}
           </TableCell>
-          <TableCell align="center">{interview.candidates.length}</TableCell>
-          <TableCell align="center">{fDate(interview.createdAt)}</TableCell>
-          <TableCell align="center">
+          <TableCell align="center" sx={{ border: "1px solid #ddd" }}>
+            {interview.candidates.length}
+          </TableCell>
+          <TableCell align="center" sx={{ border: "1px solid #ddd" }}>
+            {fDate(interview.createdAt)}
+          </TableCell>
+          <TableCell align="center" sx={{ border: "1px solid #ddd" }}>
             {/* <Label color={interview.status === "Yes" ? "success" : "error"}>
               {interview.status}
             </Label> */}

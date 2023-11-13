@@ -6,21 +6,21 @@ const InterviewDetailSkeleton = () => {
     <>
       <TableBody>
         <TableRow>
-          <TableCell>
+          <TableCell sx={{ border: "1px solid #ddd" }}>
             <Skeleton
               variant="rectangular"
               height={40}
               sx={{ width: "100%" }}
             />
           </TableCell>
-          <TableCell>
+          <TableCell sx={{ border: "1px solid #ddd" }}>
             <Skeleton
               variant="rectangular"
               height={40}
               sx={{ width: "100%" }}
             />
           </TableCell>
-          <TableCell>
+          <TableCell sx={{ border: "1px solid #ddd" }}>
             <Skeleton
               variant="rectangular"
               height={40}
