@@ -10,6 +10,8 @@ import {
   Typography,
   MenuItem,
   Container,
+  Stack,
+  Grid,
 } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,71 +52,94 @@ const ShowQuestions = () => {
         questions.map((question, index) => {
           console.log(question);
           return (
-            <Box
+            <Stack
               key={index}
               sx={{
-                background: "white",
                 margin: 4,
-                padding: 4,
-                boxShadow: 2,
               }}
               ref={index === questions.length - 1 ? lastQuestionRef : null}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                {question.questionImageURL ? (
-                  <>
-                    <Box>
+              <Stack direction="row" justifyContent="space-between">
+                <Stack flexGrow={1}>
+                  {question.questionImageURL && (
+                    <>
+                      <Box>
+                        <Typography
+                          variant="h5"
+                          sx={{
+                            textAlign: "start",
+                            fontSize: "20px",
+                            paddingBottom: 1,
+                            userSelect: "none",
+                          }}
+                        >
+                          {index + 1}. {question.questionImageDesc}
+                        </Typography>
+                        <img
+                          src={question.questionImageURL}
+                          alt="Big Image"
+                          style={{
+                            width: "100%",
+                            objectFit: "contain",
+                          }}
+                        />
+                      </Box>
+                    </>
+                  )}
+                  {question.question && (
+                    <>
                       <Typography
-                        onCopy={(e) => e.preventDefault()}
+                        variant="h5"
                         sx={{
                           textAlign: "start",
-                          fontSize: "20px",
                           paddingBottom: 1,
                           userSelect: "none",
                         }}
                       >
-                        {index + 1}.
+                        {index + 1}. {question.question}
                       </Typography>
-                      <img
-                        src={question.questionImageURL}
-                        alt="Big Image"
-                        style={{
-                          width: "100%",
-                          objectFit: "contain",
-                        }}
-                      />
-                    </Box>
-                  </>
-                ) : (
-                  <>
-                    <Typography
-                      onCopy={(e) => e.preventDefault()}
-                      sx={{
-                        textAlign: "start",
-                        fontSize: "20px",
-                        paddingBottom: 1,
-                        userSelect: "none",
-                      }}
-                    >
-                      {index + 1}. {question.question}
-                    </Typography>
-                  </>
-                )}
-                <IconButton onClick={() => handleDeleteQuestion(index)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
+                    </>
+                  )}
+
+                  {question.code && (
+                    <>
+                      <Stack spacing={2}>
+                        <Typography
+                          variant="h5"
+                          component="pre"
+                          sx={{ whiteSpace: "pre-wrap", userSelect: "none" }}
+                        >
+                          {index + 1}. {question.codeDescription}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          component="pre"
+                          sx={{
+                            whiteSpace: "pre-wrap",
+                            padding: "10px",
+                            backgroundColor: "black",
+                            color: "white",
+                            borderRadius: "5px",
+                            userSelect: "none",
+                          }}
+                        >
+                          {question.code}
+                        </Typography>
+                      </Stack>
+                    </>
+                  )}
+                </Stack>
+                <Stack>
+                  <IconButton onClick={() => handleDeleteQuestion(index)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Stack>
+              </Stack>
 
               {question.answerType === "Radio" && (
                 <>
-                  <Divider />
-                  <RadioGroup sx={{ my: 2 }}>
+                  <Divider sx={{ my: 1 }} />
+                  <RadioGroup>
                     {question.options.map((option, index) => {
                       return (
                         <Box
@@ -159,8 +184,8 @@ const ShowQuestions = () => {
 
               {question.answerType === "Checkbox" && (
                 <>
-                  <Divider />
-                  <RadioGroup sx={{ my: 2 }}>
+                  <Divider sx={{ my: 1 }} />
+                  <RadioGroup>
                     {question.options.map((option, index) => {
                       return (
                         <Box
@@ -213,7 +238,7 @@ const ShowQuestions = () => {
                   />
                 </>
               )}
-            </Box>
+            </Stack>
           );
         })}
     </>

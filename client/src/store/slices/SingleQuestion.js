@@ -11,6 +11,8 @@ const initialState = {
   options: [],
   answers: [],
   questionMarks: 1,
+  code: "",
+  codeDescription: "",
 };
 
 export const SingleQuestionSlice = createSlice({
@@ -35,6 +37,12 @@ export const SingleQuestionSlice = createSlice({
     },
     setQuestionImageDesc(state, action) {
       state.questionImageDesc = action.payload;
+    },
+    setCode(state, action) {
+      state.code = action.payload;
+    },
+    setCodeDescription(state, action) {
+      state.codeDescription = action.payload;
     },
     setQuestionMarks(state, action) {
       state.questionMarks = action.payload;
@@ -98,5 +106,7 @@ export const {
   setAnswers,
   clearQuestion,
   setQuestionMarks,
+  setCode,
+  setCodeDescription,
 } = SingleQuestionSlice.actions;
 export default SingleQuestionSlice.reducer;
