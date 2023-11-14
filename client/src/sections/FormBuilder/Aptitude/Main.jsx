@@ -87,7 +87,7 @@ const Main = () => {
                   color="inherit"
                   variant="contained"
                   sx={{ mt: 2 }}
-                  // onClick={() => setIsDialogOpen(true)}
+                  onClick={() => setIsDialogOpen(true)}
                 >
                   Show Questions
                 </Button>
