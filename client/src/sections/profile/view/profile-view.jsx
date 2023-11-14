@@ -27,7 +27,7 @@ const ProfileView = () => {
           justifyContent="space-between"
           mb={5}
         >
-          <Typography variant="h4">Interviews</Typography>
+          <Typography variant="h4">Profile</Typography>
         </Stack>
         {isSkeletonOpen ? (
           <ProfileSkeleton />
