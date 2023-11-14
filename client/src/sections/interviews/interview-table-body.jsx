@@ -25,18 +25,28 @@ const InterviewTableBody = ({ interview }) => {
               fontWeight: "bold",
               cursor: "pointer",
               border: "1px solid #ddd",
+              fontSize: 16,
             }}
             onClick={getInterviewDetails}
           >
             {interview.title}
           </TableCell>
-          <TableCell align="center" sx={{ border: "1px solid #ddd" }}>
+          <TableCell
+            align="center"
+            sx={{ border: "1px solid #ddd", fontSize: 16 }}
+          >
             {interview.candidates.length}
           </TableCell>
-          <TableCell align="center" sx={{ border: "1px solid #ddd" }}>
+          <TableCell
+            align="center"
+            sx={{ border: "1px solid #ddd", fontSize: 16 }}
+          >
             {fDate(interview.createdAt)}
           </TableCell>
-          <TableCell align="center" sx={{ border: "1px solid #ddd" }}>
+          <TableCell
+            align="center"
+            sx={{ border: "1px solid #ddd", fontSize: 16 }}
+          >
             {/* <Label color={interview.status === "Yes" ? "success" : "error"}>
               {interview.status}
             </Label> */}

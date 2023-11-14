@@ -15,6 +15,7 @@ const InterviewTableHead = ({ headLabel }) => {
                 width: headCell.width,
                 minWidth: headCell.minWidth,
                 border: "1px solid #ddd",
+                fontSize: 16,
               }}
             >
               {headCell.label}

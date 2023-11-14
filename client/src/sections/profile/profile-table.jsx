@@ -90,6 +90,7 @@ const ProfileTable = ({ client }) => {
                     src={client.logo ? client.logo.url : client.logo}
                     alt={`${client.name}_logo`}
                     loading="lazy"
+                    style={{ objectFit: "contain" }}
                   />
                 }
               />
@@ -108,7 +109,7 @@ const ProfileTable = ({ client }) => {
                         : client.validcertificate
                     }
                     alt={`${client.name}_certificate`}
-                    sx={{ height: 500, width: 500, objectFit: "contain" }}
+                    style={{ objectFit: "contain" }}
                   />
                 }
               />
