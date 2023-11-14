@@ -22,4 +22,8 @@ router
   .route("/add/candidates/:token")
   .post(isauthenticated, addCandidatesWithUsernameAndPassword);
 
+router
+  .route("/client-data/:clientId/:token")
+  .get(isauthenticated, getClientData);
+
 export default router;
