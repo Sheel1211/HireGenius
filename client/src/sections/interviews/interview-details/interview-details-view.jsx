@@ -2,37 +2,24 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Scrollbar from "../../../components/scrollbar";
 import {
-  Avatar,
-  Box,
   Button,
   Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
   Container,
   Dialog,
   DialogTitle,
-  IconButton,
   Stack,
   Table,
-  TableBody,
-  TableCell,
   TableContainer,
-  TableRow,
   Typography,
 } from "@mui/material";
-import Iconify from "../../../components/iconify";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 import config from "../../../utils/config";
 import InterviewDetailsTableHead from "./table-head";
 import InterviewDetailsTableBody from "./table-body";
-import InterviewSkeleton from "../interviews-skeleton";
 import InterviewDetailSkeleton from "./interview-details-skeleton";
-import SvgColor from "../../../components/svg-color";
 import RoundImage from "./round-image";
-import NotFoundPage from "../../../pages/page-not-found";
 
 const InterviewDetails = () => {
   const [allRounds, setAllRounds] = useState([]);
@@ -51,6 +38,7 @@ const InterviewDetails = () => {
         config
       )
       .then((res) => {
+        console.log(res);
         setAllRounds(res.data.interview.rounds);
         setInterviewDetails(res.data.interview);
         setIsLoading(false);
@@ -72,6 +60,8 @@ const InterviewDetails = () => {
     setIsDialogOpen(false);
   };
 
+  // return <></>;
+
   return (
     <>
       <Container>
@@ -86,7 +76,8 @@ const InterviewDetails = () => {
             onClick={() => navigate("/")}
             sx={{ cursor: "pointer" }}
           >
-            {interview.title}
+            {/* """{interview.title}"" */}
+            interviewTitle
           </Typography>
 
           <Stack
@@ -159,9 +150,24 @@ const InterviewDetails = () => {
         <DialogTitle textAlign="center">Create an interview round </DialogTitle>
         <Card>
           <Stack direction="row" gap={4} sx={{ justifyContent: "center" }}>
-            <RoundImage path={"/assets/round/aptitude.svg"} round="Aptitude" />
-            <RoundImage path={"/assets/round/coding.svg"} round="Coding" />
-            <RoundImage path={"/assets/round/meet.svg"} round="Meet" />
+            <RoundImage
+              path={"/assets/round/aptitude.svg"}
+              round="Aptitude"
+              setIsDialogOpen={setIsDialogOpen}
+              interview={interview}
+            />
+            <RoundImage
+              path={"/assets/round/coding.svg"}
+              round="Coding"
+              setIsDialogOpen={setIsDialogOpen}
+              interview={interview}
+            />
+            <RoundImage
+              path={"/assets/round/meet.svg"}
+              round="Meet"
+              setIsDialogOpen={setIsDialogOpen}
+              interview={interview}
+            />
           </Stack>
         </Card>
       </Dialog>

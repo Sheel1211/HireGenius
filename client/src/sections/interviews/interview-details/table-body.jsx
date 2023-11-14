@@ -7,7 +7,7 @@ const InterviewDetailsTableBody = ({ round, index }) => {
       <TableBody>
         <TableRow
           hover
-          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+          // sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
         >
           <TableCell
             align="left"

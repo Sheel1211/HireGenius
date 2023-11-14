@@ -4,49 +4,34 @@ import { uploadFile } from "../services/uploadFileS3.service.js";
 import interview from "../models/interviewSchema.js";
 import candidate from "../models/candidateSchema.js";
 
-export const saveQuestions = async (req, res) => {
+export const createAptitude = async (req, res) => {
   try {
-    const { aptitudeId, questions, duration, negativeMarking, expiryDate } =
+    const { interviewId, questions, duration, negativeMarking, expiryDate } =
       req.body;
-    const aptitude = await Aptitude.findOne({ aptitudeId: aptitudeId });
 
-    if (!aptitude) {
-      throw new Error("Something went wrong!");
-    }
-
-    aptitude.questions = questions;
-    aptitude.duration = duration;
-    aptitude.negativeMarking = negativeMarking;
+    const aptitudeId = uuidv4();
     const AptitudeLink = `http://localhost:5173/aptitude/${aptitudeId}`;
-    aptitude.testLink = AptitudeLink;
-    aptitude.expiry = expiryDate;
-    await aptitude.save();
+
+    const newAptitude = await Aptitude({
+      aptitudeId,
+      questions,
+      duration,
+      negativeMarking,
+      expiry: expiryDate,
+      testLink: AptitudeLink,
+    });
+
+    await newAptitude.save();
+
+    const oldInterview = await interview.findOne({ _id: interviewId });
+    oldInterview.rounds.push({ roundId: newAptitude._id, name: "Aptitude" });
+    await oldInterview.save();
 
     res
       .status(200)
       .json({ success: true, message: "Link generated...", AptitudeLink });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
-
-export const createAptitude = async (req, res) => {
-  try {
-    const { interviewId } = req.body;
-    const aptitudeId = uuidv4();
-    const newAptitude = await Aptitude({ aptitudeId });
-    await newAptitude.save();
-
-    const oldInterview = await interview.findOne({ _id: interviewId });
-    oldInterview.rounds.push({ roundId: interviewId, name: "Aptitude" });
-    await oldInterview.save();
-
-    res.status(200).json({
-      success: true,
-      aptitude: newAptitude,
-      message: "Aptitude created",
-    });
-  } catch (error) {
+    console.log(error);
     res.status(400).json({ success: false, message: error.message });
   }
 };

@@ -3,11 +3,11 @@ import React, { useState } from "react";
 
 const vertical = "top";
 const horizontal = "center";
-const CustomeSnackBar = ({ isOpen, message, handleClose }) => {
+const CustomeSnackBar = ({ isOpen, message, handleClose, duration }) => {
   return (
     <>
       <Snackbar
-        autoHideDuration={3000}
+        autoHideDuration={duration}
         anchorOrigin={{ vertical, horizontal }}
         open={isOpen}
         onClose={handleClose}

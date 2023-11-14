@@ -19,6 +19,9 @@ export const UserPage = lazy(() => import("../pages/user"));
 export const LoginPage = lazy(() => import("../pages/login"));
 export const ProductsPage = lazy(() => import("../pages/products"));
 export const Page404 = lazy(() => import("../pages/page-not-found"));
+export const CreateAptitude = lazy(() =>
+  import("../sections/FormBuilder/Aptitude/Main")
+);
 
 // ----------------------------------------------------------------------
 
@@ -63,6 +66,7 @@ export default function Router() {
         { path: "/", element: <IndexPage /> },
         { path: "/:interview", element: <InterviewDetails /> },
         { path: "/create-interview", element: <CreateInterviewPage /> },
+        { path: "create/aptitude", element: <CreateAptitude /> },
         { path: "/profile", element: <Profile /> },
         { path: "user", element: <UserPage /> },
         { path: "products", element: <ProductsPage /> },

@@ -152,6 +152,7 @@ const CreateInterviewPage = () => {
         isOpen={isOpen}
         message={toastMessage}
         handleClose={() => setIsOpen(false)}
+        duration={3000}
       />
     </>
   );
