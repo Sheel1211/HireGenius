@@ -56,6 +56,25 @@ export const getAptitudeQuestions = async (req, res) => {
   }
 };
 
+export const getAptitudeDetails = async (req, res, next) => {
+  try {
+    const { aptitudeId } = req.params;
+
+    const aptitude = await Aptitude.findOne({ _id: aptitudeId });
+    if (!aptitude) {
+      throw new Error("Something went wrong.");
+    }
+
+    res.status(200).json({
+      aptitude,
+      success: true,
+      message: "Valid aptitude",
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
 export const isValidAptitude = async (req, res, next) => {
   try {
     const { aptitudeId } = req.params;

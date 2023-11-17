@@ -11,6 +11,7 @@ import { getUserDetails } from "../store/slices/UserSlice";
 import Cookies from "js-cookie";
 import axios from "axios";
 import config from "../utils/config";
+import RoundDetailsView from "../sections/interviews/round-details/round-details-view";
 
 export const IndexPage = lazy(() => import("../pages/app"));
 export const TempPage = lazy(() => import("../pages/temp"));
@@ -65,6 +66,7 @@ export default function Router() {
       children: [
         { path: "/", element: <IndexPage /> },
         { path: "/:interview", element: <InterviewDetails /> },
+        { path: "/:interview/:roundId", element: <RoundDetailsView /> },
         { path: "/create-interview", element: <CreateInterviewPage /> },
         { path: "create/aptitude", element: <CreateAptitude /> },
         { path: "/profile", element: <Profile /> },

@@ -76,8 +76,7 @@ const InterviewDetails = () => {
             onClick={() => navigate("/")}
             sx={{ cursor: "pointer" }}
           >
-            {/* """{interview.title}"" */}
-            interviewTitle
+            {interview.title}
           </Typography>
 
           <Stack
@@ -105,11 +104,12 @@ const InterviewDetails = () => {
         </Stack>
         <Scrollbar>
           <TableContainer sx={{ overflow: "unset" }}>
-            <Table sx={{ minWidth: 800 }}>
+            <Table>
               <InterviewDetailsTableHead
                 headLabel={[
                   { label: "No", align: "left" },
                   { label: "Title", align: "left" },
+                  // { label: "Link", align: "left" },
                   { label: "Options", align: "center" },
                 ]}
               />

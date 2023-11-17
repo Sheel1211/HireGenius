@@ -1,28 +1,18 @@
 import {
-  Button,
-  Card,
   Container,
-  Skeleton,
   Stack,
   Table,
-  TableBody,
-  TableCell,
   TableContainer,
   TablePagination,
-  TableRow,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Iconify from "../../components/iconify";
 import Scrollbar from "../../components/scrollbar";
-import InterviewTableToolbar from "./interview-table-toolbar";
 import InterviewTableBody from "./interview-table-body";
 import InterviewTableHead from "./interview-table-head";
 import axios from "axios";
 import config from "../../utils/config";
 import Cookies from "js-cookie";
-import Loader from "../../utils/loader";
-import { interviewSkeleton } from "../../utils/interview-skeleton";
 import InterviewSkeleton from "./interviews-skeleton";
 
 const Interviews = () => {
@@ -88,12 +78,7 @@ const Interviews = () => {
           /> */}
         <Scrollbar>
           <TableContainer sx={{ overflow: "unset" }}>
-            <Table
-              sx={{
-                minWidth: 800,
-                border: 0,
-              }}
-            >
+            <Table>
               <InterviewTableHead
                 headLabel={[
                   { label: "Title", align: "left" },

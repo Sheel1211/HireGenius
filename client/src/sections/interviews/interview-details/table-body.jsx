@@ -1,7 +1,41 @@
 import { Button, TableBody, TableCell, TableRow } from "@mui/material";
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const InterviewDetailsTableBody = ({ round, index }) => {
+  const [interviewRound, setInterviewRound] = useState("");
+
+  const fetchAptitudeDetails = () => {
+    axios
+      .get("http://127.0.0.1:4000/api/aptitude/details/" + round.roundId)
+      .then((res) => {
+        console.log(res);
+        setInterviewRound(res.data.aptitude);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    if (round.name === "Aptitude") {
+      fetchAptitudeDetails();
+    }
+  }, []);
+
+  // round details
+
+  const navigate = useNavigate();
+  const params = useParams();
+  const getRoundDetails = (roundNumber) => {
+    const route = "/" + params.interview + "/" + interviewRound._id;
+    console.log(roundNumber);
+    navigate(route, {
+      state: { ...interviewRound, round, roundNumber },
+    });
+  };
+
   return (
     <>
       <TableBody>
@@ -25,19 +59,32 @@ const InterviewDetailsTableBody = ({ round, index }) => {
             align="left"
             sx={{
               fontWeight: "bold",
-              cursor: "pointer",
               border: "1px solid #ddd",
               fontSize: 16,
             }}
           >
             {round.name}
           </TableCell>
+          {/* <TableCell
+            align="left"
+            sx={{
+              fontWeight: "bold",
+              border: "1px solid #ddd",
+              fontSize: 16,
+            }}
+          >
+            {interviewRound.testLink}
+          </TableCell> */}
           <TableCell
             align="center"
             sx={{ border: "1px solid #ddd", fontSize: 16 }}
           >
-            <Button variant="contained" color="inherit">
-              Send Mail
+            <Button
+              variant="contained"
+              color="inherit"
+              onClick={() => getRoundDetails(index + 1)}
+            >
+              View Details
             </Button>
           </TableCell>
         </TableRow>
