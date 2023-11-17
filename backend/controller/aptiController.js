@@ -21,15 +21,25 @@ export const createAptitude = async (req, res) => {
       testLink: AptitudeLink,
     });
 
-    await newAptitude.save();
-
     const oldInterview = await interview.findOne({ _id: interviewId });
     oldInterview.rounds.push({ roundId: newAptitude._id, name: "Aptitude" });
+
+    const candidateIds = oldInterview.candidates.map(
+      (interview) => interview.candidateId
+    );
+
+    candidateIds.forEach((candidateId) =>
+      newAptitude.candidates.push({ candidateId: candidateId })
+    );
+
+    await newAptitude.save();
     await oldInterview.save();
 
-    res
-      .status(200)
-      .json({ success: true, message: "Link generated...", AptitudeLink });
+    res.status(200).json({
+      success: true,
+      message: "Link generated...",
+      AptitudeLink: "",
+    });
   } catch (error) {
     console.log(error);
     res.status(400).json({ success: false, message: error.message });

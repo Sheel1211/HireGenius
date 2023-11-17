@@ -7,7 +7,10 @@ const RoundImage = ({ path, round, setIsDialogOpen, interview }) => {
   const handleCreateRound = () => {
     // console.log(round);
     // console.log(interview);
-    navigate("/create/aptitude", { state: interview._id });
+
+    navigate("/create/aptitude", {
+      state: interview._id,
+    });
     setIsDialogOpen(false);
   };
   return (

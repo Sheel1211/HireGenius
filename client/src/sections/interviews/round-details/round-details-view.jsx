@@ -2,6 +2,7 @@ import {
   Button,
   Card,
   Container,
+  Dialog,
   Grid,
   IconButton,
   Stack,
@@ -12,6 +13,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import CustomeSnackBar from "../../../utils/toast-message";
+import CandidatesReadCSV from "../../create-interview/candidates-read-csv";
 
 const RoundDetailsView = () => {
   const [isCopied, setIsCopied] = useState(false);
@@ -33,8 +35,18 @@ const RoundDetailsView = () => {
       });
   };
 
+  // close toast message
+
   const handleClose = () => {
     setIsCopied(false);
+  };
+
+  // view candidates
+  const [isVCOpen, setIsVCOpen] = useState(false);
+  const handleViewCandidates = () => {};
+
+  const handleVCDialogClose = () => {
+    setIsVCOpen(false);
   };
 
   return (
@@ -51,6 +63,36 @@ const RoundDetailsView = () => {
         </Stack>
 
         <Grid container spacing={4}>
+          <Grid item xs={6}>
+            <Card sx={{ p: 4 }}>
+              <Stack spacing={2}>
+                <Stack spacing={1}>
+                  <Typography variant="body1">
+                    You can view all the candidates by clicking{" "}
+                    <strong>View Candidates </strong> Button.
+                  </Typography>
+                  <Stack direction="row">
+                    <Button color="inherit" variant="contained">
+                      View Candidates
+                    </Button>
+                  </Stack>
+                </Stack>
+                <Stack>
+                  <Typography>
+                    You can send emails to all candidates.
+                  </Typography>
+                  <Typography>
+                    Email contians Username, Password and Test link.
+                  </Typography>
+                  <Stack direction="row" mt={1}>
+                    <Button color="inherit" variant="contained">
+                      Send Mail
+                    </Button>
+                  </Stack>
+                </Stack>
+              </Stack>
+            </Card>
+          </Grid>
           <Grid item xs={6}>
             <Card sx={{ p: 4 }}>
               <Stack spacing={3}>
@@ -94,44 +136,27 @@ const RoundDetailsView = () => {
               </Stack>
             </Card>
           </Grid>
-          <Grid item xs={6}>
-            <Card sx={{ p: 4 }}>
-              <Stack spacing={2}>
-                <Stack spacing={1}>
-                  <Typography variant="body1">
-                    You can view all the candidates by clicking{" "}
-                    <strong>View Candidates </strong> Button.
-                  </Typography>
-                  <Stack direction="row">
-                    <Button color="inherit" variant="contained">
-                      View Candidates
-                    </Button>
-                  </Stack>
-                </Stack>
-                <Stack>
-                  <Typography>
-                    You can send emails to all candidates.
-                  </Typography>
-                  <Typography>
-                    Email contians Username, Password and Test link.
-                  </Typography>
-                  <Stack direction="row" mt={1}>
-                    <Button color="inherit" variant="contained">
-                      Send Mail
-                    </Button>
-                  </Stack>
-                </Stack>
-              </Stack>
-            </Card>
-          </Grid>
         </Grid>
       </Container>
+
+      {/* toast message */}
       <CustomeSnackBar
         isOpen={isCopied}
         message={message}
         handleClose={handleClose}
         duration={1000}
       />
+
+      {/* view candidates dialog box */}
+      <Dialog
+        fullScreen={200}
+        open={isVCOpen}
+        onClose={handleVCDialogClose}
+        aria-labelledby="view-candidates"
+        aria-describedby="view-candidates-dialog"
+      >
+        {/* <CandidatesReadCSV rows={rows} /> */}
+      </Dialog>
     </>
   );
 };

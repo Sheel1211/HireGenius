@@ -36,19 +36,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const index = ({ interviewId, setIsOpen, setToastMessage }) => {
-  // It will show the popup when you reload the page
-  // useEffect(() => {
-  //   const handleBeforeUnload = (e) => {
-  //     e.preventDefault();
-  //     e.returnValue = "";
-  //   };
-  //   window.addEventListener("beforeunload", handleBeforeUnload);
-
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //   };
-  // }, []);
-
   const location = useLocation();
   const dispatch = useDispatch();
   const singleQuestion = useSelector((state) => state.SingleQuestion);
@@ -117,6 +104,8 @@ const index = ({ interviewId, setIsOpen, setToastMessage }) => {
       negativeMarking: negativeMarking,
       expiryDate,
     };
+
+    console.log(data);
 
     axios
       .post("http://localhost:4000/api/create/aptitude", data, config)

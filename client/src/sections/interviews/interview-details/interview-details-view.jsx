@@ -56,6 +56,10 @@ const InterviewDetails = () => {
   // create round
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const handleCreateRound = () => {
+    setIsDialogOpen(true);
+  };
+
   const handleDialogClose = () => {
     setIsDialogOpen(false);
   };
@@ -95,7 +99,7 @@ const InterviewDetails = () => {
             <Button
               variant="contained"
               color="inherit"
-              onClick={() => setIsDialogOpen(true)}
+              onClick={handleCreateRound}
               startIcon={<AddIcon />}
             >
               Create Round
