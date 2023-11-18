@@ -5,7 +5,14 @@ import {
   Dialog,
   Grid,
   IconButton,
+  Skeleton,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
@@ -45,6 +52,7 @@ const RoundDetailsView = () => {
   // view candidates
   const [isVCOpen, setIsVCOpen] = useState(false);
   const [allCandidates, setAllCandidates] = useState([]);
+  const [isVCLoading, setIsVCLoading] = useState(true);
 
   const handleViewCandidates = () => {
     const candidateIds = roundDetails.candidates.map(
@@ -64,6 +72,7 @@ const RoundDetailsView = () => {
           };
         });
         setAllCandidates(data);
+        setIsVCLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -183,7 +192,75 @@ const RoundDetailsView = () => {
         aria-labelledby="view-candidates"
         aria-describedby="view-candidates-dialog"
       >
-        {allCandidates && <CandidatesReadCSV rows={allCandidates} />}
+        {allCandidates && (
+          <TableContainer sx={{ minWidth: 600 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">SN</TableCell>
+                  <TableCell align="left">Name</TableCell>
+                  <TableCell align="left">Email</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {isVCLoading ? (
+                  <>
+                    <TableRow hover role="checkbox" tabIndex={-1}>
+                      <TableCell align="left">
+                        <Skeleton variant="rectangular" height={30} />
+                      </TableCell>
+                      <TableCell align="left">
+                        <Skeleton variant="rectangular" height={30} />
+                      </TableCell>
+                      <TableCell align="left">
+                        <Skeleton variant="rectangular" height={30} />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow hover role="checkbox" tabIndex={-1}>
+                      <TableCell align="left">
+                        <Skeleton variant="rectangular" height={30} />
+                      </TableCell>
+                      <TableCell align="left">
+                        <Skeleton variant="rectangular" height={30} />
+                      </TableCell>
+                      <TableCell align="left">
+                        <Skeleton variant="rectangular" height={30} />
+                      </TableCell>
+                    </TableRow>
+                    <TableRow hover role="checkbox" tabIndex={-1}>
+                      <TableCell align="left">
+                        <Skeleton variant="rectangular" height={30} />
+                      </TableCell>
+                      <TableCell align="left">
+                        <Skeleton variant="rectangular" height={30} />
+                      </TableCell>
+                      <TableCell align="left">
+                        <Skeleton variant="rectangular" height={30} />
+                      </TableCell>
+                    </TableRow>
+                  </>
+                ) : (
+                  <>
+                    {allCandidates.map((row, index) => {
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={index}
+                        >
+                          <TableCell align="left">{row.id}</TableCell>
+                          <TableCell align="left">{row.name}</TableCell>
+                          <TableCell align="left">{row.email}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </Dialog>
     </>
   );
