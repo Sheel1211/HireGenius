@@ -7,11 +7,13 @@ import {
   isTestSubmitted,
   createAptitude,
   getAptitudeDetails,
+  createAnotherAptitude,
 } from "../controller/aptiController.js";
 
 const router = express.Router();
 
 router.route("/create/aptitude").post(createAptitude);
+router.route("/create/another/aptitude").post(createAnotherAptitude);
 router.route("/aptitude/questions/:aptitudeId").get(getAptitudeQuestions);
 router.route("/aptitude/details/:aptitudeId").get(getAptitudeDetails);
 router.route("/aptitude/check/:aptitudeId").get(isValidAptitude);

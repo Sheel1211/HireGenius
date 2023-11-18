@@ -14,13 +14,14 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import CustomeSnackBar from "../../../utils/toast-message";
 import CandidatesReadCSV from "../../create-interview/candidates-read-csv";
+import { dummyCSVData } from "../../../utils/dummy-csv-data";
+import axios from "axios";
 
 const RoundDetailsView = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [message, setMessage] = useState("");
   const location = useLocation();
   const roundDetails = location.state;
-  console.log(roundDetails);
 
   const handleCopy = (link) => {
     navigator.clipboard
@@ -43,7 +44,31 @@ const RoundDetailsView = () => {
 
   // view candidates
   const [isVCOpen, setIsVCOpen] = useState(false);
-  const handleViewCandidates = () => {};
+  const [allCandidates, setAllCandidates] = useState([]);
+
+  const handleViewCandidates = () => {
+    const candidateIds = roundDetails.candidates.map(
+      (candidate) => candidate.candidateId
+    );
+    setIsVCOpen(true);
+    axios
+      .post("http://localhost:4000/api/candidate/getallcandidates", {
+        candidateIds,
+      })
+      .then((res) => {
+        const data = res.data.candidates.map((candidate, index) => {
+          return {
+            id: index + 1,
+            name: candidate.name,
+            email: candidate.email,
+          };
+        });
+        setAllCandidates(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleVCDialogClose = () => {
     setIsVCOpen(false);
@@ -72,7 +97,11 @@ const RoundDetailsView = () => {
                     <strong>View Candidates </strong> Button.
                   </Typography>
                   <Stack direction="row">
-                    <Button color="inherit" variant="contained">
+                    <Button
+                      color="inherit"
+                      variant="contained"
+                      onClick={handleViewCandidates}
+                    >
                       View Candidates
                     </Button>
                   </Stack>
@@ -149,13 +178,12 @@ const RoundDetailsView = () => {
 
       {/* view candidates dialog box */}
       <Dialog
-        fullScreen={200}
         open={isVCOpen}
         onClose={handleVCDialogClose}
         aria-labelledby="view-candidates"
         aria-describedby="view-candidates-dialog"
       >
-        {/* <CandidatesReadCSV rows={rows} /> */}
+        {allCandidates && <CandidatesReadCSV rows={allCandidates} />}
       </Dialog>
     </>
   );

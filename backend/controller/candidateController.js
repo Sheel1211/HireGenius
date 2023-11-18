@@ -67,4 +67,25 @@ export const getCandidate = async (req, res) => {
   }
 };
 
+export const getAllCandidates = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    const { candidateIds } = req.body;
+
+    const candidates = await candidate.find(
+      {
+        _id: { $in: candidateIds },
+      },
+      "name email"
+    );
+
+    res.status(200).json({
+      success: true,
+      candidates: candidates,
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
 // module.exports = { getAllCandidates };

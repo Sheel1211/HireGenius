@@ -38,7 +38,60 @@ export const createAptitude = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Link generated...",
-      AptitudeLink: "",
+      AptitudeLink,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const createAnotherAptitude = async (req, res, next) => {
+  try {
+    const {
+      interviewId,
+      questions,
+      duration,
+      negativeMarking,
+      expiryDate,
+      prevRoundId,
+    } = req.body;
+
+    const aptitudeId = uuidv4();
+    const AptitudeLink = `http://localhost:5173/aptitude/${aptitudeId}`;
+
+    const newAptitude = await Aptitude({
+      aptitudeId,
+      questions,
+      duration,
+      negativeMarking,
+      expiry: expiryDate,
+      testLink: AptitudeLink,
+    });
+
+    const oldInterview = await interview.findOne({ _id: interviewId });
+    oldInterview.rounds.push({ roundId: newAptitude._id, name: "Aptitude" });
+
+    const prevRound = await Aptitude.findOne({ _id: prevRoundId });
+    const selectedCandidateIds = prevRound.candidates
+      .map((candidate) => {
+        if (!candidate.isRejected) return candidate.candidateId;
+      })
+      .filter((candidateId) => candidateId !== undefined);
+
+    console.log(selectedCandidateIds);
+
+    selectedCandidateIds.forEach((candidateId) =>
+      newAptitude.candidates.push({ candidateId: candidateId })
+    );
+
+    await newAptitude.save();
+    await oldInterview.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Link generated...",
+      AptitudeLink,
     });
   } catch (error) {
     console.log(error);

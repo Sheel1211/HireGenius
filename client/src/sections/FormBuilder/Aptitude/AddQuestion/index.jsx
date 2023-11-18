@@ -35,7 +35,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-const index = ({ interviewId, setIsOpen, setToastMessage }) => {
+const index = ({
+  interviewId,
+  setIsOpen,
+  setToastMessage,
+  allRounds,
+  interviewDetails,
+}) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const singleQuestion = useSelector((state) => state.SingleQuestion);
@@ -97,29 +103,69 @@ const index = ({ interviewId, setIsOpen, setToastMessage }) => {
   };
 
   const handleGenerateLink = () => {
-    const data = {
-      interviewId,
-      questions,
-      duration: time,
-      negativeMarking: negativeMarking,
-      expiryDate,
-    };
+    if (allRounds.length === 0) {
+      const data = {
+        interviewId,
+        questions,
+        duration: time,
+        negativeMarking: negativeMarking,
+        expiryDate,
+      };
 
-    console.log(data);
+      axios
+        .post("http://localhost:4000/api/create/aptitude", data, config)
+        .then((res) => {
+          setLink(res.data.AptitudeLink);
+          localStorage.setItem("AptitudeLink", res.data.AptitudeLink);
+          setLinkModal(true);
+          setOpen(false);
+          const interview = interviewDetails;
+          navigate(
+            `/${interviewDetails.title.split(" ").join("-").toLowerCase()}`,
+            {
+              state: interview,
+            }
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      const prevRound = allRounds[allRounds.length - 1];
+      const data = {
+        interviewId,
+        questions,
+        duration: time,
+        negativeMarking: negativeMarking,
+        expiryDate,
+        prevRoundId: prevRound.roundId,
+      };
 
-    axios
-      .post("http://localhost:4000/api/create/aptitude", data, config)
-      .then((res) => {
-        console.log(res);
-        alert(res.data.AptitudeLink);
-        setLink(res.data.AptitudeLink);
-        localStorage.setItem("AptitudeLink", res.data.AptitudeLink);
-        setLinkModal(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    setOpen(false);
+      if (prevRound.name === "Aptitude") {
+        axios
+          .post(
+            "http://localhost:4000/api/create/another/aptitude",
+            data,
+            config
+          )
+          .then((res) => {
+            setLink(res.data.AptitudeLink);
+            localStorage.setItem("AptitudeLink", res.data.AptitudeLink);
+            setLinkModal(true);
+            setOpen(false);
+            const interview = interviewDetails;
+            navigate(
+              `/${interviewDetails.title.split(" ").join("-").toLowerCase()}`,
+              {
+                state: interview,
+              }
+            );
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    }
   };
 
   // TO copy link to clipboard

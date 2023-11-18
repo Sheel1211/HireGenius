@@ -2,14 +2,25 @@ import { Box, IconButton, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const RoundImage = ({ path, round, setIsDialogOpen, interview }) => {
+const RoundImage = ({
+  path,
+  round,
+  setIsDialogOpen,
+  interview,
+  allRounds,
+  interviewDetails,
+}) => {
   const navigate = useNavigate();
   const handleCreateRound = () => {
     // console.log(round);
     // console.log(interview);
 
     navigate("/create/aptitude", {
-      state: interview._id,
+      state: {
+        interviewId: interview._id,
+        allRounds,
+        interviewDetails,
+      },
     });
     setIsDialogOpen(false);
   };

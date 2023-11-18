@@ -30,7 +30,6 @@ const InterviewDetailsTableBody = ({ round, index }) => {
   const params = useParams();
   const getRoundDetails = (roundNumber) => {
     const route = "/" + params.interview + "/" + interviewRound._id;
-    console.log(roundNumber);
     navigate(route, {
       state: { ...interviewRound, round, roundNumber },
     });

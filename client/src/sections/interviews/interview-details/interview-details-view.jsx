@@ -31,6 +31,8 @@ const InterviewDetails = () => {
 
   // fetch all interview rounds
 
+  console.log(interview);
+
   const fetchRounds = () => {
     axios
       .get(
@@ -145,12 +147,7 @@ const InterviewDetails = () => {
           )}
         </Scrollbar>
       </Container>
-      <Dialog
-        fullWidth
-        maxWidth="sm"
-        onClose={handleDialogClose}
-        open={isDialogOpen}
-      >
+      <Dialog maxWidth="sm" onClose={handleDialogClose} open={isDialogOpen}>
         <DialogTitle textAlign="center">Create an interview round </DialogTitle>
         <Card>
           <Stack direction="row" gap={4} sx={{ justifyContent: "center" }}>
@@ -159,18 +156,24 @@ const InterviewDetails = () => {
               round="Aptitude"
               setIsDialogOpen={setIsDialogOpen}
               interview={interview}
+              allRounds={allRounds}
+              interviewDetails={interviewDetails}
             />
             <RoundImage
               path={"/assets/round/coding.svg"}
               round="Coding"
               setIsDialogOpen={setIsDialogOpen}
               interview={interview}
+              allRounds={allRounds}
+              interviewDetails={interviewDetails}
             />
             <RoundImage
               path={"/assets/round/meet.svg"}
               round="Meet"
               setIsDialogOpen={setIsDialogOpen}
               interview={interview}
+              allRounds={allRounds}
+              interviewDetails={interviewDetails}
             />
           </Stack>
         </Card>

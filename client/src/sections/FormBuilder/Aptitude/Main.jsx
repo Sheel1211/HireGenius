@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Button,
   Card,
-  CardContent,
   Container,
   Dialog,
   Grid,
@@ -12,13 +11,12 @@ import {
 import AddQuestion from "./AddQuestion";
 import ShowQuestions from "./ShowQuestions";
 import { useLocation } from "react-router-dom";
-import Scrollbar from "../../../components/scrollbar";
 import { useSelector } from "react-redux";
 import CustomeSnackBar from "../../../utils/toast-message";
 
 const Main = () => {
   const location = useLocation();
-  const interviewId = location.state;
+  const { interviewId, allRounds, interviewDetails } = location.state;
   const questions = useSelector((state) => state.Aptitude);
 
   const quantitativeCount = questions.reduce((count, obj) => {
@@ -72,6 +70,8 @@ const Main = () => {
                   interviewId={interviewId}
                   setIsOpen={setIsOpen}
                   setToastMessage={setToastMessage}
+                  allRounds={allRounds}
+                  interviewDetails={interviewDetails}
                 />
               </Card>
             </Grid>
