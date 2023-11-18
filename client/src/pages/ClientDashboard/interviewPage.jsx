@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 // import Grid from "@mui/system/Unstable_Grid";
 import { Grid, Container, Typography } from "@mui/material";
+import { useState } from "react";
 const config = {
   headers: {
     Accept: "application/json",
@@ -15,6 +16,13 @@ const config = {
 
 export default function interviewPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const {row} = location.state;
+  const [interviewData,setInterviewData] = useState(row)
+ 
+  console.log("details of interview :",interviewData);
+
+
   const createAptitude = async () => {
     axios
       .post("http://127.0.0.1:4000/api/createAptitude", config)
@@ -31,7 +39,7 @@ export default function interviewPage() {
       });
   };
 
-  const location = useLocation();
+  
   const createCompiler = async () => {
     const interviewId = location.state;
     navigate("/create/coding",{state:interviewId});
@@ -39,6 +47,12 @@ export default function interviewPage() {
     // navigate("/create/coding");
   };
 
+  const createGD = async()=>{
+    navigate("/schedule-meet",{
+      state:{interviewData},
+    })
+  }
+  
   return (
     <Box sx={{ width: "100%", paddingLeft: "50px" }}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -88,7 +102,7 @@ export default function interviewPage() {
             Coding Round
           </Typography>
         </Grid>
-        <Grid xs={4}>
+        <Grid xs={4} onClick={createGD}>
           <Link to="#">
             <Box
               component="img"

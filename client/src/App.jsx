@@ -18,7 +18,6 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Registration from "./pages/ClientRegistration/Registration";
 import axios from "axios";
-// import MeetHome from "./pages/Meet/home"
 import { useDispatch, useSelector } from "react-redux";
 import ClientLogin from "./pages/ClientRegistration/ClientLogin";
 import { getUserDetails } from "./store/slices/UserSlice";
@@ -30,6 +29,7 @@ import Header from "./pages/landing_page/header/Header";
 import CandidateCoding from "./pages/Candidate/compiler/CandidateCoding";
 import { Cookie } from "@mui/icons-material";
 import Cookies from "js-cookie";
+import Scheduleroom from './pages/GD/Main';
 
 const config = {
   headers: {
@@ -82,10 +82,13 @@ const App = () => {
       <ToastContainer />
       <Header />
       <Routes>
+
+        {/* GD */}
+        <Route path="/schedule-meet" element={<Scheduleroom/>}/>
+        
         <Route path="/" exact element={<Landing />} />
         <Route path="/create/coding" element={<CompilerForm />} />
 
-        {/* <Route path="/meet" element={<MeetHome/>}/> */}
         {/* Candidate */}
 
         <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />

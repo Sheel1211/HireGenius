@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken";
 export const candidateLogin = async (req, res) => {
   console.log("yes in candidate login")
   try {
+
+    console.log(req.body);
+
       const { username, password,interviewId} = req.body;
       const candidateData = await candidate.findOne({ username, password });
     
@@ -82,6 +85,7 @@ export const candidateLogin = async (req, res) => {
           data: error.message,
         });
     }
+    
   };
 // const express = require("express");
 // const candidate = require("../models/candidateSchema");

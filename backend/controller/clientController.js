@@ -196,6 +196,7 @@ export const addCandidatesWithUsernameAndPassword = async (req, res) => {
     rows.map(async (item, index) => {
       if (item.id == "") return;
       console.log(index, " => ", item);
+      
       const password = generateUniquePassword();
 
       const candidateDetails = new candidate({

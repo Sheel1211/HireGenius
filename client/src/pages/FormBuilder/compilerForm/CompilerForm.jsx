@@ -8,7 +8,10 @@ import ShowQuestion from "./showQuestion";
 const CompilerForm = () => {
   const location = useLocation();
   // const { dat } = location.state;
-  const interviewId = location.state;
+  const interview = location.state;
+  console.log(JSON.stringify(interview))
+  const interviewId = location.state.row._id;
+  
   return (
     <>
         <Box

@@ -5,14 +5,9 @@ const navConfig = [
     // icon: icon("ic_analytics"),
   },
   {
-    title: "Candidates",
+    title: "Create Interview",
     path: "/clientdashboard/candidate",
     // icon: icon("ic_user"),
-  },
-  {
-    title: "Schedule Interview",
-    path: "/clientdashboard/schedule-interview",
-    // icon: icon("ic_cart"),
   },
 ];
 

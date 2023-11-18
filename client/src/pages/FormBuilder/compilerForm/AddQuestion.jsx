@@ -50,7 +50,6 @@ const AddQuestion = ({ interviewId }) => {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [time, setTime] = useState(60);
-  const [title, setTitle] = useState("");
 
   const [link, setLink] = useState(null);
   const [linkmodal, setLinkModal] = useState(false);
@@ -147,11 +146,10 @@ const AddQuestion = ({ interviewId }) => {
   };
 
   const handleGenerateLink = () => {
-    const interviewId = location.state;
+    const interviewId = location.state.row._id;
     const data = {
       questions: questionsList,
       duration: time,
-      title: title,
       interviewId,
     };
 
@@ -486,17 +484,7 @@ const AddQuestion = ({ interviewId }) => {
               value={time}
               onChange={(e) => setTime(e.target.value)}
             />
-            <Typography variant="h5" sx={{ my: 2 }}>
-              Enter title for coding round
-            </Typography>
-            <TextField
-              fullWidth
-              label="Title"
-              variant="outlined"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
+            
           </Box>
         </Box>
         <DialogActions>
