@@ -10,7 +10,6 @@ const InterviewDetailsTableBody = ({ round, index }) => {
     axios
       .get("http://127.0.0.1:4000/api/aptitude/details/" + round.roundId)
       .then((res) => {
-        console.log(res);
         setInterviewRound(res.data.aptitude);
       })
       .catch((err) => {

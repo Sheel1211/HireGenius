@@ -31,8 +31,6 @@ const InterviewDetails = () => {
 
   // fetch all interview rounds
 
-  console.log(interview);
-
   const fetchRounds = () => {
     axios
       .get(
@@ -40,7 +38,6 @@ const InterviewDetails = () => {
         config
       )
       .then((res) => {
-        console.log(res);
         setAllRounds(res.data.interview.rounds);
         setInterviewDetails(res.data.interview);
         setIsLoading(false);

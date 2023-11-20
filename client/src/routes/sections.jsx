@@ -14,9 +14,6 @@ import config from "../utils/config";
 import RoundDetailsView from "../sections/interviews/round-details/round-details-view";
 
 export const IndexPage = lazy(() => import("../pages/app"));
-export const TempPage = lazy(() => import("../pages/temp"));
-export const BlogPage = lazy(() => import("../pages/blog"));
-export const UserPage = lazy(() => import("../pages/user"));
 export const LoginPage = lazy(() => import("../pages/login"));
 export const ProductsPage = lazy(() => import("../pages/products"));
 export const Page404 = lazy(() => import("../pages/page-not-found"));
@@ -30,7 +27,7 @@ export default function Router() {
   const dispatch = useDispatch();
 
   const userDetails = useSelector((state) => state.User);
-  console.log("details", userDetails);
+
   useEffect(() => {
     async function fetchData(token) {
       try {
@@ -39,7 +36,6 @@ export default function Router() {
           config
         );
         const user = response.data.user;
-        console.log("user in app.jsx", user);
         dispatch(getUserDetails(user));
       } catch (error) {
         // Handle errors, e.g., unauthorized access
@@ -50,7 +46,7 @@ export default function Router() {
     if (token) {
       fetchData(token);
     } else {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [dispatch]);
 
@@ -70,10 +66,6 @@ export default function Router() {
         { path: "/create-interview", element: <CreateInterviewPage /> },
         { path: "create/aptitude", element: <CreateAptitude /> },
         { path: "/profile", element: <Profile /> },
-        { path: "user", element: <UserPage /> },
-        { path: "products", element: <ProductsPage /> },
-        { path: "blog", element: <BlogPage /> },
-        { path: "temp", element: <TempPage /> },
       ],
     },
     {
