@@ -1,19 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Divider,
-  Typography,
-  Button,
-  FormControl,
-  Dialog,
-  DialogActions,
-  TextField,
-  Stack,
-} from "@mui/material";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Button, FormControl, Stack } from "@mui/material";
 import Question from "./Question";
 import Answer from "./Answer";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -26,14 +12,9 @@ import validateSingleQuestion from "./validateSingleQuestion";
 import { clearQuestion } from "../../../../store/slices/SingleQuestion";
 import axios from "axios";
 import Slide from "@mui/material/Slide";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import dayjs from "dayjs";
 import config from "../../../../utils/config";
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="down" ref={ref} {...props} />;
-});
 
 const index = ({
   interviewId,
@@ -42,34 +23,27 @@ const index = ({
   allRounds,
   interviewDetails,
 }) => {
-  const location = useLocation();
   const dispatch = useDispatch();
   const singleQuestion = useSelector((state) => state.SingleQuestion);
   const Aptitude = useSelector((state) => state.Aptitude);
   const [isQuestionAdded, setIsQuestionAdded] = useState(false);
-  const [open, setOpen] = React.useState(false);
   const [time, setTime] = useState(60);
-  const [negativeMarking, setNegativeMarking] = useState(0);
-  const [link, setLink] = useState(null);
-  const [linkmodal, setLinkModal] = useState(false);
-  const [expiryDate, setExpiryDate] = useState(dayjs());
+  // const [expiryDate, setExpiryDate] = useState(dayjs());
   const navigate = useNavigate();
+
+  const roundKey =
+    "Aptitude" + interviewDetails._id + "-" + allRounds.length + 1;
 
   useEffect(() => {
     if (!isQuestionAdded) return;
-    localStorage.setItem("Aptitude", JSON.stringify(Aptitude));
+    localStorage.setItem(roundKey, JSON.stringify(Aptitude));
   }, [isQuestionAdded]);
 
   useEffect(() => {
-    const allQuestions = JSON.parse(localStorage.getItem("Aptitude"));
-    if (allQuestions) {
-      dispatch(addMultipleQuestions(allQuestions));
-    }
+    const allQuestions = localStorage.getItem(roundKey);
+    if (!allQuestions) return;
+    dispatch(addMultipleQuestions(JSON.parse(allQuestions)));
   }, []);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const handleSubmit = () => {
     if (validateSingleQuestion(singleQuestion)) {
@@ -80,12 +54,13 @@ const index = ({
       setToastMessage(
         'Question is added. You can check all questions by clicking on the button "Shows Question"'
       );
+      // localStorage.removeItem("Aptitude");
     }
   };
 
   const questions = useSelector((state) => state.Aptitude);
 
-  const handleDuration = () => {
+  const handleGenerateLink = () => {
     if (questions.length === 0) {
       toast.warn("Please add some questions...", {
         position: "top-center",
@@ -99,17 +74,11 @@ const index = ({
       });
       return;
     }
-    setOpen(true);
-  };
 
-  const handleGenerateLink = () => {
     if (allRounds.length === 0) {
       const data = {
         interviewId,
         questions,
-        duration: time,
-        negativeMarking: negativeMarking,
-        expiryDate,
       };
 
       axios
@@ -117,8 +86,7 @@ const index = ({
         .then((res) => {
           setLink(res.data.AptitudeLink);
           localStorage.setItem("AptitudeLink", res.data.AptitudeLink);
-          setLinkModal(true);
-          setOpen(false);
+          localStorage.removeItem(roundKey);
           const interview = interviewDetails;
           navigate(
             `/${interviewDetails.title.split(" ").join("-").toLowerCase()}`,
@@ -135,9 +103,6 @@ const index = ({
       const data = {
         interviewId,
         questions,
-        duration: time,
-        negativeMarking: negativeMarking,
-        expiryDate,
         prevRoundId: prevRound.roundId,
       };
 
@@ -151,8 +116,7 @@ const index = ({
           .then((res) => {
             setLink(res.data.AptitudeLink);
             localStorage.setItem("AptitudeLink", res.data.AptitudeLink);
-            setLinkModal(true);
-            setOpen(false);
+            localStorage.removeItem(roundKey);
             const interview = interviewDetails;
             navigate(
               `/${interviewDetails.title.split(" ").join("-").toLowerCase()}`,
@@ -168,49 +132,8 @@ const index = ({
     }
   };
 
-  // TO copy link to clipboard
-  const handleCopyLink = () => {
-    navigator.clipboard
-      .writeText(link)
-      .then(() => {
-        alert("Link copied to clipboard: " + link);
-      })
-      .catch((error) => {
-        console.error("Error copying link to clipboard: ", error);
-      });
-    setLinkModal(false);
-    navigate("/clientdashboard");
-  };
-
   return (
     <>
-      {linkmodal && (
-        <Dialog
-          maxWidth="md"
-          open={linkmodal}
-          TransitionComponent={Transition}
-          keepMounted
-          onClose={handleClose}
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <Box sx={{ p: 4 }}>
-            <Typography variant="h5" sx={{ my: 2 }}>
-              Copy Link
-            </Typography>
-            <TextField
-              fullWidth
-              label="Copy link"
-              variant="outlined"
-              value={link}
-            />
-          </Box>
-          <DialogActions>
-            <Button onClick={() => setLinkModal(false)}>Close</Button>
-            <Button onClick={handleCopyLink}>Copy</Button>
-          </DialogActions>
-        </Dialog>
-      )}
-
       <FormControl fullWidth>
         <Question />
         <Answer isQuestionAdded={isQuestionAdded} />
@@ -237,71 +160,12 @@ const index = ({
             type="submit"
             size="medium"
             variant="contained"
-            onClick={handleDuration}
+            onClick={handleGenerateLink}
           >
             Generate Link
           </Button>
         </Stack>
       </FormControl>
-      <Dialog
-        maxWidth="md"
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <Box sx={{ p: 4 }}>
-          <Box>
-            <Typography variant="h5" sx={{ my: 2 }}>
-              Select Aptitude Duration in Minutes
-            </Typography>
-            <TextField
-              fullWidth
-              label="Time (in minutes)"
-              variant="outlined"
-              type="number"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-            />
-          </Box>
-          <Box>
-            <Typography variant="h5" sx={{ my: 2 }}>
-              Negative marking (0% means no negative marking)
-            </Typography>
-            <TextField
-              fullWidth
-              label="Negative marking (in percentage)"
-              variant="outlined"
-              type="number"
-              value={negativeMarking}
-              onChange={(e) => setNegativeMarking(e.target.value)}
-            />
-          </Box>
-          <Box>
-            <Typography variant="h5" sx={{ my: 2 }}>
-              Set expiry date
-            </Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["DatePicker", "DatePicker"]}>
-                <DatePicker
-                  label="Expiry Date"
-                  value={expiryDate}
-                  onChange={(date) => setExpiryDate(date)}
-                />
-              </DemoContainer>
-            </LocalizationProvider>
-          </Box>
-        </Box>
-        <DialogActions>
-          <Button color="inherit" onClick={handleClose}>
-            Disagree
-          </Button>
-          <Button color="inherit" onClick={handleGenerateLink}>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 };

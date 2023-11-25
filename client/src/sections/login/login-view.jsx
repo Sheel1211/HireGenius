@@ -30,15 +30,20 @@ export default function LoginView() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = (event) => {
     event.preventDefault();
 
-    const data = new FormData(event.currentTarget);
-    const email = data.get("email");
-    const password = data.get("password");
+    // const data = new FormData(event.currentTarget);
+    // const email = data.get("email");
+    // const password = data.get("password");
+
+    // const email = formData.get("email");
+    // const password = formData.get("password");
 
     axios
       .post(
@@ -48,7 +53,6 @@ export default function LoginView() {
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res);
           Cookies.set("token", res.data.user.authToken, { expires: 7 });
           dispatch(UserLogin(res.data.user));
           router.push("/");
@@ -69,12 +73,19 @@ export default function LoginView() {
   const renderForm = (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" />
+        <TextField
+          name="email"
+          label="Email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
         <TextField
           name="password"
           label="Password"
           type={showPassword ? "text" : "password"}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -113,7 +124,7 @@ export default function LoginView() {
         type="submit"
         variant="contained"
         color="inherit"
-        // onClick={handleClick}
+        onClick={handleClick}
       >
         Login
       </LoadingButton>

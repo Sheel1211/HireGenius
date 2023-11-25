@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { QUANTITATIVE, REASONING, TECHNICAL, VERBAL } from "../../utils/helper";
+import dayjs from "dayjs";
 
 const initialState = {
   questions: [],
@@ -15,6 +16,10 @@ const initialState = {
   selectedPage: "0",
   duration: 0,
   negativeMarking: 0,
+  startTime: dayjs(),
+  endTime: dayjs(),
+  testDuration: 60,
+  isActiveLinkIsuueOccurs: false,
 };
 
 export const AptiDashboardSlice = createSlice({
@@ -153,6 +158,18 @@ export const AptiDashboardSlice = createSlice({
       updatedSections[currentSection] = updatedQuestions;
       state.sections = updatedSections;
     },
+    setStartTime(state, action) {
+      state.startTime = action.payload;
+    },
+    setEndTime(state, action) {
+      state.endTime = action.payload;
+    },
+    setTestDuration(state, action) {
+      state.testDuration = action.payload;
+    },
+    setIsActiveLinkIsuueOccurs(state, action) {
+      state.isActiveLinkIsuueOccurs = action.payload;
+    },
   },
 });
 
@@ -172,5 +189,9 @@ export const {
   setNegativeMarking,
   setColor,
   clearQuestion,
+  setStartTime,
+  setEndTime,
+  setTestDuration,
+  setIsActiveLinkIsuueOccurs,
 } = AptiDashboardSlice.actions;
 export default AptiDashboardSlice.reducer;

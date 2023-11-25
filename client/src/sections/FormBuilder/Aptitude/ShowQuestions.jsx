@@ -8,17 +8,13 @@ import {
   RadioGroup,
   TextField,
   Typography,
-  MenuItem,
-  Container,
   Stack,
-  Grid,
 } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import EditIcon from "@mui/icons-material/Edit";
+// import MoreVertIcon from "@mui/icons-material/MoreVert";
+// import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { StyledMenu } from "./Style";
 import { deleteQuestion } from "../../../store/slices/AptitudeSlice";
 
 const ShowQuestions = () => {
@@ -59,7 +55,11 @@ const ShowQuestions = () => {
               }}
               ref={index === questions.length - 1 ? lastQuestionRef : null}
             >
-              <Stack direction="row" justifyContent="space-between">
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="start"
+              >
                 <Stack flexGrow={1}>
                   {question.questionImageURL && (
                     <>
@@ -69,7 +69,6 @@ const ShowQuestions = () => {
                           sx={{
                             textAlign: "start",
                             fontSize: "20px",
-                            paddingBottom: 1,
                             userSelect: "none",
                           }}
                         >
@@ -91,8 +90,7 @@ const ShowQuestions = () => {
                       <Typography
                         variant="h5"
                         sx={{
-                          textAlign: "start",
-                          paddingBottom: 1,
+                          textAlign: "justify",
                           userSelect: "none",
                         }}
                       >
@@ -129,11 +127,12 @@ const ShowQuestions = () => {
                     </>
                   )}
                 </Stack>
-                <Stack>
-                  <IconButton onClick={() => handleDeleteQuestion(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Stack>
+                <IconButton
+                  sx={{ ml: 2 }}
+                  onClick={() => handleDeleteQuestion(index)}
+                >
+                  <DeleteIcon />
+                </IconButton>
               </Stack>
 
               {question.answerType === "Radio" && (

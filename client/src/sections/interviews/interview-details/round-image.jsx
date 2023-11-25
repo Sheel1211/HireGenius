@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -37,7 +37,8 @@ const RoundImage = ({
             objectFit: "contain",
             cursor: "pointer",
             p: 1,
-            border: "1px solid #cccccc",
+            border: "2px solid #cccccc",
+            borderRadius: 2,
             transition: "border-color 0.3s ease", // Adding a transition for a smooth effect
             "&:hover": {
               borderColor: "#2196f3", // Change border color on hover

@@ -144,36 +144,40 @@ const InterviewDetails = () => {
           )}
         </Scrollbar>
       </Container>
-      <Dialog maxWidth="sm" onClose={handleDialogClose} open={isDialogOpen}>
-        <DialogTitle textAlign="center">Create an interview round </DialogTitle>
-        <Card>
-          <Stack direction="row" gap={4} sx={{ justifyContent: "center" }}>
-            <RoundImage
-              path={"/assets/round/aptitude.svg"}
-              round="Aptitude"
-              setIsDialogOpen={setIsDialogOpen}
-              interview={interview}
-              allRounds={allRounds}
-              interviewDetails={interviewDetails}
-            />
-            <RoundImage
-              path={"/assets/round/coding.svg"}
-              round="Coding"
-              setIsDialogOpen={setIsDialogOpen}
-              interview={interview}
-              allRounds={allRounds}
-              interviewDetails={interviewDetails}
-            />
-            <RoundImage
-              path={"/assets/round/meet.svg"}
-              round="Meet"
-              setIsDialogOpen={setIsDialogOpen}
-              interview={interview}
-              allRounds={allRounds}
-              interviewDetails={interviewDetails}
-            />
-          </Stack>
-        </Card>
+      <Dialog onClose={handleDialogClose} open={isDialogOpen}>
+        <Stack sx={{ p: 4 }}>
+          <DialogTitle textAlign="center">
+            Create an interview round{" "}
+          </DialogTitle>
+          <Card>
+            <Stack direction="row" gap={4} sx={{ justifyContent: "center" }}>
+              <RoundImage
+                path={"/assets/round/aptitude.svg"}
+                round="Aptitude"
+                setIsDialogOpen={setIsDialogOpen}
+                interview={interview}
+                allRounds={allRounds}
+                interviewDetails={interviewDetails}
+              />
+              <RoundImage
+                path={"/assets/round/coding.svg"}
+                round="Coding"
+                setIsDialogOpen={setIsDialogOpen}
+                interview={interview}
+                allRounds={allRounds}
+                interviewDetails={interviewDetails}
+              />
+              <RoundImage
+                path={"/assets/round/meet.svg"}
+                round="Meet"
+                setIsDialogOpen={setIsDialogOpen}
+                interview={interview}
+                allRounds={allRounds}
+                interviewDetails={interviewDetails}
+              />
+            </Stack>
+          </Card>
+        </Stack>
       </Dialog>
     </>
   );

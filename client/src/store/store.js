@@ -5,6 +5,8 @@ import { UserSlice } from "./slices/UserSlice";
 import { AptiDashboardSlice } from "./slices/AptiDashboard";
 import { codingRoundSlice } from "./slices/CodingSlice";
 import { CodingDashboardSlice } from "./slices/CodingDashboard";
+import { ToastMSGSlice } from "./slices/ToastMSGSlice";
+import { DialogSlice } from "./slices/DialogSlice";
 
 export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
@@ -18,5 +20,7 @@ export const store = configureStore({
     AptiDashboard: AptiDashboardSlice.reducer,
     Coding: codingRoundSlice.reducer,
     CodingDashboard: CodingDashboardSlice.reducer,
+    ToastMSG: ToastMSGSlice.reducer,
+    DialogSlice: DialogSlice.reducer,
   },
 });

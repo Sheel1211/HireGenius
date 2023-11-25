@@ -3,11 +3,11 @@ import { v4 as uuidv4 } from "uuid";
 import { uploadFile } from "../services/uploadFileS3.service.js";
 import interview from "../models/interviewSchema.js";
 import candidate from "../models/candidateSchema.js";
+import e from "express";
 
 export const createAptitude = async (req, res) => {
   try {
-    const { interviewId, questions, duration, negativeMarking, expiryDate } =
-      req.body;
+    const { interviewId, questions } = req.body;
 
     const aptitudeId = uuidv4();
     const AptitudeLink = `http://localhost:5173/aptitude/${aptitudeId}`;
@@ -15,9 +15,6 @@ export const createAptitude = async (req, res) => {
     const newAptitude = await Aptitude({
       aptitudeId,
       questions,
-      duration,
-      negativeMarking,
-      expiry: expiryDate,
       testLink: AptitudeLink,
     });
 
@@ -48,14 +45,7 @@ export const createAptitude = async (req, res) => {
 
 export const createAnotherAptitude = async (req, res, next) => {
   try {
-    const {
-      interviewId,
-      questions,
-      duration,
-      negativeMarking,
-      expiryDate,
-      prevRoundId,
-    } = req.body;
+    const { interviewId, questions, prevRoundId } = req.body;
 
     const aptitudeId = uuidv4();
     const AptitudeLink = `http://localhost:5173/aptitude/${aptitudeId}`;
@@ -63,9 +53,6 @@ export const createAnotherAptitude = async (req, res, next) => {
     const newAptitude = await Aptitude({
       aptitudeId,
       questions,
-      duration,
-      negativeMarking,
-      expiry: expiryDate,
       testLink: AptitudeLink,
     });
 
@@ -78,8 +65,6 @@ export const createAnotherAptitude = async (req, res, next) => {
         if (!candidate.isRejected) return candidate.candidateId;
       })
       .filter((candidateId) => candidateId !== undefined);
-
-    console.log(selectedCandidateIds);
 
     selectedCandidateIds.forEach((candidateId) =>
       newAptitude.candidates.push({ candidateId: candidateId })
@@ -102,15 +87,17 @@ export const createAnotherAptitude = async (req, res, next) => {
 export const getAptitudeQuestions = async (req, res) => {
   try {
     const { aptitudeId } = req.params;
+
     const aptitude = await Aptitude.findOne({ aptitudeId });
     if (!aptitude) {
       throw new Error("No Aptitude Record Found");
     }
-    const { questions, duration, negativeMarking } = aptitude;
+
+    const { questions, testDuration, negativeMarking } = aptitude;
     res.status(200).json({
       success: true,
       questions,
-      duration,
+      testDuration,
       negativeMarking,
       message: "Aptitude created",
     });
@@ -147,10 +134,18 @@ export const isValidAptitude = async (req, res, next) => {
       throw new Error("Not a valid aptitude link");
     }
 
-    const currentDate = new Date();
-    if (expiry && currentDate > expiry) {
-      throw new Error("Test link has expired");
+    const currentDateTime = new Date();
+    if (
+      !(
+        currentDateTime >= validAptitude.startTime &&
+        currentDateTime <= validAptitude.endTime
+      )
+    ) {
+      throw new Error("Test is not active yet...");
     }
+    // if (validAptitude.expiry && currentDate > validAptitude.expiry) {
+    //   throw new Error("Test link has expired");
+    // }
 
     res.status(200).json({
       success: true,
@@ -191,8 +186,10 @@ export const submitTest = async (req, res) => {
   try {
     const { aptitudeId, ...data } = req.body;
     const aptitude = await Aptitude.findOne({ aptitudeId });
-    aptitude.candidates.push(data);
-    await aptitude.save();
+
+    console.log(data);
+
+    // await aptitude.save();
 
     res.status(200).json({
       success: true,
@@ -218,13 +215,62 @@ export const isTestSubmitted = async (req, res) => {
     }
     const candidateId = candidateData._id;
 
-    const isSubmitted = aptitude.candidates.some((candidate) => {
-      return candidate.candidateId.equals(candidateId);
-    });
-    if (isSubmitted) {
+    const candidateTest = aptitude.candidates.find(
+      (candidate) => candidate.candidateId.toString() === candidateId.toString()
+    );
+
+    if (!candidateTest || !candidateTest.isSubmitted) {
+      return res.status(200).json({ success: true, isSubmitted: false });
+    } else {
       throw new Error("You have already submitted the test");
     }
-    res.status(200).json({ success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const startAptitudeTest = async (req, res, next) => {
+  try {
+    const { aptitudeId, startDateTime } = req.body;
+    const aptitude = await Aptitude.findOne({ aptitudeId });
+    aptitude.startTime = startDateTime;
+
+    await aptitude.save();
+
+    res.status(200).json({ success: true, message: "Test is started" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const endAptitudeTest = async (req, res, next) => {
+  try {
+    const { aptitudeId, endDateTime } = req.body;
+    const aptitude = await Aptitude.findOne({ aptitudeId });
+    aptitude.endTime = endDateTime;
+
+    await aptitude.save();
+
+    res.status(200).json({ success: true, message: "Test is ended" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const setAptitudeTestTimes = async (req, res, next) => {
+  try {
+    const { aptitudeId, startTime, endTime, testDuration, negativeMarking } =
+      req.body;
+    const aptitude = await Aptitude.findOne({ aptitudeId });
+    aptitude.startTime = startTime;
+    aptitude.endTime = endTime;
+    aptitude.testDuration = testDuration;
+    aptitude.negativeMarking = negativeMarking;
+
+    await aptitude.save();
+
+    res.status(200).json({ success: true, message: "Test is ended" });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

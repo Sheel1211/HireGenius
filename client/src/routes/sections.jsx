@@ -20,6 +20,9 @@ export const Page404 = lazy(() => import("../pages/page-not-found"));
 export const CreateAptitude = lazy(() =>
   import("../sections/FormBuilder/Aptitude/Main")
 );
+export const GiveAptitude = lazy(() =>
+  import("../sections/give-test/Aptitude/index")
+);
 
 // ----------------------------------------------------------------------
 
@@ -68,6 +71,7 @@ export default function Router() {
         { path: "/profile", element: <Profile /> },
       ],
     },
+    { path: "/aptitude/:aptitudeId", element: <GiveAptitude /> },
     {
       path: "login",
       element: <LoginPage />,

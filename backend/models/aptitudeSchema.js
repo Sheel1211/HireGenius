@@ -6,45 +6,29 @@ const aptitudeSchema = new mongoose.Schema(
       type: String,
     },
     questions: [{}],
-    duration: {
-      type: Number,
-      default: 0,
-    },
     negativeMarking: {
       type: Number,
       default: 0,
     },
-    isFinished: {
-      type: Boolean,
-      default: false,
-    },
     candidates: [
       {
-        candidateId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "candidate",
-        },
-        isRejected: {
-          type: Boolean,
-          default: false,
-        },
-        gain: {
-          type: Number,
-          default: 0,
-        },
-        total: {
-          type: Number,
-          default: 0,
-        },
+        candidateId: { type: mongoose.Schema.Types.ObjectId, ref: "candidate" },
+        gain: { type: Number, default: 0 },
+        total: { type: Number, default: 0 },
+        isSubmitted: { type: Boolean, default: false },
+        isRejected: { type: Boolean, default: false },
+        submissionTime: { type: Date, default: Date.now },
       },
     ],
     testLink: {
       type: String,
     },
-    expiry: {
-      type: Date,
-      default: Date.now,
-    },
+    startTime: { type: Date, default: Date.now },
+    endTime: { type: Date, default: Date.now },
+    testLinkDuration: { type: Date },
+    isStarted: { type: Boolean, default: false },
+    isCompleted: { type: Boolean, default: false },
+    testDuration: { type: Number, default: 0 }, // testDuration of aptitude test in minutes
   },
   { timestamps: true }
 );

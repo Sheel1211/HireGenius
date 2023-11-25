@@ -3,6 +3,9 @@ import {
   Card,
   Container,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Grid,
   IconButton,
   Skeleton,
@@ -17,12 +20,27 @@ import {
   Typography,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import CustomeSnackBar from "../../../utils/toast-message";
-import CandidatesReadCSV from "../../create-interview/candidates-read-csv";
-import { dummyCSVData } from "../../../utils/dummy-csv-data";
+// import CandidatesReadCSV from "../../create-interview/candidates-read-csv";
+// import { dummyCSVData } from "../../../utils/dummy-csv-data";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsActivateLinkDialogOpen } from "../../../store/slices/DialogSlice";
+
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import {
+  setEndTime,
+  setIsActiveLinkIsuueOccurs,
+  setNegativeMarking,
+  setStartTime,
+  setTestDuration,
+} from "../../../store/slices/AptiDashboard";
+import dayjs from "dayjs";
 
 const RoundDetailsView = () => {
   const [isCopied, setIsCopied] = useState(false);
@@ -44,9 +62,9 @@ const RoundDetailsView = () => {
   };
 
   // close toast message
-
   const handleClose = () => {
     setIsCopied(false);
+    dispatch(setIsActiveLinkIsuueOccurs(false));
   };
 
   // view candidates
@@ -58,6 +76,7 @@ const RoundDetailsView = () => {
     const candidateIds = roundDetails.candidates.map(
       (candidate) => candidate.candidateId
     );
+
     setIsVCOpen(true);
     axios
       .post("http://localhost:4000/api/candidate/getallcandidates", {
@@ -82,6 +101,90 @@ const RoundDetailsView = () => {
   const handleVCDialogClose = () => {
     setIsVCOpen(false);
   };
+
+  // activate test link
+  const dispatch = useDispatch();
+  const DialogSlice = useSelector((state) => state.DialogSlice);
+  const AptiDashboard = useSelector((state) => state.AptiDashboard);
+  const [isTestStarted, setIsTestStarted] = useState(false);
+
+  const handleActivateLinkDialogOpen = () => {
+    dispatch(setIsActivateLinkDialogOpen(true));
+  };
+
+  const handleActivateLinkDialogClose = () => {
+    dispatch(setIsActivateLinkDialogOpen(false));
+  };
+
+  const handleActivateLink = () => {
+    if (AptiDashboard.endTime <= AptiDashboard.startTime) {
+      dispatch(setIsActiveLinkIsuueOccurs(true));
+      setMessage("Please select valid time limit");
+      return;
+    }
+
+    const data = {
+      aptitudeId: roundDetails.aptitudeId,
+      startTime: AptiDashboard.startTime,
+      endTime: AptiDashboard.endTime,
+      testDuration: AptiDashboard.testDuration,
+      negativeMarking: AptiDashboard.negativeMarking,
+    };
+
+    axios
+      .post("http://localhost:4000/api/set/aptitudelink/duration", data)
+      .then((res) => {
+        // localStorage.setItem(roundDetails.aptitudeId + "-isActive", true);
+        localStorage.setItem(
+          roundDetails.aptitudeId + "-startTime",
+          AptiDashboard.startTime.format("DD/MM/YYYY HH:mm:ss A")
+        );
+        localStorage.setItem(
+          roundDetails.aptitudeId + "-endTime",
+          AptiDashboard.endTime.format("DD/MM/YYYY HH:mm:ss A")
+        );
+        dispatch(setIsActivateLinkDialogOpen(false));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    const startTestInterval = setInterval(() => {
+      const currentTime = dayjs();
+      const startTime = localStorage.getItem(
+        roundDetails.aptitudeId + "-startTime"
+      );
+
+      if (currentTime.format("DD/MM/YYYY HH:mm:ss A") === startTime) {
+        localStorage.setItem(roundDetails.aptitudeId + "-isActive", true);
+        setIsTestStarted(true);
+        clearInterval(startTestInterval);
+      }
+    }, 1000);
+
+    return () => clearInterval(startTestInterval);
+  }, []);
+
+  useEffect(() => {
+    const endTestInterval = setInterval(() => {
+      const currentTime = dayjs();
+      const endTime = localStorage.getItem(
+        roundDetails.aptitudeId + "-endTime"
+      );
+
+      if (currentTime.format("DD/MM/YYYY HH:mm:ss A") === endTime) {
+        setIsTestStarted(false);
+        localStorage.removeItem(roundDetails.aptitudeId + "-isActive");
+        localStorage.removeItem(roundDetails.aptitudeId + "-startTime");
+        localStorage.removeItem(roundDetails.aptitudeId + "-endTime");
+        clearInterval(endTestInterval);
+      }
+    }, 1000);
+
+    return () => clearInterval(endTestInterval);
+  }, []);
 
   return (
     <>
@@ -159,16 +262,39 @@ const RoundDetailsView = () => {
                 </Stack>
                 <Stack spacing={1}>
                   <Typography>
-                    You can start the test by clicking
-                    <strong> Start Test </strong> Button.
+                    You can activate the test link by clicking
+                    <strong> Active Link </strong> Button.
                   </Typography>
-                  <Stack direction="row" spacing={2}>
-                    <Button color="inherit" variant="contained">
-                      Start Test
+                  <Stack spacing={2} alignItems="start">
+                    <Button
+                      color="inherit"
+                      variant="contained"
+                      onClick={handleActivateLinkDialogOpen}
+                      disabled={
+                        localStorage.getItem(
+                          roundDetails.aptitudeId + "-isActive"
+                        ) === "true"
+                      }
+                    >
+                      Active Link
                     </Button>
-                    <Button color="inherit" variant="contained">
-                      Extend Test
-                    </Button>
+                    {isTestStarted && (
+                      <Stack>
+                        <Typography variant="h6">Test is started...</Typography>
+                        <Typography variant="body1">
+                          Start Time -{" "}
+                          {localStorage.getItem(
+                            roundDetails.aptitudeId + "-startTime"
+                          )}
+                        </Typography>
+                        <Typography variant="body1">
+                          End Time -{" "}
+                          {localStorage.getItem(
+                            roundDetails.aptitudeId + "-endTime"
+                          )}
+                        </Typography>
+                      </Stack>
+                    )}
                   </Stack>
                 </Stack>
               </Stack>
@@ -177,7 +303,75 @@ const RoundDetailsView = () => {
         </Grid>
       </Container>
 
+      {/* activate link dialog */}
+
+      <Dialog
+        open={DialogSlice.isActivateLinkDialogOpen}
+        onClose={handleActivateLinkDialogClose}
+      >
+        <DialogTitle textAlign="center" id="link-activate">
+          {"Set Limit"}
+        </DialogTitle>
+        <DialogContent>
+          <Stack width={400} spacing={3} sx={{ px: 4, py: 1 }}>
+            <TextField
+              id="negative-marking"
+              label="Negative Marking (percentage)"
+              variant="outlined"
+              type="number"
+              value={AptiDashboard.negativeMarking}
+              onChange={(e) => dispatch(setNegativeMarking(e.target.value))}
+            />
+            <TextField
+              id="text-duration"
+              label="Test Duration (minutes)"
+              variant="outlined"
+              type="number"
+              value={AptiDashboard.testDuration}
+              onChange={(e) => dispatch(setTestDuration(e.target.value))}
+            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DateTimePicker"]}>
+                <DateTimePicker
+                  label="Start Time"
+                  value={AptiDashboard.startTime}
+                  onChange={(time) => dispatch(setStartTime(time))}
+                  format="DD/MM/YYYY HH:mm:ss A"
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DateTimePicker"]}>
+                <DateTimePicker
+                  label="End Time"
+                  value={AptiDashboard.endTime}
+                  onChange={(time) => dispatch(setEndTime(time))}
+                  format="DD/MM/YYYY HH:mm:ss A"
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={handleActivateLinkDialogClose}
+            color="inherit"
+          >
+            Cancle
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleActivateLink}
+            color="inherit"
+          >
+            Active
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {/* toast message */}
+
       <CustomeSnackBar
         isOpen={isCopied}
         message={message}
@@ -185,7 +379,17 @@ const RoundDetailsView = () => {
         duration={1000}
       />
 
+      <CustomeSnackBar
+        isOpen={AptiDashboard.isActiveLinkIsuueOccurs}
+        message={message}
+        handleClose={handleClose}
+        duration={1000}
+      />
+
+      {/* <CustomeSnackBar  /> */}
+
       {/* view candidates dialog box */}
+
       <Dialog
         open={isVCOpen}
         onClose={handleVCDialogClose}
