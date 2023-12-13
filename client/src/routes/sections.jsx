@@ -13,6 +13,7 @@ import axios from "axios";
 import config from "../utils/config";
 import RoundDetailsView from "../sections/interviews/round-details/round-details-view";
 import Loader from "../utils/loader";
+import Landing from "../sections/landing_page/Landing";
 
 export const IndexPage = lazy(() => import("../pages/app"));
 export const LoginPage = lazy(() => import("../pages/login"));
@@ -71,6 +72,7 @@ export default function Router() {
         { path: "/profile", element: <Profile /> },
       ],
     },
+    { path: "/landing", element: <Landing /> },
     { path: "/aptitude/:aptitudeId", element: <GiveAptitude /> },
     {
       path: "login",
