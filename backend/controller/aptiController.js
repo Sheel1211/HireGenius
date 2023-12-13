@@ -275,3 +275,19 @@ export const setAptitudeTestTimes = async (req, res, next) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const completeTest = async (req, res, next) => {
+  try {
+    const { aptitudeId } = req.body;
+    const aptitude = await Aptitude.findOne({ aptitudeId });
+    aptitude.isCompleted = true;
+
+    await aptitude.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "Test is completed", aptitude });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};

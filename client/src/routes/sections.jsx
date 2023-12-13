@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Outlet, Navigate, useRoutes } from "react-router-dom";
 
 import DashboardLayout from "../layouts/dashboard";
@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import config from "../utils/config";
 import RoundDetailsView from "../sections/interviews/round-details/round-details-view";
+import Loader from "../utils/loader";
 
 export const IndexPage = lazy(() => import("../pages/app"));
 export const LoginPage = lazy(() => import("../pages/login"));
@@ -28,7 +29,6 @@ export const GiveAptitude = lazy(() =>
 
 export default function Router() {
   const dispatch = useDispatch();
-
   const userDetails = useSelector((state) => state.User);
 
   useEffect(() => {

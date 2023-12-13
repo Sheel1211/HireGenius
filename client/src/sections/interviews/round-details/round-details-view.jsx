@@ -180,11 +180,55 @@ const RoundDetailsView = () => {
         localStorage.removeItem(roundDetails.aptitudeId + "-startTime");
         localStorage.removeItem(roundDetails.aptitudeId + "-endTime");
         clearInterval(endTestInterval);
+
+        // call api which makes isCompleted true in aptitude
+
+        axios
+          .patch("http://localhost:4000/api/complete/aptitude", {
+            aptitudeId: roundDetails.aptitudeId,
+          })
+          .then((res) => {
+            console.log(res);
+            setIsTestCompleted(res.data.aptitude.isCompleted);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     }, 1000);
 
     return () => clearInterval(endTestInterval);
   }, []);
+
+  // setIsTestStarted at reload
+  useEffect(() => {
+    if (localStorage.getItem(roundDetails.aptitudeId + "-isActive") === true) {
+      setIsTestStarted(true);
+    }
+  }, []);
+
+  // update round details
+  const [isUpdateAptiLoading, setIsUpdateAptiLoading] = useState(true);
+  const [isTestCompleted, setIsTestCompleted] = useState(false);
+  useEffect(() => {
+    console.log("Hi");
+
+    axios
+      .get("http://localhost:4000/api/aptitude/details/" + roundDetails._id)
+      .then((res) => {
+        console.log(res);
+        const updatedAptiDetails = res.data.aptitude;
+        roundDetails.isCompleted = updatedAptiDetails.isCompleted;
+        setIsUpdateAptiLoading(false);
+        setIsTestCompleted(roundDetails.isCompleted);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsUpdateAptiLoading(false);
+      });
+  }, [isTestStarted]);
+
+  console.log(roundDetails);
 
   return (
     <>
@@ -261,23 +305,39 @@ const RoundDetailsView = () => {
                   />
                 </Stack>
                 <Stack spacing={1}>
-                  <Typography>
+                  {/* <Typography>
                     You can activate the test link by clicking
                     <strong> Active Link </strong> Button.
-                  </Typography>
+                  </Typography> */}
                   <Stack spacing={2} alignItems="start">
-                    <Button
-                      color="inherit"
-                      variant="contained"
-                      onClick={handleActivateLinkDialogOpen}
-                      disabled={
-                        localStorage.getItem(
-                          roundDetails.aptitudeId + "-isActive"
-                        ) === "true"
-                      }
-                    >
-                      Active Link
-                    </Button>
+                    {isUpdateAptiLoading ? (
+                      <>
+                        <Skeleton variant="rounded" width="100%" height={50} />
+                      </>
+                    ) : (
+                      <>
+                        {!isTestCompleted && (
+                          <Button
+                            color="inherit"
+                            variant="contained"
+                            onClick={handleActivateLinkDialogOpen}
+                          >
+                            Active Link
+                          </Button>
+                        )}
+                        {isTestCompleted && (
+                          <>
+                            <Typography variant="h5">
+                              You have completed the {roundDetails.round.name}{" "}
+                              test.
+                            </Typography>
+                            <Button color="inherit" variant="contained">
+                              Generate Result
+                            </Button>
+                          </>
+                        )}
+                      </>
+                    )}
                     {isTestStarted && (
                       <Stack>
                         <Typography variant="h6">Test is started...</Typography>
