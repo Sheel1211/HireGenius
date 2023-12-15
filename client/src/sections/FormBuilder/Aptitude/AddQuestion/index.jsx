@@ -75,6 +75,8 @@ const index = ({
       return;
     }
 
+    console.log("first");
+
     if (allRounds.length === 0) {
       const data = {
         interviewId,
@@ -84,7 +86,7 @@ const index = ({
       axios
         .post("http://localhost:4000/api/create/aptitude", data, config)
         .then((res) => {
-          setLink(res.data.AptitudeLink);
+          // setLink(res.data.AptitudeLink);
           localStorage.setItem("AptitudeLink", res.data.AptitudeLink);
           localStorage.removeItem(roundKey);
           const interview = interviewDetails;
@@ -114,7 +116,7 @@ const index = ({
             config
           )
           .then((res) => {
-            setLink(res.data.AptitudeLink);
+            // setLink(res.data.AptitudeLink);
             localStorage.setItem("AptitudeLink", res.data.AptitudeLink);
             localStorage.removeItem(roundKey);
             const interview = interviewDetails;

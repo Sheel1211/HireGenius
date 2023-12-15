@@ -299,13 +299,13 @@ const RegisterView = () => {
           height: 1,
         }}
       >
-        <Logo
+        {/* <Logo
           sx={{
             position: "fixed",
             top: { xs: 16, md: 24 },
             left: { xs: 16, md: 24 },
           }}
-        />
+        /> */}
       </Box>
       <RenderForm />
     </Scrollbar>

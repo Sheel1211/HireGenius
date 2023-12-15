@@ -14,6 +14,7 @@ import config from "../utils/config";
 import RoundDetailsView from "../sections/interviews/round-details/round-details-view";
 import Loader from "../utils/loader";
 import Landing from "../sections/landing_page/Landing";
+import GDPage from "../sections/GD/Main";
 
 export const IndexPage = lazy(() => import("../pages/app"));
 export const LoginPage = lazy(() => import("../pages/login"));
@@ -68,8 +69,9 @@ export default function Router() {
         { path: "/:interview", element: <InterviewDetails /> },
         { path: "/:interview/:roundId", element: <RoundDetailsView /> },
         { path: "/create-interview", element: <CreateInterviewPage /> },
-        { path: "create/aptitude", element: <CreateAptitude /> },
         { path: "/profile", element: <Profile /> },
+        { path: "/create/aptitude", element: <CreateAptitude /> },
+        { path: "/create/gd", element: <GDPage /> },
       ],
     },
     { path: "/landing", element: <Landing /> },

@@ -11,17 +11,29 @@ const RoundImage = ({
   interviewDetails,
 }) => {
   const navigate = useNavigate();
+
   const handleCreateRound = () => {
     // console.log(round);
     // console.log(interview);
 
-    navigate("/create/aptitude", {
-      state: {
-        interviewId: interview._id,
-        allRounds,
-        interviewDetails,
-      },
-    });
+    if (round === "Aptitude") {
+      navigate("/create/aptitude", {
+        state: {
+          interviewId: interview._id,
+          allRounds,
+          interviewDetails,
+        },
+      });
+    } else if (round === "Meet") {
+      navigate("/create/gd", {
+        state: {
+          interviewId: interview._id,
+          allRounds,
+          interviewDetails,
+        },
+      });
+    }
+
     setIsDialogOpen(false);
   };
   return (

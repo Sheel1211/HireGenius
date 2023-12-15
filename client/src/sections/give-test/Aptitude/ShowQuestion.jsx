@@ -143,6 +143,7 @@ const ShowQuestion = () => {
                   }}
                 >
                   {selectedQuestionIdx + 1}.{" "}
+                  {questions[selectedQuestionIdx].questionImageDesc}
                   <img
                     src={questions[selectedQuestionIdx].questionImageURL}
                     alt="Big Image"
