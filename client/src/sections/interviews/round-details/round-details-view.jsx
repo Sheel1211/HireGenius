@@ -286,7 +286,7 @@ const RoundDetailsView = () => {
                     Here is the{" "}
                     <strong> {roundDetails.round.name} link... </strong>
                   </Typography>
-
+                {console.log("Round details: ",roundDetails)}
                   <TextField
                     id="test-link"
                     multiline

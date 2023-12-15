@@ -111,27 +111,27 @@ export const scheduleMeet = async (req, res) => {
           name: "gd",
         };
 
-        // interview
-        //   .findById(interviewID)
-        //   .exec()
-        //   .then((foundInterview) => {
-        //     if (!foundInterview) {
-        //       console.error("Interview not found.");
-        //     } else {
-        //       foundInterview.rounds.push(newRoundData);
-        //       foundInterview
-        //         .save()
-        //         .then((updatedInterview) => {
-        //           console.log("Round added successfully:", updatedInterview);
-        //         })
-        //         .catch((err) => {
-        //           console.error(err);
-        //         });
-        //     }
-        //   })
-        //   .catch((err) => {
-        //     console.error(err);
-        //   });
+        interview
+          .findById(interviewID)
+          .exec()
+          .then((foundInterview) => {
+            if (!foundInterview) {
+              console.error("Interview not found.");
+            } else {
+              foundInterview.rounds.push(newRoundData);
+              foundInterview
+                .save()
+                .then((updatedInterview) => {
+                  console.log("Round added successfully:", updatedInterview);
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
 
         const sendEmailToMentor = await sendEmail(
           mentorData.email,
@@ -149,6 +149,7 @@ export const scheduleMeet = async (req, res) => {
         } else {
           console.log("email sended to mentor: ", mentorEmail);
         }
+
       }
     }
 
