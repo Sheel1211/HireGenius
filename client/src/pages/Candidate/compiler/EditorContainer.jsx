@@ -18,7 +18,10 @@ import OutputDetails from "./components/OutputDetails";
 import ThemeDropdown from "./components/ThemeDropdown";
 import LanguagesDropdown from "./components/LanguagesDropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { updateCorrectlyAnsweredQuestions, updateMarksOfCandidate } from "../../../store/slices/CodingDashboard";
+import {
+  updateCorrectlyAnsweredQuestions,
+  updateMarksOfCandidate,
+} from "../../../store/slices/CodingDashboard";
 
 //Judge CE
 let REACT_APP_RAPID_API_URL = "https://judge0-ce.p.rapidapi.com/submissions";
@@ -26,8 +29,8 @@ let REACT_APP_RAPID_API_HOST = "judge0-ce.p.rapidapi.com";
 let REACT_APP_RAPID_API_KEY =
   // "a77dcef814mshdad0f602ecd8767p1b6a1djsnd2c8bfa00c1a";
   "ebacf7f826msha6a4ad8496227b5p1173e2jsn132dff9af65b";
-  // "b58d3c3518msh74c1a466ccf8679p114144jsn1fb356ca874c";
-  // "c0cac615cfmsh40bbcc5107e561ep1f4b00jsn0767bc46380f";
+// "b58d3c3518msh74c1a466ccf8679p114144jsn1fb356ca874c";
+// "c0cac615cfmsh40bbcc5107e561ep1f4b00jsn0767bc46380f";
 
 const EditorContainer = () => {
   //20 for starting with javascript
@@ -70,7 +73,7 @@ const EditorContainer = () => {
   const handleTestcases = async (testcases, hiddenTestcases) => {
     let allPublicPassed = true;
     let allHiddenPassed = true;
-  
+
     for (const testcase of testcases) {
       const passed = await processTestcase(testcase);
       console.log(JSON.stringify(testcase) + " => " + passed);
@@ -79,7 +82,7 @@ const EditorContainer = () => {
         break; // If any public test case fails, stop processing.
       }
     }
-    
+
     if (allPublicPassed) {
       for (const testcase of hiddenTestcases) {
         const passed = await processTestcase(testcase);
@@ -90,23 +93,23 @@ const EditorContainer = () => {
         }
       }
     }
-  
+
     return [allPublicPassed, allHiddenPassed];
   };
-  
+
   const processTestcase = async (testcase) => {
     const input = testcase.input;
     const output = testcase.output;
-  
+
     setProcessing(true);
-  
+
     const formData = {
       language_id: language.id,
       source_code: btoa(code),
       stdin: btoa(input),
       expected_output: btoa(output),
     };
-  
+
     const options = {
       method: "POST",
       url: REACT_APP_RAPID_API_URL,
@@ -119,19 +122,19 @@ const EditorContainer = () => {
       },
       data: formData,
     };
-  
+
     try {
       const response = await axios.request(options);
       const token = response.data.token;
       const statusId = await pollStatus(token, input);
-      console.log(statusId)
+      console.log(statusId);
       setProcessing(false);
-  
+
       return statusId == 3;
     } catch (err) {
       let error = err.response ? err.response.data : err;
       let status = err.response.status;
-  
+
       if (status === 429) {
         showErrorToast(`Quota of 100 requests exceeded for the Day!`, 10000);
       }
@@ -140,7 +143,7 @@ const EditorContainer = () => {
       return false;
     }
   };
-  
+
   const pollStatus = async (token, input) => {
     return new Promise(async (resolve, reject) => {
       const checkStatus = async () => {
@@ -153,13 +156,13 @@ const EditorContainer = () => {
             "X-RapidAPI-Key": REACT_APP_RAPID_API_KEY,
           },
         };
-  
+
         try {
           const response = await axios.request(options);
           const statusId = response.data.status?.id;
-  
+
           console.log(statusId + " status inside poll");
-  
+
           if (statusId === 1 || statusId === 2) {
             setTimeout(checkStatus, 2000);
           } else {
@@ -171,32 +174,48 @@ const EditorContainer = () => {
           reject(err);
         }
       };
-  
+
       checkStatus();
     });
   };
-  
-  
+
   const handleSubmitChallenge = async () => {
     const testcases = question.testcases;
     const hiddenTestcases = question.hiddenTestcases;
-  
+
     const [allPublicPassed, allHiddenPassed] = await handleTestcases(
       testcases,
       hiddenTestcases
     );
-  
+
     if (allPublicPassed && allHiddenPassed) {
       showSuccessToast("Your code is accepted!");
       dispatch(updateCorrectlyAnsweredQuestions(question._id));
-      dispatch(updateMarksOfCandidate(question.marks))
+      dispatch(updateMarksOfCandidate(question.marks));
+
+      const existingCorrectlyAnsweredQuestions =
+        JSON.parse(localStorage.getItem("correctlyAnsweredQuestions")) || [];
+
+      existingCorrectlyAnsweredQuestions.push(question._id);
+
+      localStorage.setItem(
+        "correctlyAnsweredQuestions",
+        JSON.stringify(existingCorrectlyAnsweredQuestions)
+      );
+
+      const existingTotalMarks =
+        JSON.parse(localStorage.getItem("totalMarks")) || 0;
+
+      const updatedTotalMarks = existingTotalMarks + question.marks;
+
+      localStorage.setItem("totalMarks", JSON.stringify(updatedTotalMarks));
     } else if (!allPublicPassed) {
       showErrorToast("Some Public Testcases Failed.");
     } else {
       showErrorToast("Some Hidden Testcases Failed.");
     }
   };
-  
+
   const handleCompile = () => {
     setProcessing(true);
     const formData = {

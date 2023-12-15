@@ -331,7 +331,7 @@ const AddQuestion = ({ interviewId }) => {
             onChange={(event) => setTc({ ...tc, output: event.target.value })}
             value={tc.output}
           />
-          <Button variant="contained" color="primary" onClick={addNewTestCase}>
+          <Button variant="contained" sx={{backgroundColor:"#000000"}} color="primary" onClick={addNewTestCase}>
             + Add Test Case
           </Button>
         </Box>
@@ -387,6 +387,7 @@ const AddQuestion = ({ interviewId }) => {
           <Button
             variant="contained"
             color="primary"
+            sx={{backgroundColor:"#000000"}}
             onClick={addNewHiddenTestCase}
           >
             + Add Hidden Test Case
@@ -455,11 +456,12 @@ const AddQuestion = ({ interviewId }) => {
           <Button
             variant="contained"
             color="primary"
+            sx={{backgroundColor:"#000000"}}
             onClick={handleQuestionAdd}
           >
             Add Question
           </Button>
-          <Button variant="contained" color="primary" onClick={handleDuration}>
+          <Button variant="contained" sx={{backgroundColor:"#000000"}} color="primary" onClick={handleDuration}>
             Generate Link
           </Button>
         </Box>

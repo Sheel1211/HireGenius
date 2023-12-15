@@ -108,3 +108,61 @@ export const getQuestions = async(req,res)=>{
     });
   }
 }
+
+export const isValidCoding = async (req, res, next) => {
+  
+  try {
+    const { codingId } = req.params;
+    
+    // console.log("params",req.params);
+    const validCoding = await coding.findOne({ _id:codingId });
+    
+
+    console.log(validCoding)
+    if (!validCoding) {
+      throw new Error("Not a valid coding link");
+    }
+    res.status(200).json({
+      success: true,
+      message: "Valid Coding",
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const addMarks = async(req,res,next)=>{
+  try{
+    const {user,marks,codingId} = req.body;  
+    const userDetails = JSON.parse(user)  
+    const codingData = await coding.findById(codingId);
+
+    if (!codingData) {
+      throw new Error("Coding not found");
+    }
+
+    codingData.results.push({ "email":userDetails.email,"marks": marks,});
+
+    await codingData.save();
+
+    console.log("Result added successfully");
+  }catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+}
+
+export const viewResults=async(req,res,next)=>{
+  try{
+    const codingId = req.body.codingId;
+
+    const resultData = await coding.findById(codingId);
+
+    res.status(200).json({
+      success:true,
+      results:resultData
+    })
+
+  }catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+}

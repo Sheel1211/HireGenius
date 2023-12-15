@@ -100,7 +100,9 @@ const interviewDetails = () => {
                     <TableRow>
                       <TableCell>Round</TableCell>
                       <TableCell>Title</TableCell>
-                      <TableCell align="right">Round_Id</TableCell>
+                      <TableCell >Round_Id</TableCell>
+                      <TableCell align="right">Options</TableCell>
+                      
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -118,7 +120,8 @@ const interviewDetails = () => {
                         <TableCell component="th" scope="row">
                           {row.name}
                         </TableCell>
-                        <TableCell align="right">{row.roundId}</TableCell>
+                        <TableCell>{row.roundId}</TableCell>
+                        <TableCell align="right"><Button sx={{color:"#000000"}} onClick={()=>navigate("/clientdashboard/results",{state:{"id":row.roundId,"type":row.name}})}>View Results</Button></TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

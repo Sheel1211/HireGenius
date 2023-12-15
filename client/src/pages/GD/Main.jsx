@@ -412,7 +412,7 @@ const Main = () => {
             </Grid>
 
             <Grid item xs={12} sm={2}>
-              <Button variant="contained" onClick={handleGenerateLink}>
+              <Button variant="contained" sx={{backgroundColor:"#000000"}} onClick={handleGenerateLink}>
                 Generate
               </Button>
             </Grid>
@@ -421,7 +421,7 @@ const Main = () => {
                 required
                 id="duration"
                 name="duration"
-                label="Generaet link"
+                label="Generate link"
                 fullWidth
                 value={link}
                 size="small"
@@ -484,7 +484,7 @@ const Main = () => {
               p: 2,
             }}
           >
-            <Button variant="contained" onClick={handleScheduleMeet}>
+            <Button variant="contained" sx={{backgroundColor:"#000000"}}onClick={handleScheduleMeet}>
               Send Email to All
             </Button>
           </Box>

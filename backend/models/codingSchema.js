@@ -55,6 +55,16 @@ const codingSchema = new mongoose.Schema({
       }
     },
   ],
+  results: [
+    {
+      email: {
+        type: String,
+      },
+      marks: {
+        type: Number,
+      },
+    },
+  ],
   testLink: String, 
 });
 

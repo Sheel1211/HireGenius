@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useNavigationType, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -29,15 +29,18 @@ const config = {
 const CandidateLogin = () => {
   const dispatch = useDispatch();
   const params = useParams();
+  const navigate = useNavigate();
+
+  localStorage.setItem("codingId",params.codingId)
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/aptitude/check/${params.aptitudeId}`).then((res)=>{
+      .get(`http://localhost:4000/api/coding/check/${params.codingId}`).then((res)=>{
         console.log(res);
       })
       .catch((error) => {
         console.log(error);
-        error("Something went wrong!", {
+        toast.error("Something went wrong!", {
           position: "top-center",
           autoClose: 1000,
           hideProgressBar: false,
@@ -64,6 +67,7 @@ const CandidateLogin = () => {
 
     // console.log("interview id : ",interviewId)
     console.log(username, password,interviewId)
+    // navigate("/coding/instructions");
     axios
     .post(
       "http://127.0.0.1:4000/api/candidate/login",
@@ -76,8 +80,12 @@ const CandidateLogin = () => {
         Cookies.set("token", res.data.user.authToken, { expires: 7 });
         console.log(res.data.user)
         dispatch(UserLogin(res.data.user));
-        alert("Login successfully.")
 
+        localStorage.setItem("User",JSON.stringify(res.data.user));
+        localStorage.setItem("totalMarks",0);
+        
+        alert("Login successfully.")
+        navigate("/coding/instructions");
       } else if (res.status === 202) {
         alert("You are not candidate");
       } else if (res.status === 204) alert("No candidate for given data");

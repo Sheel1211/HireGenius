@@ -6,6 +6,7 @@ import ClientDashboardAppPage from "./pages/ClientDashboard/appPage";
 import CandidatePage from "./pages/ClientDashboard/candidatePage";
 import InterviewPage from "./pages/ClientDashboard/interviewPage";
 import InterviewDetails from "./pages/ClientDashboard/interviewDetails";
+import InterviewResults from "./pages/ClientDashboard/interviewResults";
 import AdminDashboard from "./pages/Admin/adminDashboard";
 import AdminLogin from "./pages/Admin/adminLogin";
 import Playground from "./pages/compiler/Playground";
@@ -29,7 +30,10 @@ import Header from "./pages/landing_page/header/Header";
 import CandidateCoding from "./pages/Candidate/compiler/CandidateCoding";
 import { Cookie } from "@mui/icons-material";
 import Cookies from "js-cookie";
-import Scheduleroom from './pages/GD/Main';
+import Scheduleroom from "./pages/GD/Main";
+import CompilerCandidateLogin from "./pages/Candidate/compiler/CandidateLogin";
+import Instructions from "./pages/Candidate/compiler/Instructions";
+import ThankYou from "./pages/Candidate/compiler/ThankYou";
 
 const config = {
   headers: {
@@ -40,8 +44,6 @@ const config = {
   credentials: "include",
   withCredentials: true,
 };
-
-
 
 const App = () => {
   const dispatch = useDispatch();
@@ -57,7 +59,7 @@ const App = () => {
           config
         );
         const user = response.data.user;
-        console.log("user in app.jsx",user);
+        console.log("user in app.jsx", user);
         dispatch(getUserDetails(user));
         setIsLoading(false);
       } catch (error) {
@@ -66,11 +68,11 @@ const App = () => {
       }
     }
     const token = Cookies.get("token");
-  if (token) {
-    fetchData();
-  } else {
-    setIsLoading(false);
-  }
+    if (token) {
+      fetchData();
+    } else {
+      setIsLoading(false);
+    }
   }, [dispatch]);
 
   if (isLoading) {
@@ -82,19 +84,24 @@ const App = () => {
       <ToastContainer />
       <Header />
       <Routes>
-
         {/* GD */}
-        <Route path="/schedule-meet" element={<Scheduleroom/>}/>
-        
+        <Route path="/schedule-meet" element={<Scheduleroom />} />
+
         <Route path="/" exact element={<Landing />} />
         <Route path="/create/coding" element={<CompilerForm />} />
 
         {/* Candidate */}
 
         <Route path="/aptitude/:aptitudeId" element={<CandidateAptitude />} />
-        <Route path="/coding/:codingId" element={<CandidateCoding />} />
+        <Route path="/coding/solve/:codingId" element={<CandidateCoding />} />
+        <Route
+          path="/coding/:codingId"
+          element={<CompilerCandidateLogin />}
+        />
         <Route path="/solve/coding/" element={<CandidatePlayground />} />
-        
+        <Route path="/coding/instructions/" element={<Instructions />} />
+        <Route path="/coding/thank-you/" element={<ThankYou />} />
+
         <Route path="/compiler" element={<CompilerHome />} />
         <Route path="/compiler/playground" element={<Playground />} />
 
@@ -114,6 +121,7 @@ const App = () => {
                 <Route path="candidate" element={<CandidatePage />} />
                 <Route path="schedule-interview" element={<InterviewPage />} />
                 <Route path="rounds" element={<InterviewDetails />} />
+                <Route path="results" element={<InterviewResults />} />
               </Route>
             </>
           )}

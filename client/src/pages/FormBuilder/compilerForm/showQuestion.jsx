@@ -22,12 +22,12 @@ const ShowQuestion = () => {
 
   return (
     <Container sx={{ backgroundColor: "white" }}>
-      <Typography variant="h4" color="primary">Questions</Typography>
+      <Typography variant="h4" color="#000000">Questions</Typography>
       {questions &&
         questions.map((question, index) => (
           <Box key={index} sx={{ marginBottom: 2 }}>
             <Box sx={{ display: "flex", flexDirection: "row" }}>
-              <Typography variant="h6" sx={{ color: "#1E88E5" }}>
+              <Typography variant="h6" sx={{ color: "#000000" }}>
                 Question {index + 1}
               </Typography>
               <IconButton
