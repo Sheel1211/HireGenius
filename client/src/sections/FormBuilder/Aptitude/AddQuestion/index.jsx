@@ -75,63 +75,58 @@ const index = ({
       return;
     }
 
-    console.log("first");
+    // if (allRounds.length === 0) {
+    const data = {
+      interviewId,
+      questions,
+    };
 
-    if (allRounds.length === 0) {
-      const data = {
-        interviewId,
-        questions,
-      };
-
-      axios
-        .post("http://localhost:4000/api/create/aptitude", data, config)
-        .then((res) => {
-          // setLink(res.data.AptitudeLink);
-          localStorage.setItem("AptitudeLink", res.data.AptitudeLink);
-          localStorage.removeItem(roundKey);
-          const interview = interviewDetails;
-          navigate(
-            `/${interviewDetails.title.split(" ").join("-").toLowerCase()}`,
-            {
-              state: interview,
-            }
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      const prevRound = allRounds[allRounds.length - 1];
-      const data = {
-        interviewId,
-        questions,
-        prevRoundId: prevRound.roundId,
-      };
-
-      if (prevRound.name === "Aptitude") {
-        axios
-          .post(
-            "http://localhost:4000/api/create/another/aptitude",
-            data,
-            config
-          )
-          .then((res) => {
-            // setLink(res.data.AptitudeLink);
-            localStorage.setItem("AptitudeLink", res.data.AptitudeLink);
-            localStorage.removeItem(roundKey);
-            const interview = interviewDetails;
-            navigate(
-              `/${interviewDetails.title.split(" ").join("-").toLowerCase()}`,
-              {
-                state: interview,
-              }
-            );
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    }
+    axios
+      .post("http://localhost:4000/api/create/aptitude", data, config)
+      .then((res) => {
+        console.log(res);
+        // setLink(res.data.AptitudeLink);
+        localStorage.setItem("AptitudeLink", res.data.AptitudeLink);
+        localStorage.removeItem(roundKey);
+        const interview = interviewDetails;
+        navigate(
+          `/${interviewDetails.title.split(" ").join("-").toLowerCase()}`,
+          {
+            state: interview,
+          }
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // } else {
+    // const prevRound = allRounds[allRounds.length - 1];
+    // const data = {
+    //   interviewId,
+    //   questions,
+    //   prevRoundId: prevRound.roundId,
+    // };
+    // if (prevRound.name === "Aptitude") {
+    // axios
+    //   .post("http://localhost:4000/api/create/another/aptitude", data, config)
+    //   .then((res) => {
+    //     console.log(res);
+    //     // setLink(res.data.AptitudeLink);
+    //     localStorage.setItem("AptitudeLink", res.data.AptitudeLink);
+    //     localStorage.removeItem(roundKey);
+    //     const interview = interviewDetails;
+    //     navigate(
+    //       `/${interviewDetails.title.split(" ").join("-").toLowerCase()}`,
+    //       {
+    //         state: interview,
+    //       }
+    //     );
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    // }
+    // }
   };
 
   return (

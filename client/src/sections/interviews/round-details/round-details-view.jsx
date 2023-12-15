@@ -41,6 +41,8 @@ import {
   setTestDuration,
 } from "../../../store/slices/AptiDashboard";
 import dayjs from "dayjs";
+import Cookies from "js-cookie";
+import config from "../../../utils/config";
 
 const RoundDetailsView = () => {
   const [isCopied, setIsCopied] = useState(false);
@@ -107,9 +109,11 @@ const RoundDetailsView = () => {
   const DialogSlice = useSelector((state) => state.DialogSlice);
   const AptiDashboard = useSelector((state) => state.AptiDashboard);
   const [isTestStarted, setIsTestStarted] = useState(false);
+  const [isActivated, setIsActivated] = useState(false);
 
   const handleActivateLinkDialogOpen = () => {
     dispatch(setIsActivateLinkDialogOpen(true));
+    setIsActivated(true);
   };
 
   const handleActivateLinkDialogClose = () => {
@@ -210,25 +214,61 @@ const RoundDetailsView = () => {
   // update round details
   const [isUpdateAptiLoading, setIsUpdateAptiLoading] = useState(true);
   const [isTestCompleted, setIsTestCompleted] = useState(false);
-  useEffect(() => {
-    console.log("Hi");
 
-    axios
-      .get("http://localhost:4000/api/aptitude/details/" + roundDetails._id)
-      .then((res) => {
-        console.log(res);
-        const updatedAptiDetails = res.data.aptitude;
-        roundDetails.isCompleted = updatedAptiDetails.isCompleted;
-        setIsUpdateAptiLoading(false);
-        setIsTestCompleted(roundDetails.isCompleted);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsUpdateAptiLoading(false);
-      });
+  useEffect(() => {
+    if (roundDetails.round.name === "Aptitude") {
+      axios
+        .get("http://localhost:4000/api/aptitude/details/" + roundDetails._id)
+        .then((res) => {
+          console.log(res);
+          const updatedAptiDetails = res.data.aptitude;
+          roundDetails.isCompleted = updatedAptiDetails.isCompleted;
+          setIsUpdateAptiLoading(false);
+          setIsTestCompleted(roundDetails.isCompleted);
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsUpdateAptiLoading(false);
+        });
+    }
+
+    if (roundDetails.round.name === "gd") {
+      axios
+        .get("http://127.0.0.1:4000/api/gd/details/" + roundDetails._id)
+        .then((res) => {
+          // console.log(res);
+          // setInterviewRound(res.data.GD);
+          setIsUpdateAptiLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsUpdateAptiLoading(false);
+        });
+    }
   }, [isTestStarted]);
 
   console.log(roundDetails);
+
+  // send email toast
+
+  const [isMailForwarded, setIsMailForwarded] = useState(false);
+  const handleSendEmail = () => {
+    const aptLink = roundDetails.testLink;
+    const token = Cookies.get("token");
+    axios
+      .post(
+        "http://127.0.0.1:4000/api/interview/send-email-apt-candidates/" +
+          token,
+        { aptLink, candidates: roundDetails.candidates },
+        config
+      )
+      .then((res) => {
+        setIsMailForwarded(true);
+      })
+      .catch((error) => {
+        alert("error in app.jsx" + error.message);
+      });
+  };
 
   return (
     <>
@@ -239,7 +279,7 @@ const RoundDetailsView = () => {
             sx={{ cursor: "pointer" }}
             onClick={() => window.history.back()}
           >
-            {roundDetails.roundNumber} - {roundDetails.round.name}
+            {roundDetails.roundNumber} - {roundDetails.round.name.toUpperCase()}
           </Typography>
         </Stack>
 
@@ -263,17 +303,25 @@ const RoundDetailsView = () => {
                   </Stack>
                 </Stack>
                 <Stack>
-                  <Typography>
-                    You can send emails to all candidates.
-                  </Typography>
-                  <Typography>
-                    Email contians Username, Password and Test link.
-                  </Typography>
-                  <Stack direction="row" mt={1}>
-                    <Button color="inherit" variant="contained">
-                      Send Mail
-                    </Button>
-                  </Stack>
+                  {roundDetails.round.name === "Aptitude" && (
+                    <>
+                      <Typography>
+                        You can send emails to all candidates.
+                      </Typography>
+                      <Typography>
+                        Email contians Username, Password and Test link.
+                      </Typography>
+                      <Stack direction="row" mt={1}>
+                        <Button
+                          color="inherit"
+                          variant="contained"
+                          onClick={handleSendEmail}
+                        >
+                          Send Mail
+                        </Button>
+                      </Stack>
+                    </>
+                  )}
                 </Stack>
               </Stack>
             </Card>
@@ -284,25 +332,49 @@ const RoundDetailsView = () => {
                 <Stack spacing={1}>
                   <Typography variant="body1">
                     Here is the{" "}
-                    <strong> {roundDetails.round.name} link... </strong>
+                    <strong>
+                      {" "}
+                      {roundDetails.round.name.toUpperCase()} link...{" "}
+                    </strong>
                   </Typography>
 
-                  <TextField
-                    id="test-link"
-                    multiline
-                    value={roundDetails.testLink}
-                    disabled
-                    fullWidth
-                    InputProps={{
-                      endAdornment: (
-                        <IconButton
-                          onClick={() => handleCopy(roundDetails.testLink)}
-                        >
-                          <ContentCopyIcon />
-                        </IconButton>
-                      ),
-                    }}
-                  />
+                  {roundDetails.round.name === "Aptitude" && (
+                    <TextField
+                      id="test-link"
+                      multiline
+                      value={roundDetails.testLink}
+                      disabled
+                      fullWidth
+                      InputProps={{
+                        endAdornment: (
+                          <IconButton
+                            onClick={() => handleCopy(roundDetails.testLink)}
+                          >
+                            <ContentCopyIcon />
+                          </IconButton>
+                        ),
+                      }}
+                    />
+                  )}
+
+                  {roundDetails.round.name === "gd" && (
+                    <TextField
+                      id="test-link"
+                      multiline
+                      value={roundDetails.link}
+                      disabled
+                      fullWidth
+                      InputProps={{
+                        endAdornment: (
+                          <IconButton
+                            onClick={() => handleCopy(roundDetails.testLink)}
+                          >
+                            <ContentCopyIcon />
+                          </IconButton>
+                        ),
+                      }}
+                    />
+                  )}
                 </Stack>
                 <Stack spacing={1}>
                   {/* <Typography>
@@ -316,15 +388,17 @@ const RoundDetailsView = () => {
                       </>
                     ) : (
                       <>
-                        {!isTestCompleted && (
-                          <Button
-                            color="inherit"
-                            variant="contained"
-                            onClick={handleActivateLinkDialogOpen}
-                          >
-                            Active Link
-                          </Button>
-                        )}
+                        {!isActivated &&
+                          !isTestCompleted &&
+                          roundDetails.round.name === "Aptitude" && (
+                            <Button
+                              color="inherit"
+                              variant="contained"
+                              onClick={handleActivateLinkDialogOpen}
+                            >
+                              Active Link
+                            </Button>
+                          )}
                         {isTestCompleted && (
                           <>
                             <Typography variant="h5">
@@ -526,6 +600,15 @@ const RoundDetailsView = () => {
           </TableContainer>
         )}
       </Dialog>
+
+      {isMailForwarded && (
+        <CustomeSnackBar
+          isOpen={isMailForwarded}
+          message="Email send successfully"
+          handleClose={() => setIsMailForwarded(false)}
+          duration={3000}
+        />
+      )}
     </>
   );
 };

@@ -111,27 +111,27 @@ export const scheduleMeet = async (req, res) => {
           name: "gd",
         };
 
-        // interview
-        //   .findById(interviewID)
-        //   .exec()
-        //   .then((foundInterview) => {
-        //     if (!foundInterview) {
-        //       console.error("Interview not found.");
-        //     } else {
-        //       foundInterview.rounds.push(newRoundData);
-        //       foundInterview
-        //         .save()
-        //         .then((updatedInterview) => {
-        //           console.log("Round added successfully:", updatedInterview);
-        //         })
-        //         .catch((err) => {
-        //           console.error(err);
-        //         });
-        //     }
-        //   })
-        //   .catch((err) => {
-        //     console.error(err);
-        //   });
+        interview
+          .findById(interviewID)
+          .exec()
+          .then((foundInterview) => {
+            if (!foundInterview) {
+              console.error("Interview not found.");
+            } else {
+              foundInterview.rounds.push(newRoundData);
+              foundInterview
+                .save()
+                .then((updatedInterview) => {
+                  console.log("Round added successfully:", updatedInterview);
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
 
         const sendEmailToMentor = await sendEmail(
           mentorData.email,
@@ -179,5 +179,26 @@ export const scheduleMeet = async (req, res) => {
     });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+export const getGdDetails = async (req, res, next) => {
+  try {
+    const { gdId } = req.params;
+
+    console.log(req.params);
+
+    const GD = await gd.findOne({ _id: gdId });
+    if (!GD) {
+      throw new Error("Something went wrong.");
+    }
+
+    res.status(200).json({
+      GD,
+      success: true,
+      message: "Valid GD",
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
   }
 };

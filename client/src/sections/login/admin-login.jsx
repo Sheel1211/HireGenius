@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 
 import { Box } from "@mui/material";
@@ -23,9 +24,9 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { UserLogin } from "../../store/slices/UserSlice";
-// ----------------------------------------------------------------------
+import config from "../../utils/config";
 
-export default function LoginView() {
+const AdminLogin = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -47,27 +48,19 @@ export default function LoginView() {
 
     axios
       .post(
-        "http://127.0.0.1:4000/api/client/login",
+        "http://127.0.0.1:4000/api/admin/admin-login",
         { email, password },
-        { headers: { "Content-Type": "application/json" } }
+        config
       )
       .then((res) => {
-        if (res.status === 200) {
-          Cookies.set("token", res.data.user.authToken, { expires: 7 });
-          dispatch(UserLogin(res.data.user));
-          router.push("/");
-        } else if (res.status === 202) {
-          alert("You are not Approved as client");
-        } else if (res.status === 204) alert("No client for given data");
+        console.log("res : ", res.data);
+        dispatch(UserLogin(res.data.user));
+        Cookies.set("token", res.data.token, { expires: 7 });
+        navigate("/admindashboard");
       })
       .catch((err) => {
-        console.log(err);
-        alert("Something went wrong!");
+        console.log("err", err);
       });
-  };
-
-  const handleGetStarted = () => {
-    navigate("/client/register");
   };
 
   const renderForm = (
@@ -141,14 +134,6 @@ export default function LoginView() {
         height: 1,
       }}
     >
-      {/* <Logo
-        sx={{
-          position: "fixed",
-          top: { xs: 16, md: 24 },
-          left: { xs: 16, md: 24 },
-        }}
-      /> */}
-
       <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
         <Card
           sx={{
@@ -157,60 +142,15 @@ export default function LoginView() {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Sign in to HireGenius</Typography>
-
-          <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            Don’t have an account?
-            <MuiLink
-              variant="subtitle2"
-              sx={{ ml: 0.5, cursor: "pointer" }}
-              onClick={handleGetStarted}
-            >
-              Get started
-            </MuiLink>
+          <Typography variant="h4" sx={{ mb: 4 }} textAlign="center">
+            Admin Login
           </Typography>
-
-          {/* <Stack direction="row" spacing={2}>
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:google-fill" color="#DF3E30" />
-            </Button>
-
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:facebook-fill" color="#1877F2" />
-            </Button>
-
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:twitter-fill" color="#1C9CEA" />
-            </Button>
-          </Stack> */}
-
-          <Divider sx={{ my: 3 }}>
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              OR
-            </Typography>
-          </Divider>
 
           <form onSubmit={handleClick}>{renderForm}</form>
         </Card>
       </Stack>
     </Box>
   );
-}
+};
+
+export default AdminLogin;

@@ -15,6 +15,10 @@ import RoundDetailsView from "../sections/interviews/round-details/round-details
 import Loader from "../utils/loader";
 import Landing from "../sections/landing_page/Landing";
 import GDPage from "../sections/GD/Main";
+import AdminLogin from "../sections/login/admin-login";
+import AdminDashboard from "../sections/admin/adminDashboard";
+import ClientProfile from "../sections/admin/clientProfile";
+import LandingPage from "../pages/landing-page";
 
 export const IndexPage = lazy(() => import("../pages/app"));
 export const LoginPage = lazy(() => import("../pages/login"));
@@ -74,16 +78,19 @@ export default function Router() {
         { path: "/create/gd", element: <GDPage /> },
       ],
     },
-    { path: "/landing", element: <Landing /> },
+    { path: "/landing", element: <LandingPage /> },
     { path: "/aptitude/:aptitudeId", element: <GiveAptitude /> },
     {
-      path: "login",
+      path: "/client/login",
       element: <LoginPage />,
     },
     {
-      path: "signup",
+      path: "/client/register",
       element: <RegisterPage />,
     },
+    { path: "/admin/login", element: <AdminLogin /> },
+    { path: "/admindashboard", element: <AdminDashboard /> },
+    { path: "/admin/client-profile", element: <ClientProfile /> },
     {
       path: "404",
       element: <Page404 />,
