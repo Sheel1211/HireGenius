@@ -184,12 +184,38 @@ export const createImageLink = async (req, res) => {
 
 export const submitTest = async (req, res) => {
   try {
-    const { aptitudeId, ...data } = req.body;
+    const { aptitudeId, candidateId, gain, total } = req.body;
+
+    // Find the aptitude based on aptitudeId
     const aptitude = await Aptitude.findOne({ aptitudeId });
 
-    console.log(data);
+    if (!aptitude) {
+      return res.status(404).json({
+        success: false,
+        message: "Aptitude not found",
+      });
+    }
 
-    // await aptitude.save();
+    // Find the index of the candidate within the candidates array
+    const candidateIndex = aptitude.candidates.findIndex(
+      (candidate) => candidate.candidateId.toString() === candidateId.toString()
+    );
+
+    if (candidateIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        message: "Candidate not found in the aptitude test",
+      });
+    }
+
+    // Update gain and total for the specific candidate
+    aptitude.candidates[candidateIndex].gain = gain;
+    aptitude.candidates[candidateIndex].total = total;
+
+    aptitude.candidates[candidateIndex].isSubmitted = true;
+
+    // Save the updated aptitude
+    await aptitude.save();
 
     res.status(200).json({
       success: true,

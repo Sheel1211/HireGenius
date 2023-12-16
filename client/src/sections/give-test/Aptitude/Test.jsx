@@ -91,8 +91,8 @@ const Test = () => {
     <Box sx={{ minHeight: "100vh", background: "#eeeeee" }}>
       <Header />
       <Box sx={{ mt: 2 }}>
-        {/* <NewTab /> */}
-        {/* <PreventKeys /> */}
+        <NewTab />
+        <PreventKeys />
 
         <Grid container spacing={2} columns={20}>
           <Grid item xs={7}>

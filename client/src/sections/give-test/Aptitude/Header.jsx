@@ -75,6 +75,7 @@ const Header = () => {
       gain: right,
       total,
     };
+    console.log(data);
 
     // console.log(data);
     // make post request to store score of the candidate in aptitude schema
