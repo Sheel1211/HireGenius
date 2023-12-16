@@ -5,6 +5,7 @@ import {
   clientProfileUpdate,
   clientRegistration,
   getClientData,
+  logout,
 } from "../controller/clientController.js";
 import isauthenticated from "../middleware/auth.js";
 const router = express.Router();
@@ -25,5 +26,7 @@ router
 router
   .route("/client-data/:clientId/:token")
   .get(isauthenticated, getClientData);
+
+router.route("/logout").get(logout);
 
 export default router;

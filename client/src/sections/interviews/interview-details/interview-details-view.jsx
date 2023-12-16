@@ -76,7 +76,7 @@ const InterviewDetails = () => {
         >
           <Typography
             variant="h4"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/dashboard")}
             sx={{ cursor: "pointer" }}
           >
             {interview.title}

@@ -12,7 +12,7 @@ const icon = (name) => (
 const navConfig = [
   {
     title: "dashboard",
-    path: "/",
+    path: "/dashboard",
     icon: icon("ic_analytics"),
   },
   {

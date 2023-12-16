@@ -55,7 +55,7 @@ export default function LoginView() {
         if (res.status === 200) {
           Cookies.set("token", res.data.user.authToken, { expires: 7 });
           dispatch(UserLogin(res.data.user));
-          router.push("/");
+          router.push("/dashboard");
         } else if (res.status === 202) {
           alert("You are not Approved as client");
         } else if (res.status === 204) alert("No client for given data");

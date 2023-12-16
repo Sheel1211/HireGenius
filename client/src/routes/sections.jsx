@@ -69,7 +69,7 @@ export default function Router() {
         </DashboardLayout>
       ),
       children: [
-        { path: "/", element: <IndexPage /> },
+        { path: "/dashboard", element: <IndexPage /> },
         { path: "/:interview", element: <InterviewDetails /> },
         { path: "/:interview/:roundId", element: <RoundDetailsView /> },
         { path: "/create-interview", element: <CreateInterviewPage /> },
@@ -78,7 +78,7 @@ export default function Router() {
         { path: "/create/gd", element: <GDPage /> },
       ],
     },
-    { path: "/landing", element: <LandingPage /> },
+    { path: "/", element: <LandingPage /> },
     { path: "/aptitude/:aptitudeId", element: <GiveAptitude /> },
     {
       path: "/client/login",

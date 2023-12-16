@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CustomeSnackBar from "../../../utils/toast-message";
 // import CandidatesReadCSV from "../../create-interview/candidates-read-csv";
 // import { dummyCSVData } from "../../../utils/dummy-csv-data";
@@ -109,11 +109,9 @@ const RoundDetailsView = () => {
   const DialogSlice = useSelector((state) => state.DialogSlice);
   const AptiDashboard = useSelector((state) => state.AptiDashboard);
   const [isTestStarted, setIsTestStarted] = useState(false);
-  const [isActivated, setIsActivated] = useState(false);
 
   const handleActivateLinkDialogOpen = () => {
     dispatch(setIsActivateLinkDialogOpen(true));
-    setIsActivated(true);
   };
 
   const handleActivateLinkDialogClose = () => {
@@ -270,6 +268,27 @@ const RoundDetailsView = () => {
       });
   };
 
+  const [isResultOpen, setIsResultOpen] = useState(false);
+  const [aptitudeResult, setAptitudeResult] = useState(null);
+  const handleGenerateResult = () => {
+    setIsResultOpen(true);
+    axios
+      .post("http://localhost:4000/api/generate/aptitude/result", {
+        aptitudeId: roundDetails.aptitudeId,
+      })
+      .then((res) => {
+        console.log(res.data.result);
+        setAptitudeResult(res.data.result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleResultClose = () => {
+    setIsResultOpen(false);
+  };
+
   return (
     <>
       <Container>
@@ -388,27 +407,24 @@ const RoundDetailsView = () => {
                       </>
                     ) : (
                       <>
-                        {!isActivated &&
-                          !isTestCompleted &&
-                          roundDetails.round.name === "Aptitude" && (
-                            <Button
-                              color="inherit"
-                              variant="contained"
-                              onClick={handleActivateLinkDialogOpen}
-                            >
-                              Active Link
-                            </Button>
-                          )}
-                        {isTestCompleted && (
-                          <>
-                            <Typography variant="h5">
-                              You have completed the {roundDetails.round.name}{" "}
-                              test.
-                            </Typography>
-                            <Button color="inherit" variant="contained">
-                              Generate Result
-                            </Button>
-                          </>
+                        {roundDetails.round.name === "Aptitude" && (
+                          <Button
+                            color="inherit"
+                            variant="contained"
+                            onClick={handleActivateLinkDialogOpen}
+                          >
+                            Active Link
+                          </Button>
+                        )}
+
+                        {roundDetails.round.name === "Aptitude" && (
+                          <Button
+                            color="inherit"
+                            variant="contained"
+                            onClick={handleGenerateResult}
+                          >
+                            Generate Result
+                          </Button>
                         )}
                       </>
                     )}
@@ -609,6 +625,36 @@ const RoundDetailsView = () => {
           duration={3000}
         />
       )}
+
+      <Dialog open={isResultOpen} onClose={handleResultClose}>
+        <Container>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="left">No</TableCell>
+                <TableCell align="left">Username</TableCell>
+                <TableCell align="left">Email</TableCell>
+                <TableCell align="left">Marks</TableCell>
+                <TableCell align="left">Total</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {aptitudeResult &&
+                aptitudeResult.map((candidate, index) => {
+                  return (
+                    <TableRow key={index}>
+                      <TableCell align="left">{index + 1}</TableCell>
+                      <TableCell align="left">{candidate.username}</TableCell>
+                      <TableCell align="left">{candidate.email}</TableCell>
+                      <TableCell align="left">{candidate.marks}</TableCell>
+                      <TableCell align="left">{candidate.total}</TableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </Container>
+      </Dialog>
     </>
   );
 };
