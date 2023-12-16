@@ -2,6 +2,7 @@ import {
   allInterviews,
   allRoundsOfInterview,
   sendEmailToAllCandidates,
+  sendEmailToAllCandidatesForAPT,
 } from "../controller/interviewController.js";
 import express from "express";
 import isauthenticated from "../middleware/auth.js";
@@ -12,6 +13,9 @@ router.route("/all-interviews/:token").get(isauthenticated, allInterviews);
 router
   .route("/sendemail-to-candidates")
   .post(isauthenticated, sendEmailToAllCandidates);
+router
+  .route("/send-email-apt-candidates/:token")
+  .post(isauthenticated, sendEmailToAllCandidatesForAPT);
 router.route("/all-rounds/:interviewId").get(allRoundsOfInterview);
 
 export default router;

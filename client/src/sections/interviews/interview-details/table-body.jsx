@@ -6,6 +6,8 @@ import { useNavigate, useParams } from "react-router-dom";
 const InterviewDetailsTableBody = ({ round, index }) => {
   const [interviewRound, setInterviewRound] = useState("");
 
+  console.log(round);
+
   const fetchAptitudeDetails = () => {
     axios
       .get("http://127.0.0.1:4000/api/aptitude/details/" + round.roundId)
@@ -17,9 +19,23 @@ const InterviewDetailsTableBody = ({ round, index }) => {
       });
   };
 
+  const fetchGdDetails = () => {
+    axios
+      .get("http://127.0.0.1:4000/api/gd/details/" + round.roundId)
+      .then((res) => {
+        console.log(res);
+        setInterviewRound(res.data.GD);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     if (round.name === "Aptitude") {
       fetchAptitudeDetails();
+    } else if (round.name === "gd") {
+      fetchGdDetails();
     }
   }, []);
 

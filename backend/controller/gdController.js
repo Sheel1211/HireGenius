@@ -182,3 +182,24 @@ export const scheduleMeet = async (req, res) => {
     res.status(400).json({ success: false, message: err.message });
   }
 };
+
+export const getGdDetails = async (req, res, next) => {
+  try {
+    const { gdId } = req.params;
+
+    console.log(req.params);
+
+    const GD = await gd.findOne({ _id: gdId });
+    if (!GD) {
+      throw new Error("Something went wrong.");
+    }
+
+    res.status(200).json({
+      GD,
+      success: true,
+      message: "Valid GD",
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};

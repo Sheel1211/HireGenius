@@ -71,7 +71,7 @@ const RenderForm = () => {
   };
 
   const handleLogin = () => {
-    navigate("/login");
+    navigate("/client/login");
   };
 
   const handleNext = () => {

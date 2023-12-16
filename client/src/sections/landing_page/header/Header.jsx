@@ -18,7 +18,7 @@ const Logo = () => {
     navigate("/");
   };
   return (
-    <Box onClick={handleClick} sx={{cursor:"pointer"}}>
+    <Box onClick={handleClick} sx={{ cursor: "pointer" }}>
       <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>
         Hire<span style={{ color: "#1e88e5" }}>Genius</span>
       </Typography>
@@ -35,7 +35,7 @@ const Header = () => {
   const { breakpoints } = useTheme();
   const matchMobileView = useMediaQuery(breakpoints.down("md"));
   return (
-    <Box sx={{ backgroundColor: "background.paper",fontFamily: "monospace"}}>
+    <Box sx={{ backgroundColor: "background.paper", fontFamily: "monospace" }}>
       <Container sx={{ py: { xs: 2, md: 3 } }}>
         <Box
           sx={{
@@ -73,7 +73,7 @@ const Header = () => {
             <Box /> {/* Magic space */}
             <Navigation />
             <AuthNavigation />
-            <UserOptions />
+            {/* <UserOptions /> */}
             {visibleMenu && matchMobileView && (
               <IconButton
                 sx={{

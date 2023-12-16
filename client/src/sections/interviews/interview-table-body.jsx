@@ -7,6 +7,8 @@ import { fDate } from "../../utils/format-time";
 const InterviewTableBody = ({ interview }) => {
   const navigate = useNavigate();
 
+  console.log(interview);
+
   const getInterviewDetails = () => {
     navigate(`/${interview.title.split(" ").join("-").toLowerCase()}`, {
       state: interview,
