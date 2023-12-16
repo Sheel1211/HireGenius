@@ -16,7 +16,7 @@ const RegistrationSub1 = ({ clientData, setClientData }) => {
       return true;
     }
 
-    return name.length > 3 && name.length < 10;
+    return name.length > 3;
   };
 
   const isEmailValid = (email) => {
@@ -86,7 +86,7 @@ const RegistrationSub1 = ({ clientData, setClientData }) => {
             error={!isNameValid(clientData.name)}
             helperText={
               !isNameValid(clientData.name)
-                ? "Name length must be between 3 and 10 characters"
+                ? "Name length must be greater than 3 Characters"
                 : ""
             }
           />

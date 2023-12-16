@@ -139,11 +139,11 @@ const HomeHero = () => {
                     Get Started
                   </Button>
                 </ScrollLink>
-                <ScrollLink to="video-section" spy={true} smooth={true} offset={0} duration={350}>
+                {/* <ScrollLink to="video-section" spy={true} smooth={true} offset={0} duration={350}>
                   <Button color="primary" size="large" variant="outlined" startIcon={<PlayArrowIcon />}>
                     Watch Video
                   </Button>
-                </ScrollLink>
+                </ScrollLink> */}
               </Box>
             </Box>
           </Grid>
