@@ -12,6 +12,7 @@ import {
   endAptitudeTest,
   setAptitudeTestTimes,
   completeTest,
+  generateResult,
 } from "../controller/aptiController.js";
 
 const router = express.Router();
@@ -28,5 +29,6 @@ router.route("/start/aptitude").post(startAptitudeTest);
 router.route("/end/aptitude").post(endAptitudeTest);
 router.route("/set/aptitudelink/duration").post(setAptitudeTestTimes);
 router.route("/complete/aptitude").patch(completeTest);
+router.route("/generate/aptitude/result").post(generateResult);
 
 export default router;

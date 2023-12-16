@@ -11,6 +11,9 @@ import IconButton from "@mui/material/IconButton";
 
 // import { account } from "../../../_mock/account";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -38,8 +41,33 @@ export default function AccountPopover() {
     setOpen(event.currentTarget);
   };
 
+  const navigate = useNavigate();
   const handleClose = () => {
     setOpen(null);
+  };
+
+  const handleLogout = () => {
+    axios
+      .get("http://localhost:4000/api/client/logout")
+      .then((res) => {
+        Cookies.remove("token");
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setOpen(null);
+  };
+
+  const handleProfile = (label) => {
+    setOpen(null);
+    console.log(label);
+    if (label === "Profile") {
+      navigate("/profile");
+    }
+    if (label === "Home") {
+      navigate("/dashboard");
+    }
   };
 
   const user = useSelector((state) => state.User);
@@ -118,7 +146,10 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: "dashed" }} />
 
         {MENU_OPTIONS.map((option) => (
-          <MenuItem key={option.label} onClick={handleClose}>
+          <MenuItem
+            key={option.label}
+            onClick={() => handleProfile(option.label)}
+          >
             {option.label}
           </MenuItem>
         ))}
@@ -128,7 +159,7 @@ export default function AccountPopover() {
         <MenuItem
           disableRipple
           disableTouchRipple
-          onClick={handleClose}
+          onClick={handleLogout}
           sx={{ typography: "body2", color: "error.main", py: 1.5 }}
         >
           Logout

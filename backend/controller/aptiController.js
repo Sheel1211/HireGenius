@@ -291,3 +291,31 @@ export const completeTest = async (req, res, next) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const generateResult = async (req, res, next) => {
+  try {
+    const { aptitudeId } = req.body;
+    const aptitude = await Aptitude.findOne({ aptitudeId });
+
+    const candidateIds = aptitude.candidates;
+    const result = await Promise.all(
+      candidateIds.map(async (cand) => {
+        const candidateDetails = await candidate.findOne({
+          _id: cand.candidateId,
+        });
+
+        return {
+          username: candidateDetails.username,
+          email: candidateDetails.email,
+          marks: cand.gain,
+          total: cand.total,
+        };
+      })
+    );
+    res
+      .status(200)
+      .json({ success: true, message: "result is generated", result });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};

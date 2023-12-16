@@ -34,8 +34,8 @@ const ProfileTable = ({ client }) => {
           <TableHead>
             <TableRow>
               <BorderedTableCell value="Label" sx={{ width: "20%" }} />
-              <BorderedTableCell value="Value" sx={{ width: "60%" }} />
-              <BorderedTableCell value="Options" sx={{ width: "20%" }} />
+              <BorderedTableCell value="Value" sx={{ width: "80%" }} />
+              {/* <BorderedTableCell value="Options" sx={{ width: "20%" }} /> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -43,42 +43,42 @@ const ProfileTable = ({ client }) => {
             <TableRow>
               <BorderedTableCell value="Name" />
               <BorderedTableCell value={client.name} />
-              <BorderedTableCell value="Edit" />
+              {/* <BorderedTableCell value="Edit" /> */}
             </TableRow>
 
             {/* Email */}
             <TableRow>
               <BorderedTableCell value="Email" />
               <BorderedTableCell value={client.email} />
-              <BorderedTableCell value="Edit" />
+              {/* <BorderedTableCell value="Edit" /> */}
             </TableRow>
 
             {/* About */}
             <TableRow>
               <BorderedTableCell value="About" />
               <BorderedTableCell value={client.description} />
-              <BorderedTableCell value="Edit" />
+              {/* <BorderedTableCell value="Edit" /> */}
             </TableRow>
 
             {/* Website */}
             <TableRow>
               <BorderedTableCell value="Website" />
               <BorderedTableCell value={client.url} />
-              <BorderedTableCell value="Edit" />
+              {/* <BorderedTableCell value="Edit" /> */}
             </TableRow>
 
             {/* Sector */}
             <TableRow>
               <BorderedTableCell value="Sector" />
               <BorderedTableCell value={client.sector} />
-              <BorderedTableCell value="Edit" />
+              {/* <BorderedTableCell value="Edit" /> */}
             </TableRow>
 
             {/* Contact No. */}
             <TableRow>
               <BorderedTableCell value="Contact" />
               <BorderedTableCell value={client.contactno} />
-              <BorderedTableCell value="Edit" />
+              {/* <BorderedTableCell value="Edit" /> */}
             </TableRow>
 
             {/* Logo */}
@@ -94,7 +94,7 @@ const ProfileTable = ({ client }) => {
                   />
                 }
               />
-              <BorderedTableCell value="Edit" />
+              {/* <BorderedTableCell value="Edit" /> */}
             </TableRow>
 
             {/* Proof */}
@@ -113,7 +113,7 @@ const ProfileTable = ({ client }) => {
                   />
                 }
               />
-              <BorderedTableCell value="Edit" />
+              {/* <BorderedTableCell value="Edit" /> */}
             </TableRow>
           </TableBody>
         </Table>
