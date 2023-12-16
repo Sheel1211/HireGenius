@@ -88,13 +88,13 @@ const InterviewDetails = () => {
             justifyContent="space-between"
             gap={4}
           >
-            <Button
+            {/* <Button
               variant="contained"
               color="inherit"
               startIcon={<VisibilityIcon />}
             >
               View Candidates
-            </Button>
+            </Button> */}
             <Button
               variant="contained"
               color="inherit"

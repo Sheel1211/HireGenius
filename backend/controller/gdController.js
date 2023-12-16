@@ -149,6 +149,7 @@ export const scheduleMeet = async (req, res) => {
         } else {
           console.log("email sended to mentor: ", mentorEmail);
         }
+
       }
     }
 
